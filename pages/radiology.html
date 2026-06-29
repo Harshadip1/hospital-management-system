@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MediCore HMS — Radiology</title>
+<link rel="stylesheet" href="../css/style.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar">
+  <div class="sidebar-logo"><div class="logo-icon"><i class="fa-solid fa-hospital-user" style="color:white"></i></div><div><h1>MediCore</h1><span>Hospital Management</span></div></div>
+  <nav class="sidebar-nav"></nav>
+  <div class="sidebar-footer"><a href="my-profile.html" class="sidebar-user"><img id="sidebarAvatar" src="" alt=""/><div class="user-info"><div class="user-name" id="sidebarName">User</div><div class="user-role" id="sidebarRole">Role</div></div></a></div>
+</aside>
+<div class="main-content">
+  <header class="header">
+    <button class="sidebar-toggle"><i class="fa-solid fa-bars"></i></button>
+    <div class="header-left"><div class="header-title">Radiology & Imaging</div><div class="header-subtitle">X-Ray, CT, MRI orders</div></div>
+    <div class="header-search"><i class="fa-solid fa-magnifying-glass search-icon"></i><input type="text" id="tableSearch" placeholder="Search orders..."/></div>
+    <div class="header-actions">
+      <button class="btn btn-ghost btn-sm" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i></button>
+      <a href="my-profile.html"><img id="headerAvatar" class="header-avatar" alt=""/></a>
+    </div>
+  </header>
+  <div class="page-content">
+    <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:24px;">
+      <div class="stat-card"><div class="stat-icon blue"><i class="fa-solid fa-x-ray"></i></div><div class="stat-info"><div class="stat-value" id="statTotal">0</div><div class="stat-label">Total Orders</div></div></div>
+      <div class="stat-card"><div class="stat-icon yellow"><i class="fa-solid fa-clock"></i></div><div class="stat-info"><div class="stat-value" id="statPending">0</div><div class="stat-label">In Progress</div></div></div>
+      <div class="stat-card"><div class="stat-icon green"><i class="fa-solid fa-check"></i></div><div class="stat-info"><div class="stat-value" id="statDone">0</div><div class="stat-label">Completed</div></div></div>
+      <div class="stat-card"><div class="stat-icon red"><i class="fa-solid fa-bolt"></i></div><div class="stat-info"><div class="stat-value" id="statUrgent">0</div><div class="stat-label">Urgent</div></div></div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div><div class="card-title">Imaging Orders</div></div>
+        <button class="btn btn-primary btn-sm" data-modal="orderModal"><i class="fa-solid fa-plus"></i> New Order</button>
+      </div>
+      <div class="card-body no-pad">
+        <div class="table-wrap"><table><thead><tr><th>Order ID</th><th>Patient</th><th>Test</th><th>Ordered By</th><th>Date</th><th>Priority</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody id="radBody"></tbody></table></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="modal-overlay" id="orderModal">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title"><i class="fa-solid fa-x-ray" style="color:var(--primary);margin-right:8px;"></i>Order Imaging</div><button class="modal-close"><i class="fa-solid fa-xmark"></i></button></div>
+    <form id="orderForm">
+      <div class="modal-body">
+        <div class="form-group"><label class="form-label">Patient</label><select class="form-control" name="patientId" id="radPatient" required></select></div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Test Type</label><select class="form-control" name="test"><option>Chest X-Ray</option><option>CT Scan</option><option>CT Angiography</option><option>MRI Brain</option><option>Ultrasound</option><option>Mammography</option></select></div>
+          <div class="form-group"><label class="form-label">Priority</label><select class="form-control" name="priority"><option>Routine</option><option>Urgent</option><option>STAT</option></select></div>
+        </div>
+        <div class="form-group"><label class="form-label">Ordered By</label><select class="form-control" name="orderedBy" id="radDoctor"></select></div>
+      </div>
+      <div class="modal-footer"><button type="button" class="btn btn-ghost modal-close">Cancel</button><button type="submit" class="btn btn-primary">Place Order</button></div>
+    </form>
+  </div>
+</div>
+
+<script src="../js/data.js"></script>
+<script src="../js/nav.js"></script>
+<script src="../js/app.js"></script>
+<script src="../js/main.js"></script>
+<script>
+function renderRad() {
+  const orders = HMSData.get('radiologyOrders');
+  document.getElementById('statTotal').textContent = orders.length;
+  document.getElementById('statPending').textContent = orders.filter(o => o.status === 'In Progress' || o.status === 'Scheduled').length;
+  document.getElementById('statDone').textContent = orders.filter(o => o.status === 'Completed').length;
+  document.getElementById('statUrgent').textContent = orders.filter(o => o.priority === 'Urgent' || o.priority === 'STAT').length;
+  document.getElementById('radBody').innerHTML = orders.map(o => `<tr>
+    <td><span class="badge badge-primary">${o.id}</span></td>
+    <td><a href="patient-profile.html?id=${o.patientId}">${o.patient}</a></td>
+    <td>${o.test}</td><td>${o.orderedBy}</td><td>${HMSData.formatDate(o.date)}</td>
+    <td><span class="badge ${o.priority === 'Urgent' || o.priority === 'STAT' ? 'badge-danger' : 'badge-gray'}">${o.priority}</span></td>
+    <td><span class="badge ${HMSData.badgeForStatus(o.status)}">${o.status}</span></td>
+    <td>${o.status !== 'Completed' ? `<button class="btn btn-success btn-sm" onclick="completeOrder('${o.id}')">Complete</button>` : '<span style="color:var(--gray-400);font-size:0.8rem;">Done</span>'}</td></tr>`).join('');
+}
+function completeOrder(id) { HMSData.update('radiologyOrders', id, { status: 'Completed' }); showToast('Report marked complete'); renderRad(); }
+document.getElementById('orderForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const patient = HMSData.find('patients', fd.get('patientId'));
+  HMSData.add('radiologyOrders', { id: HMSData.nextId('RAD-', 'radiologyOrders'), patient: HMSData.getPatientName(patient), patientId: patient.id, test: fd.get('test'), orderedBy: fd.get('orderedBy'), date: new Date().toISOString().slice(0, 10), status: 'Scheduled', priority: fd.get('priority') });
+  document.getElementById('orderModal').classList.remove('active');
+  showToast('Imaging order placed');
+  renderRad();
+});
+document.addEventListener('DOMContentLoaded', () => {
+  HMSData.get('patients').forEach(p => { document.getElementById('radPatient').innerHTML += `<option value="${p.id}">${HMSData.getPatientName(p)}</option>`; });
+  HMSData.get('doctors').forEach(d => { document.getElementById('radDoctor').innerHTML += `<option>${d.name}</option>`; });
+  renderRad();
+});
+</script>
+</body>
+</html>

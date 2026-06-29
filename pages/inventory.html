@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MediCore HMS — Inventory</title>
+<link rel="stylesheet" href="../css/style.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar">
+  <div class="sidebar-logo"><div class="logo-icon"><i class="fa-solid fa-hospital-user" style="color:white"></i></div><div><h1>MediCore</h1><span>Hospital Management</span></div></div>
+  <nav class="sidebar-nav"></nav>
+  <div class="sidebar-footer"><a href="my-profile.html" class="sidebar-user"><img id="sidebarAvatar" src="" alt=""/><div class="user-info"><div class="user-name" id="sidebarName">User</div><div class="user-role" id="sidebarRole">Role</div></div></a></div>
+</aside>
+<div class="main-content">
+  <header class="header">
+    <button class="sidebar-toggle"><i class="fa-solid fa-bars"></i></button>
+    <div class="header-left"><div class="header-title">Medical Inventory</div><div class="header-subtitle">Supplies & equipment tracking</div></div>
+    <div class="header-search"><i class="fa-solid fa-magnifying-glass search-icon"></i><input type="text" id="tableSearch" placeholder="Search inventory..."/></div>
+    <div class="header-actions">
+      <button class="btn btn-ghost btn-sm" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i></button>
+      <a href="my-profile.html"><img id="headerAvatar" class="header-avatar" alt=""/></a>
+    </div>
+  </header>
+  <div class="page-content">
+    <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:24px;">
+      <div class="stat-card"><div class="stat-icon blue"><i class="fa-solid fa-boxes-stacked"></i></div><div class="stat-info"><div class="stat-value" id="statItems">0</div><div class="stat-label">Total Items</div></div></div>
+      <div class="stat-card"><div class="stat-icon yellow"><i class="fa-solid fa-triangle-exclamation"></i></div><div class="stat-info"><div class="stat-value" id="statLow">0</div><div class="stat-label">Low Stock Alerts</div></div></div>
+      <div class="stat-card"><div class="stat-icon green"><i class="fa-solid fa-check"></i></div><div class="stat-info"><div class="stat-value" id="statOk">0</div><div class="stat-label">In Stock</div></div></div>
+    </div>
+    <div id="lowStockAlert" style="display:none;margin-bottom:20px;padding:14px 18px;background:#fef3c7;border:1px solid #fcd34d;border-radius:10px;font-size:0.875rem;">
+      <i class="fa-solid fa-triangle-exclamation" style="color:var(--warning);margin-right:8px;"></i>
+      <strong>Low stock alert:</strong> <span id="lowStockList"></span>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div><div class="card-title">Inventory Items</div></div>
+        <button class="btn btn-primary btn-sm" data-modal="addInvModal"><i class="fa-solid fa-plus"></i> Add Item</button>
+      </div>
+      <div class="card-body no-pad">
+        <div class="table-wrap"><table><thead><tr><th>ID</th><th>Item</th><th>Category</th><th>Quantity</th><th>Unit</th><th>Reorder Level</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody id="invBody"></tbody></table></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="modal-overlay" id="addInvModal">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Add Inventory Item</div><button class="modal-close"><i class="fa-solid fa-xmark"></i></button></div>
+    <form id="invForm">
+      <div class="modal-body">
+        <div class="form-group"><label class="form-label">Item Name</label><input type="text" class="form-control" name="name" required/></div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Category</label><select class="form-control" name="category"><option>Consumables</option><option>PPE</option><option>Fluids</option><option>Equipment</option></select></div>
+          <div class="form-group"><label class="form-label">Unit</label><input type="text" class="form-control" name="unit" placeholder="boxes, units..." required/></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Quantity</label><input type="number" class="form-control" name="quantity" min="0" required/></div>
+          <div class="form-group"><label class="form-label">Reorder Level</label><input type="number" class="form-control" name="reorderLevel" min="0" required/></div>
+        </div>
+      </div>
+      <div class="modal-footer"><button type="button" class="btn btn-ghost modal-close">Cancel</button><button type="submit" class="btn btn-primary">Add Item</button></div>
+    </form>
+  </div>
+</div>
+
+<script src="../js/data.js"></script>
+<script src="../js/nav.js"></script>
+<script src="../js/app.js"></script>
+<script src="../js/main.js"></script>
+<script>
+function getStatus(item) {
+  return item.quantity <= item.reorderLevel ? 'Low Stock' : 'In Stock';
+}
+function renderInv() {
+  const items = HMSData.get('inventory');
+  const low = items.filter(i => getStatus(i) === 'Low Stock');
+  document.getElementById('statItems').textContent = items.length;
+  document.getElementById('statLow').textContent = low.length;
+  document.getElementById('statOk').textContent = items.length - low.length;
+  const alert = document.getElementById('lowStockAlert');
+  if (low.length) {
+    alert.style.display = 'block';
+    document.getElementById('lowStockList').textContent = low.map(i => i.name).join(', ');
+  } else alert.style.display = 'none';
+  document.getElementById('invBody').innerHTML = items.map(i => {
+    const status = getStatus(i);
+    return `<tr>
+      <td><span class="badge badge-primary">${i.id}</span></td><td>${i.name}</td><td>${i.category}</td>
+      <td><strong>${i.quantity}</strong></td><td>${i.unit}</td><td>${i.reorderLevel}</td>
+      <td><span class="badge ${HMSData.badgeForStatus(status)}">${status}</span></td>
+      <td><button class="btn btn-outline btn-sm" onclick="restock('${i.id}')">Restock</button></td></tr>`;
+  }).join('');
+}
+function restock(id) {
+  const qty = parseInt(prompt('Add quantity:'), 10);
+  if (!qty || qty < 1) return;
+  const item = HMSData.find('inventory', id);
+  HMSData.update('inventory', id, { quantity: item.quantity + qty, status: 'In Stock' });
+  showToast('Restocked ' + qty + ' ' + item.unit);
+  renderInv();
+}
+document.getElementById('invForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const qty = parseInt(fd.get('quantity'), 10);
+  const reorder = parseInt(fd.get('reorderLevel'), 10);
+  HMSData.add('inventory', { id: HMSData.nextId('INV-', 'inventory'), name: fd.get('name'), category: fd.get('category'), quantity: qty, unit: fd.get('unit'), reorderLevel: reorder, status: qty <= reorder ? 'Low Stock' : 'In Stock' });
+  document.getElementById('addInvModal').classList.remove('active');
+  showToast('Item added');
+  renderInv();
+});
+document.addEventListener('DOMContentLoaded', renderInv);
+</script>
+</body>
+</html>

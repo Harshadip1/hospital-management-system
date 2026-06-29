@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MediCore HMS — Rooms &amp; Wards</title>
+<link rel="stylesheet" href="../css/style.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<style>
+.room-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:12px; }
+.room-card {
+  border-radius:10px;
+  padding:16px;
+  border:1.5px solid var(--gray-200);
+  text-align:center;
+  transition:var(--transition);
+  cursor:pointer;
+  position:relative;
+}
+.room-card:hover { border-color:var(--primary); box-shadow:0 2px 8px rgba(37,99,235,0.1); }
+.room-card.occupied { background:#fff5f5; border-color:#fecaca; }
+.room-card.available { background:#f0fdf4; border-color:#bbf7d0; }
+.room-card.maintenance { background:#fffbeb; border-color:#fde68a; }
+.room-number { font-size:1.3rem; font-weight:800; color:var(--gray-900); }
+.room-type { font-size:0.72rem; color:var(--gray-500); margin-top:2px; }
+.room-patient { font-size:0.78rem; color:var(--gray-700); margin-top:8px; font-weight:500; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+</style>
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar">
+  <div class="sidebar-logo"><div class="logo-icon"><i class="fa-solid fa-hospital-user" style="color:white"></i></div><div><h1>MediCore</h1><span>Hospital Management</span></div></div>
+  <nav class="sidebar-nav">
+    <div class="nav-section"><div class="nav-section-title">Main</div>
+      <a href="dashboard.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-grip"></i></span> Dashboard</a>
+      <a href="appointments.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-calendar-check"></i></span> Appointments <span class="nav-badge">5</span></a>
+      <a href="patients.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-users"></i></span> Patients</a>
+      <a href="doctors.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-user-doctor"></i></span> Doctors</a>
+      <a href="departments.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-building-columns"></i></span> Departments</a>
+    </div>
+    <div class="nav-section"><div class="nav-section-title">Clinical</div>
+      <a href="medical-records.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-file-medical"></i></span> Medical Records</a>
+      <a href="laboratory.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-flask-vial"></i></span> Laboratory</a>
+      <a href="pharmacy.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-pills"></i></span> Pharmacy</a>
+      <a href="rooms.html" class="nav-item active"><span class="nav-icon"><i class="fa-solid fa-bed"></i></span> Rooms &amp; Wards</a>
+      <a href="emergency.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-truck-medical"></i></span> Emergency <span class="nav-badge">2</span></a>
+    </div>
+    <div class="nav-section"><div class="nav-section-title">Administration</div>
+      <a href="staff.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-id-badge"></i></span> Staff</a>
+      <a href="billing.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-file-invoice-dollar"></i></span> Billing</a>
+      <a href="reports.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-chart-bar"></i></span> Reports</a>
+      <a href="messages.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-message"></i></span> Messages <span class="nav-badge">3</span></a>
+      <a href="notifications.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-bell"></i></span> Notifications</a>
+      <a href="settings.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-gear"></i></span> Settings</a>
+    </div>
+  </nav>
+  <div class="sidebar-footer"><a href="my-profile.html" class="sidebar-user"><img id="sidebarAvatar" src="https://ui-avatars.com/api/?name=Dr+Admin&background=2563eb&color=fff" alt=""/><div class="user-info"><div class="user-name" id="sidebarName">Dr. Admin</div><div class="user-role" id="sidebarRole">Administrator</div></div></a></div>
+</aside>
+<div class="main-content">
+  <header class="header">
+    <button class="sidebar-toggle"><i class="fa-solid fa-bars"></i></button>
+    <div class="header-left"><div class="header-title">Rooms &amp; Wards</div><div class="header-subtitle">Bed occupancy management</div></div>
+    <div class="header-search"><i class="fa-solid fa-magnifying-glass search-icon"></i><input type="text" placeholder="Search rooms..."/></div>
+    <div class="header-actions">
+      <a href="notifications.html" class="header-btn"><i class="fa-solid fa-bell"></i></a>
+      <a href="my-profile.html"><img src="https://ui-avatars.com/api/?name=Dr+Admin&background=2563eb&color=fff" class="header-avatar" alt=""/></a>
+    </div>
+  </header>
+  <div class="page-content">
+    <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:24px;">
+      <div class="stat-card"><div class="stat-icon blue"><i class="fa-solid fa-bed"></i></div><div class="stat-info"><div class="stat-value">320</div><div class="stat-label">Total Beds</div></div></div>
+      <div class="stat-card"><div class="stat-icon red"><i class="fa-solid fa-person-bed"></i></div><div class="stat-info"><div class="stat-value">237</div><div class="stat-label">Occupied</div></div></div>
+      <div class="stat-card"><div class="stat-icon green"><i class="fa-solid fa-bed-pulse"></i></div><div class="stat-info"><div class="stat-value">71</div><div class="stat-label">Available</div></div></div>
+      <div class="stat-card"><div class="stat-icon yellow"><i class="fa-solid fa-wrench"></i></div><div class="stat-info"><div class="stat-value">12</div><div class="stat-label">Maintenance</div></div></div>
+    </div>
+
+    <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;align-items:center;">
+      <button class="btn btn-primary btn-sm">All Wards</button>
+      <button class="btn btn-ghost btn-sm">Cardiology</button>
+      <button class="btn btn-ghost btn-sm">Neurology</button>
+      <button class="btn btn-ghost btn-sm">Orthopedics</button>
+      <button class="btn btn-ghost btn-sm">Pediatrics</button>
+      <button class="btn btn-ghost btn-sm">ICU</button>
+      <div style="display:flex;gap:16px;margin-left:auto;font-size:0.8rem;align-items:center;">
+        <span><span style="display:inline-block;width:12px;height:12px;background:#bbf7d0;border-radius:3px;margin-right:4px;border:1.5px solid #86efac;"></span>Available</span>
+        <span><span style="display:inline-block;width:12px;height:12px;background:#fecaca;border-radius:3px;margin-right:4px;border:1.5px solid #fca5a5;"></span>Occupied</span>
+        <span><span style="display:inline-block;width:12px;height:12px;background:#fde68a;border-radius:3px;margin-right:4px;border:1.5px solid #fcd34d;"></span>Maintenance</span>
+      </div>
+    </div>
+
+    <!-- CARDIOLOGY WARD -->
+    <div class="card" style="margin-bottom:20px;">
+      <div class="card-header">
+        <div><div class="card-title"><i class="fa-solid fa-heart-pulse" style="color:var(--primary);margin-right:8px;"></i>Cardiology Ward — Floor 3</div><div class="card-subtitle">44/48 beds occupied · 92%</div></div>
+        <div class="progress" style="width:140px;"><div class="progress-bar blue" data-width="92%" style="width:0%"></div></div>
+      </div>
+      <div class="card-body">
+        <div class="room-grid">
+          <div class="room-card occupied"><div class="room-number">301</div><div class="room-type">General</div><div class="room-patient">Sarah Johnson</div><span class="badge badge-danger" style="font-size:0.65rem;margin-top:6px;">Occupied</span></div>
+          <div class="room-card occupied"><div class="room-number">302</div><div class="room-type">General</div><div class="room-patient">Robert Lee</div><span class="badge badge-danger" style="font-size:0.65rem;margin-top:6px;">Occupied</span></div>
+          <div class="room-card available"><div class="room-number">303</div><div class="room-type">General</div><div class="room-patient">—</div><span class="badge badge-success" style="font-size:0.65rem;margin-top:6px;">Available</span></div>
+          <div class="room-card occupied"><div class="room-number">304</div><div class="room-type">Private</div><div class="room-patient">Karen Mills</div><span class="badge badge-danger" style="font-size:0.65rem;margin-top:6px;">Occupied</span></div>
+          <div class="room-card maintenance"><div class="room-number">305</div><div class="room-type">Private</div><div class="room-patient">—</div><span class="badge badge-warning" style="font-size:0.65rem;margin-top:6px;">Maintenance</span></div>
+          <div class="room-card available"><div class="room-number">306</div><div class="room-type">ICU</div><div class="room-patient">—</div><span class="badge badge-success" style="font-size:0.65rem;margin-top:6px;">Available</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NEUROLOGY WARD -->
+    <div class="card" style="margin-bottom:20px;">
+      <div class="card-header">
+        <div><div class="card-title"><i class="fa-solid fa-brain" style="color:#7c3aed;margin-right:8px;"></i>Neurology Ward — Floor 4</div><div class="card-subtitle">28/36 beds occupied · 78%</div></div>
+        <div class="progress" style="width:140px;"><div class="progress-bar" data-width="78%" style="width:0%;background:linear-gradient(90deg,#7c3aed,#a78bfa)"></div></div>
+      </div>
+      <div class="card-body">
+        <div class="room-grid">
+          <div class="room-card occupied"><div class="room-number">401</div><div class="room-type">General</div><div class="room-patient">James Brown</div><span class="badge badge-danger" style="font-size:0.65rem;margin-top:6px;">Occupied</span></div>
+          <div class="room-card available"><div class="room-number">402</div><div class="room-type">General</div><div class="room-patient">—</div><span class="badge badge-success" style="font-size:0.65rem;margin-top:6px;">Available</span></div>
+          <div class="room-card occupied"><div class="room-number">403</div><div class="room-type">Private</div><div class="room-patient">Anna Torres</div><span class="badge badge-danger" style="font-size:0.65rem;margin-top:6px;">Occupied</span></div>
+          <div class="room-card available"><div class="room-number">404</div><div class="room-type">General</div><div class="room-patient">—</div><span class="badge badge-success" style="font-size:0.65rem;margin-top:6px;">Available</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ICU -->
+    <div class="card">
+      <div class="card-header">
+        <div><div class="card-title"><i class="fa-solid fa-heart-circle-exclamation" style="color:var(--danger);margin-right:8px;"></i>ICU — Floor 1</div><div class="card-subtitle">14/16 beds occupied · 88%</div></div>
+        <div class="progress" style="width:140px;"><div class="progress-bar red" data-width="88%" style="width:0%"></div></div>
+      </div>
+      <div class="card-body">
+        <div class="room-grid">
+          <div class="room-card occupied"><div class="room-number">ICU-1</div><div class="room-type">Critical</div><div class="room-patient">David Kim</div><span class="badge badge-danger" style="font-size:0.65rem;margin-top:6px;">Critical</span></div>
+          <div class="room-card occupied"><div class="room-number">ICU-2</div><div class="room-type">Critical</div><div class="room-patient">Leo Park</div><span class="badge badge-danger" style="font-size:0.65rem;margin-top:6px;">Critical</span></div>
+          <div class="room-card available"><div class="room-number">ICU-3</div><div class="room-type">Critical</div><div class="room-patient">—</div><span class="badge badge-success" style="font-size:0.65rem;margin-top:6px;">Available</span></div>
+          <div class="room-card occupied"><div class="room-number">ICU-4</div><div class="room-type">Critical</div><div class="room-patient">Rita Moor</div><span class="badge badge-danger" style="font-size:0.65rem;margin-top:6px;">Critical</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<script src="../js/data.js"></script>
+<script src="../js/nav.js"></script>
+<script src="../js/app.js"></script>
+<script src="../js/main.js"></script>
+</body>
+</html>

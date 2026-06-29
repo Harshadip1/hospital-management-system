@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MediCore HMS — OPD Queue</title>
+<link rel="stylesheet" href="../css/style.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar">
+  <div class="sidebar-logo"><div class="logo-icon"><i class="fa-solid fa-hospital-user" style="color:white"></i></div><div><h1>MediCore</h1><span>Hospital Management</span></div></div>
+  <nav class="sidebar-nav"></nav>
+  <div class="sidebar-footer"><a href="my-profile.html" class="sidebar-user"><img id="sidebarAvatar" src="" alt=""/><div class="user-info"><div class="user-name" id="sidebarName">User</div><div class="user-role" id="sidebarRole">Role</div></div></a></div>
+</aside>
+<div class="main-content">
+  <header class="header">
+    <button class="sidebar-toggle"><i class="fa-solid fa-bars"></i></button>
+    <div class="header-left"><div class="header-title">OPD Queue</div><div class="header-subtitle">Reception & walk-in management</div></div>
+    <div class="header-search"><i class="fa-solid fa-magnifying-glass search-icon"></i><input type="text" id="tableSearch" placeholder="Search queue..."/></div>
+    <div class="header-actions">
+      <a href="notifications.html" class="header-btn"><i class="fa-solid fa-bell"></i></a>
+      <button class="btn btn-ghost btn-sm" onclick="logout()" title="Logout"><i class="fa-solid fa-right-from-bracket"></i></button>
+      <a href="my-profile.html"><img id="headerAvatar" class="header-avatar" alt=""/></a>
+    </div>
+  </header>
+  <div class="page-content">
+    <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:24px;">
+      <div class="stat-card"><div class="stat-icon blue"><i class="fa-solid fa-list-ol"></i></div><div class="stat-info"><div class="stat-value" id="statTotal">0</div><div class="stat-label">In Queue</div></div></div>
+      <div class="stat-card"><div class="stat-icon yellow"><i class="fa-solid fa-clock"></i></div><div class="stat-info"><div class="stat-value" id="statWaiting">0</div><div class="stat-label">Waiting</div></div></div>
+      <div class="stat-card"><div class="stat-icon green"><i class="fa-solid fa-user-check"></i></div><div class="stat-info"><div class="stat-value" id="statDone">0</div><div class="stat-label">Completed Today</div></div></div>
+      <div class="stat-card"><div class="stat-icon purple"><i class="fa-solid fa-stopwatch"></i></div><div class="stat-info"><div class="stat-value">18m</div><div class="stat-label">Avg Wait Time</div></div></div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div><div class="card-title">Today's Queue</div><div class="card-subtitle">Token-based OPD management</div></div>
+        <button class="btn btn-primary btn-sm" data-modal="addQueueModal"><i class="fa-solid fa-plus"></i> Add to Queue</button>
+      </div>
+      <div class="card-body no-pad">
+        <div class="table-wrap"><table><thead><tr><th>Token</th><th>Patient</th><th>Department</th><th>Doctor</th><th>Wait Time</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody id="queueBody"></tbody></table></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="modal-overlay" id="addQueueModal">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title"><i class="fa-solid fa-list-ol" style="color:var(--primary);margin-right:8px;"></i>Add to Queue</div><button class="modal-close"><i class="fa-solid fa-xmark"></i></button></div>
+    <form id="addQueueForm">
+      <div class="modal-body">
+        <div class="form-group"><label class="form-label">Patient</label><select class="form-control" name="patientId" id="queuePatientSelect" required></select></div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Department</label><select class="form-control" name="department"><option>Cardiology</option><option>Neurology</option><option>Orthopedics</option><option>Dermatology</option><option>Pediatrics</option></select></div>
+          <div class="form-group"><label class="form-label">Doctor</label><select class="form-control" name="doctor" id="queueDoctorSelect"></select></div>
+        </div>
+      </div>
+      <div class="modal-footer"><button type="button" class="btn btn-ghost modal-close">Cancel</button><button type="submit" class="btn btn-primary"><i class="fa-solid fa-check"></i> Issue Token</button></div>
+    </form>
+  </div>
+</div>
+
+<script src="../js/data.js"></script>
+<script src="../js/nav.js"></script>
+<script src="../js/app.js"></script>
+<script src="../js/main.js"></script>
+<script>
+function renderQueue() {
+  const queue = HMSData.get('opdQueue');
+  const waiting = queue.filter(q => q.status === 'Waiting').length;
+  document.getElementById('statTotal').textContent = queue.filter(q => q.status !== 'Completed').length;
+  document.getElementById('statWaiting').textContent = waiting;
+  document.getElementById('statDone').textContent = queue.filter(q => q.status === 'Completed').length;
+  document.getElementById('queueBody').innerHTML = queue.map(q => `<tr>
+    <td><div class="queue-token">${q.token}</div></td>
+    <td><div class="table-avatar"><img src="${HMSData.avatarUrl(q.patient)}" alt=""/><div><div class="name">${q.patient}</div><div class="sub">${q.patientId}</div></div></div></td>
+    <td>${q.department}</td><td>${q.doctor}</td><td>${q.waitTime}</td>
+    <td><span class="badge ${HMSData.badgeForStatus(q.status)}">${q.status}</span></td>
+    <td><div style="display:flex;gap:6px;">
+      ${q.status === 'Waiting' ? `<button class="btn btn-primary btn-sm" onclick="updateStatus('${q.id}','In Consultation')">Call</button>` : ''}
+      ${q.status === 'In Consultation' ? `<button class="btn btn-success btn-sm" onclick="updateStatus('${q.id}','Completed')">Complete</button>` : ''}
+      <a href="patient-profile.html?id=${q.patientId}" class="btn btn-ghost btn-sm btn-icon"><i class="fa-solid fa-eye"></i></a>
+    </div></td></tr>`).join('');
+}
+function updateStatus(id, status) {
+  HMSData.update('opdQueue', id, { status, waitTime: status === 'Completed' ? '—' : '5 min' });
+  showToast('Queue updated');
+  renderQueue();
+}
+document.getElementById('addQueueForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const patient = HMSData.find('patients', fd.get('patientId'));
+  const queue = HMSData.get('opdQueue');
+  const nextToken = Math.max(...queue.map(q => q.token), 100) + 1;
+  HMSData.add('opdQueue', { id: 'Q-' + Date.now(), token: nextToken, patient: HMSData.getPatientName(patient), patientId: patient.id, department: fd.get('department'), doctor: fd.get('doctor'), status: 'Waiting', waitTime: '0 min' });
+  document.getElementById('addQueueModal').classList.remove('active');
+  showToast('Token #' + nextToken + ' issued');
+  renderQueue();
+});
+document.addEventListener('DOMContentLoaded', () => {
+  const pSel = document.getElementById('queuePatientSelect');
+  HMSData.get('patients').forEach(p => { pSel.innerHTML += `<option value="${p.id}">${HMSData.getPatientName(p)}</option>`; });
+  const dSel = document.getElementById('queueDoctorSelect');
+  HMSData.get('doctors').forEach(d => { dSel.innerHTML += `<option>${d.name}</option>`; });
+  renderQueue();
+});
+</script>
+</body>
+</html>

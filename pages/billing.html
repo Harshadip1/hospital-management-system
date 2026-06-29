@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MediCore HMS — Billing</title>
+<link rel="stylesheet" href="../css/style.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar">
+  <div class="sidebar-logo"><div class="logo-icon"><i class="fa-solid fa-hospital-user" style="color:white"></i></div><div><h1>MediCore</h1><span>Hospital Management</span></div></div>
+  <nav class="sidebar-nav">
+    <div class="nav-section"><div class="nav-section-title">Main</div>
+      <a href="dashboard.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-grip"></i></span> Dashboard</a>
+      <a href="appointments.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-calendar-check"></i></span> Appointments <span class="nav-badge">5</span></a>
+      <a href="patients.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-users"></i></span> Patients</a>
+      <a href="doctors.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-user-doctor"></i></span> Doctors</a>
+      <a href="departments.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-building-columns"></i></span> Departments</a>
+    </div>
+    <div class="nav-section"><div class="nav-section-title">Clinical</div>
+      <a href="medical-records.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-file-medical"></i></span> Medical Records</a>
+      <a href="laboratory.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-flask-vial"></i></span> Laboratory</a>
+      <a href="pharmacy.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-pills"></i></span> Pharmacy</a>
+      <a href="rooms.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-bed"></i></span> Rooms &amp; Wards</a>
+      <a href="emergency.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-truck-medical"></i></span> Emergency <span class="nav-badge">2</span></a>
+    </div>
+    <div class="nav-section"><div class="nav-section-title">Administration</div>
+      <a href="staff.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-id-badge"></i></span> Staff</a>
+      <a href="billing.html" class="nav-item active"><span class="nav-icon"><i class="fa-solid fa-file-invoice-dollar"></i></span> Billing</a>
+      <a href="reports.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-chart-bar"></i></span> Reports</a>
+      <a href="messages.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-message"></i></span> Messages <span class="nav-badge">3</span></a>
+      <a href="notifications.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-bell"></i></span> Notifications</a>
+      <a href="settings.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-gear"></i></span> Settings</a>
+    </div>
+  </nav>
+  <div class="sidebar-footer"><a href="my-profile.html" class="sidebar-user"><img id="sidebarAvatar" src="https://ui-avatars.com/api/?name=Dr+Admin&background=2563eb&color=fff" alt=""/><div class="user-info"><div class="user-name" id="sidebarName">Dr. Admin</div><div class="user-role" id="sidebarRole">Administrator</div></div></a></div>
+</aside>
+<div class="main-content">
+  <header class="header">
+    <button class="sidebar-toggle"><i class="fa-solid fa-bars"></i></button>
+    <div class="header-left"><div class="header-title">Billing</div><div class="header-subtitle">Invoices &amp; payments</div></div>
+    <div class="header-search"><i class="fa-solid fa-magnifying-glass search-icon"></i><input type="text" id="tableSearch" placeholder="Search invoices..."/></div>
+    <div class="header-actions">
+      <a href="notifications.html" class="header-btn"><i class="fa-solid fa-bell"></i></a>
+      <a href="my-profile.html"><img src="https://ui-avatars.com/api/?name=Dr+Admin&background=2563eb&color=fff" class="header-avatar" alt=""/></a>
+    </div>
+  </header>
+  <div class="page-content">
+    <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:28px;">
+      <div class="stat-card"><div class="stat-icon teal"><i class="fa-solid fa-sack-dollar"></i></div><div class="stat-info"><div class="stat-value">$48.2K</div><div class="stat-label">Revenue Today</div><div class="stat-change up"><i class="fa-solid fa-arrow-up"></i> 22% vs yesterday</div></div></div>
+      <div class="stat-card"><div class="stat-icon green"><i class="fa-solid fa-circle-check"></i></div><div class="stat-info"><div class="stat-value">$31.5K</div><div class="stat-label">Paid</div></div></div>
+      <div class="stat-card"><div class="stat-icon yellow"><i class="fa-solid fa-clock"></i></div><div class="stat-info"><div class="stat-value">$12.4K</div><div class="stat-label">Pending</div></div></div>
+      <div class="stat-card"><div class="stat-icon red"><i class="fa-solid fa-circle-xmark"></i></div><div class="stat-info"><div class="stat-value">$4.3K</div><div class="stat-label">Overdue</div></div></div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div><div class="card-title">Invoices</div></div>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+          <select class="form-control" style="width:auto;font-size:0.825rem;padding:8px 12px;">
+            <option>All Status</option><option>Paid</option><option>Pending</option><option>Overdue</option>
+          </select>
+          <input type="date" class="form-control" style="width:auto;" value="2026-06-29"/>
+          <button class="btn btn-primary btn-sm" data-modal="addInvoiceModal"><i class="fa-solid fa-plus"></i> New Invoice</button>
+        </div>
+      </div>
+      <div class="card-body no-pad">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Invoice #</th><th>Patient</th><th>Services</th><th>Amount</th><th>Insurance</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><span class="badge badge-primary">INV-2601</span></td>
+                <td><div class="table-avatar"><img src="https://ui-avatars.com/api/?name=Sarah+Johnson&background=dbeafe&color=1d4ed8" alt=""/><div><div class="name">Sarah Johnson</div><div class="sub">P-00421</div></div></div></td>
+                <td>Consultation + Lab</td><td><strong>$420.00</strong></td><td>BlueCross</td><td>Jun 29, 2026</td>
+                <td><span class="badge badge-success">Paid</span></td>
+                <td><div style="display:flex;gap:6px;"><button class="btn btn-ghost btn-sm btn-icon" title="View"><i class="fa-solid fa-eye"></i></button><button class="btn btn-ghost btn-sm btn-icon" title="Print"><i class="fa-solid fa-print"></i></button></div></td>
+              </tr>
+              <tr>
+                <td><span class="badge badge-primary">INV-2600</span></td>
+                <td><div class="table-avatar"><img src="https://ui-avatars.com/api/?name=James+Brown&background=fef3c7&color=92400e" alt=""/><div><div class="name">James Brown</div><div class="sub">P-00420</div></div></div></td>
+                <td>MRI + Consultation</td><td><strong>$1,850.00</strong></td><td>Aetna</td><td>Jun 28, 2026</td>
+                <td><span class="badge badge-warning">Pending</span></td>
+                <td><div style="display:flex;gap:6px;"><button class="btn btn-ghost btn-sm btn-icon"><i class="fa-solid fa-eye"></i></button><button class="btn btn-ghost btn-sm btn-icon"><i class="fa-solid fa-print"></i></button></div></td>
+              </tr>
+              <tr>
+                <td><span class="badge badge-primary">INV-2599</span></td>
+                <td><div class="table-avatar"><img src="https://ui-avatars.com/api/?name=Emily+Davis&background=f3e8ff&color=7c3aed" alt=""/><div><div class="name">Emily Davis</div><div class="sub">P-00419</div></div></div></td>
+                <td>Surgery + 2 Nights</td><td><strong>$8,200.00</strong></td><td>Cigna</td><td>Jun 27, 2026</td>
+                <td><span class="badge badge-success">Paid</span></td>
+                <td><div style="display:flex;gap:6px;"><button class="btn btn-ghost btn-sm btn-icon"><i class="fa-solid fa-eye"></i></button><button class="btn btn-ghost btn-sm btn-icon"><i class="fa-solid fa-print"></i></button></div></td>
+              </tr>
+              <tr>
+                <td><span class="badge badge-primary">INV-2598</span></td>
+                <td><div class="table-avatar"><img src="https://ui-avatars.com/api/?name=David+Kim&background=fce7f3&color=9d174d" alt=""/><div><div class="name">David Kim</div><div class="sub">P-00418</div></div></div></td>
+                <td>Emergency + ICU</td><td><strong>$12,400.00</strong></td><td>Uninsured</td><td>Jun 29, 2026</td>
+                <td><span class="badge badge-danger">Overdue</span></td>
+                <td><div style="display:flex;gap:6px;"><button class="btn btn-ghost btn-sm btn-icon"><i class="fa-solid fa-eye"></i></button><button class="btn btn-ghost btn-sm btn-icon"><i class="fa-solid fa-print"></i></button></div></td>
+              </tr>
+              <tr>
+                <td><span class="badge badge-primary">INV-2597</span></td>
+                <td><div class="table-avatar"><img src="https://ui-avatars.com/api/?name=Maria+Garcia&background=dcfce7&color=166534" alt=""/><div><div class="name">Maria Garcia</div><div class="sub">P-00417</div></div></div></td>
+                <td>Dermatology Consult</td><td><strong>$280.00</strong></td><td>Medicare</td><td>Jun 26, 2026</td>
+                <td><span class="badge badge-warning">Pending</span></td>
+                <td><div style="display:flex;gap:6px;"><button class="btn btn-ghost btn-sm btn-icon"><i class="fa-solid fa-eye"></i></button><button class="btn btn-ghost btn-sm btn-icon"><i class="fa-solid fa-print"></i></button></div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="display:flex;align-items:center;padding:16px 20px;border-top:1px solid var(--gray-100);gap:16px;">
+          <span style="font-size:0.825rem;color:var(--gray-500);">Showing 1–5 of 312 invoices</span>
+          <div style="display:flex;gap:6px;margin-left:auto;">
+            <button class="btn btn-ghost btn-sm"><i class="fa-solid fa-chevron-left"></i></button>
+            <button class="btn btn-primary btn-sm">1</button>
+            <button class="btn btn-ghost btn-sm">2</button>
+            <button class="btn btn-ghost btn-sm">3</button>
+            <button class="btn btn-ghost btn-sm"><i class="fa-solid fa-chevron-right"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- NEW INVOICE MODAL -->
+<div class="modal-overlay" id="addInvoiceModal">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">New Invoice</div><button class="modal-close"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Patient</label><select class="form-control"><option>Sarah Johnson — P-00421</option><option>James Brown — P-00420</option></select></div>
+        <div class="form-group"><label class="form-label">Date</label><input type="date" class="form-control"/></div>
+      </div>
+      <div class="form-group"><label class="form-label">Services</label><input type="text" class="form-control" placeholder="e.g. Consultation, Lab, X-Ray"/></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Amount ($)</label><input type="number" step="0.01" class="form-control" placeholder="0.00"/></div>
+        <div class="form-group"><label class="form-label">Insurance Provider</label><input type="text" class="form-control" placeholder="e.g. BlueCross"/></div>
+      </div>
+      <div class="form-group"><label class="form-label">Payment Method</label><select class="form-control"><option>Insurance</option><option>Credit Card</option><option>Cash</option><option>Bank Transfer</option></select></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost modal-close">Cancel</button>
+      <button class="btn btn-primary" onclick="window.showToast('Invoice created!');document.getElementById('addInvoiceModal').classList.remove('active')"><i class="fa-solid fa-check"></i> Create Invoice</button>
+    </div>
+  </div>
+</div>
+<script src="../js/data.js"></script>
+<script src="../js/nav.js"></script>
+<script src="../js/app.js"></script>
+<script src="../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MediCore HMS — Messages</title>
+<link rel="stylesheet" href="../css/style.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<style>
+.chat-layout { display:grid; grid-template-columns:300px 1fr; gap:0; height:calc(100vh - 70px); overflow:hidden; }
+.chat-list { border-right:1px solid var(--gray-200); overflow-y:auto; background:white; }
+.chat-item { display:flex; align-items:center; gap:12px; padding:14px 16px; cursor:pointer; border-bottom:1px solid var(--gray-100); transition:var(--transition); }
+.chat-item:hover, .chat-item.active { background:var(--primary-light); }
+.chat-item img { width:42px; height:42px; border-radius:50%; flex-shrink:0; }
+.chat-item .chat-name { font-weight:600; font-size:0.875rem; color:var(--gray-900); }
+.chat-item .chat-preview { font-size:0.75rem; color:var(--gray-500); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:160px; }
+.chat-item .chat-time { font-size:0.7rem; color:var(--gray-400); white-space:nowrap; margin-left:auto; align-self:flex-start; }
+.chat-item .unread { background:var(--primary); color:white; border-radius:20px; font-size:0.65rem; font-weight:700; padding:2px 7px; }
+.chat-window { display:flex; flex-direction:column; background:var(--gray-50); }
+.chat-header { padding:16px 20px; background:white; border-bottom:1px solid var(--gray-200); display:flex; align-items:center; gap:12px; }
+.chat-messages { flex:1; overflow-y:auto; padding:20px; display:flex; flex-direction:column; gap:12px; }
+.msg { max-width:70%; }
+.msg.sent { align-self:flex-end; }
+.msg.recv { align-self:flex-start; }
+.msg-bubble { padding:10px 14px; border-radius:12px; font-size:0.875rem; line-height:1.5; }
+.msg.sent .msg-bubble { background:var(--primary); color:white; border-radius:12px 12px 2px 12px; }
+.msg.recv .msg-bubble { background:white; color:var(--gray-800); border:1px solid var(--gray-200); border-radius:12px 12px 12px 2px; }
+.msg-time { font-size:0.68rem; color:var(--gray-400); margin-top:4px; text-align:right; }
+.msg.recv .msg-time { text-align:left; }
+.chat-input-area { padding:16px 20px; background:white; border-top:1px solid var(--gray-200); display:flex; gap:10px; align-items:center; }
+.chat-input-area input { flex:1; background:var(--gray-100); border:1.5px solid transparent; border-radius:10px; padding:10px 14px; outline:none; font-size:0.875rem; transition:var(--transition); }
+.chat-input-area input:focus { background:white; border-color:var(--primary); }
+@media(max-width:768px){.chat-layout{grid-template-columns:1fr;}.chat-list{height:240px;}}
+</style>
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar">
+  <div class="sidebar-logo"><div class="logo-icon"><i class="fa-solid fa-hospital-user" style="color:white"></i></div><div><h1>MediCore</h1><span>Hospital Management</span></div></div>
+  <nav class="sidebar-nav">
+    <div class="nav-section"><div class="nav-section-title">Main</div>
+      <a href="dashboard.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-grip"></i></span> Dashboard</a>
+      <a href="appointments.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-calendar-check"></i></span> Appointments <span class="nav-badge">5</span></a>
+      <a href="patients.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-users"></i></span> Patients</a>
+      <a href="doctors.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-user-doctor"></i></span> Doctors</a>
+      <a href="departments.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-building-columns"></i></span> Departments</a>
+    </div>
+    <div class="nav-section"><div class="nav-section-title">Clinical</div>
+      <a href="medical-records.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-file-medical"></i></span> Medical Records</a>
+      <a href="laboratory.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-flask-vial"></i></span> Laboratory</a>
+      <a href="pharmacy.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-pills"></i></span> Pharmacy</a>
+      <a href="rooms.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-bed"></i></span> Rooms &amp; Wards</a>
+      <a href="emergency.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-truck-medical"></i></span> Emergency</a>
+    </div>
+    <div class="nav-section"><div class="nav-section-title">Administration</div>
+      <a href="staff.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-id-badge"></i></span> Staff</a>
+      <a href="billing.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-file-invoice-dollar"></i></span> Billing</a>
+      <a href="reports.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-chart-bar"></i></span> Reports</a>
+      <a href="messages.html" class="nav-item active"><span class="nav-icon"><i class="fa-solid fa-message"></i></span> Messages <span class="nav-badge">3</span></a>
+      <a href="notifications.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-bell"></i></span> Notifications</a>
+      <a href="settings.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-gear"></i></span> Settings</a>
+    </div>
+  </nav>
+  <div class="sidebar-footer"><a href="my-profile.html" class="sidebar-user"><img id="sidebarAvatar" src="https://ui-avatars.com/api/?name=Dr+Admin&background=2563eb&color=fff" alt=""/><div class="user-info"><div class="user-name" id="sidebarName">Dr. Admin</div><div class="user-role" id="sidebarRole">Administrator</div></div></a></div>
+</aside>
+<div class="main-content" style="overflow:hidden;">
+  <div class="chat-layout">
+    <!-- CONTACT LIST -->
+    <div class="chat-list">
+      <div style="padding:14px 16px;border-bottom:1px solid var(--gray-100);">
+        <div style="font-weight:700;font-size:1rem;color:var(--gray-900);margin-bottom:10px;">Messages</div>
+        <div style="background:var(--gray-100);border-radius:8px;padding:8px 12px;display:flex;align-items:center;gap:8px;">
+          <i class="fa-solid fa-magnifying-glass" style="color:var(--gray-400);font-size:0.8rem;"></i>
+          <input type="text" placeholder="Search messages..." style="border:none;background:transparent;outline:none;font-size:0.825rem;flex:1;"/>
+        </div>
+      </div>
+      <div class="chat-item active" onclick="selectChat(this,'Dr. Mike Chen','Cardiologist')">
+        <img src="https://ui-avatars.com/api/?name=Mike+Chen&background=dbeafe&color=1d4ed8" alt=""/>
+        <div style="flex:1;min-width:0;">
+          <div class="chat-name">Dr. Mike Chen</div>
+          <div class="chat-preview">Can you check on Room 301 patient?</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
+          <span class="chat-time">09:42</span>
+          <span class="unread">2</span>
+        </div>
+      </div>
+      <div class="chat-item" onclick="selectChat(this,'Dr. Lisa Park','Neurologist')">
+        <img src="https://ui-avatars.com/api/?name=Lisa+Park&background=f3e8ff&color=7c3aed" alt=""/>
+        <div style="flex:1;min-width:0;">
+          <div class="chat-name">Dr. Lisa Park</div>
+          <div class="chat-preview">MRI results are ready for review.</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
+          <span class="chat-time">Yesterday</span>
+          <span class="unread">1</span>
+        </div>
+      </div>
+      <div class="chat-item" onclick="selectChat(this,'Dr. Rachel Green','Emergency')">
+        <img src="https://ui-avatars.com/api/?name=Rachel+Green&background=dcfce7&color=166534" alt=""/>
+        <div style="flex:1;min-width:0;">
+          <div class="chat-name">Dr. Rachel Green</div>
+          <div class="chat-preview">New patient incoming, ETA 5 min.</div>
+        </div>
+        <span class="chat-time" style="align-self:flex-start;">08:10</span>
+      </div>
+      <div class="chat-item" onclick="selectChat(this,'Nursing Team','Head Nurse')">
+        <img src="https://ui-avatars.com/api/?name=Nursing+Team&background=e0f2fe&color=0369a1" alt=""/>
+        <div style="flex:1;min-width:0;">
+          <div class="chat-name">Nursing Team</div>
+          <div class="chat-preview">Shift handover notes uploaded.</div>
+        </div>
+        <span class="chat-time" style="align-self:flex-start;">Yesterday</span>
+      </div>
+      <div class="chat-item" onclick="selectChat(this,'Dr. Tom Wilson','Orthopedics')">
+        <img src="https://ui-avatars.com/api/?name=Tom+Wilson&background=fef3c7&color=92400e" alt=""/>
+        <div style="flex:1;min-width:0;">
+          <div class="chat-name">Dr. Tom Wilson</div>
+          <div class="chat-preview">Post-op report sent to billing.</div>
+        </div>
+        <span class="chat-time" style="align-self:flex-start;">Mon</span>
+      </div>
+    </div>
+
+    <!-- CHAT WINDOW -->
+    <div class="chat-window" id="chatWindow">
+      <div class="chat-header">
+        <img src="https://ui-avatars.com/api/?name=Mike+Chen&background=dbeafe&color=1d4ed8" id="chatAvatar" style="width:40px;height:40px;border-radius:50%;" alt=""/>
+        <div>
+          <div style="font-weight:700;font-size:0.95rem;" id="chatName">Dr. Mike Chen</div>
+          <div style="font-size:0.75rem;color:var(--success);">● Online</div>
+        </div>
+        <div style="margin-left:auto;display:flex;gap:8px;">
+          <button class="btn btn-ghost btn-sm btn-icon"><i class="fa-solid fa-phone"></i></button>
+          <button class="btn btn-ghost btn-sm btn-icon"><i class="fa-solid fa-video"></i></button>
+        </div>
+      </div>
+      <div class="chat-messages" id="chatMessages">
+        <div class="msg recv"><div class="msg-bubble">Good morning! Can you check on Room 301 patient? She's been complaining of chest pain since last night.</div><div class="msg-time">09:38 AM</div></div>
+        <div class="msg sent"><div class="msg-bubble">I'll head over right now. Has her ECG been done?</div><div class="msg-time">09:40 AM</div></div>
+        <div class="msg recv"><div class="msg-bubble">Yes, ECG was done at 8 AM. Results look slightly irregular. I've flagged it in her record.</div><div class="msg-time">09:41 AM</div></div>
+        <div class="msg sent"><div class="msg-bubble">Got it. I'll review and update the care plan. Thank you.</div><div class="msg-time">09:42 AM</div></div>
+      </div>
+      <div class="chat-input-area">
+        <input type="text" placeholder="Type a message..." id="msgInput" onkeydown="if(event.key==='Enter')sendMsg()"/>
+        <button class="btn btn-ghost btn-sm btn-icon"><i class="fa-solid fa-paperclip"></i></button>
+        <button class="btn btn-primary btn-sm btn-icon" onclick="sendMsg()"><i class="fa-solid fa-paper-plane"></i></button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<script src="../js/data.js"></script>
+<script src="../js/nav.js"></script>
+<script src="../js/app.js"></script>
+<script src="../js/main.js"></script>
+<script>
+function selectChat(el, name) {
+  document.querySelectorAll('.chat-item').forEach(i => i.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('chatName').textContent = name;
+  const unread = el.querySelector('.unread');
+  if (unread) unread.remove();
+}
+function sendMsg() {
+  const input = document.getElementById('msgInput');
+  const text = input.value.trim();
+  if (!text) return;
+  const msgs = document.getElementById('chatMessages');
+  const now = new Date();
+  const time = now.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+  const msgEl = document.createElement('div');
+  msgEl.className = 'msg sent';
+  msgEl.innerHTML = `<div class="msg-bubble">${text}</div><div class="msg-time">${time}</div>`;
+  msgs.appendChild(msgEl);
+  input.value = '';
+  msgs.scrollTop = msgs.scrollHeight;
+}
+</script>
+</body>
+</html>

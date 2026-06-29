@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MediCore HMS — User Management</title>
+<link rel="stylesheet" href="../css/style.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar">
+  <div class="sidebar-logo"><div class="logo-icon"><i class="fa-solid fa-hospital-user" style="color:white"></i></div><div><h1>MediCore</h1><span>Hospital Management</span></div></div>
+  <nav class="sidebar-nav"></nav>
+  <div class="sidebar-footer"><a href="my-profile.html" class="sidebar-user"><img id="sidebarAvatar" src="" alt=""/><div class="user-info"><div class="user-name" id="sidebarName">User</div><div class="user-role" id="sidebarRole">Role</div></div></a></div>
+</aside>
+<div class="main-content">
+  <header class="header">
+    <button class="sidebar-toggle"><i class="fa-solid fa-bars"></i></button>
+    <div class="header-left"><div class="header-title">User Management</div><div class="header-subtitle">Accounts, roles & access control</div></div>
+    <div class="header-search"><i class="fa-solid fa-magnifying-glass search-icon"></i><input type="text" id="tableSearch" placeholder="Search users..."/></div>
+    <div class="header-actions">
+      <button class="btn btn-ghost btn-sm" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i></button>
+      <a href="my-profile.html"><img id="headerAvatar" class="header-avatar" alt=""/></a>
+    </div>
+  </header>
+  <div class="page-content">
+    <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:24px;">
+      <div class="stat-card"><div class="stat-icon blue"><i class="fa-solid fa-users"></i></div><div class="stat-info"><div class="stat-value" id="statUsers">0</div><div class="stat-label">Total Users</div></div></div>
+      <div class="stat-card"><div class="stat-icon green"><i class="fa-solid fa-user-doctor"></i></div><div class="stat-info"><div class="stat-value" id="statDoctors">0</div><div class="stat-label">Doctors</div></div></div>
+      <div class="stat-card"><div class="stat-icon purple"><i class="fa-solid fa-user-nurse"></i></div><div class="stat-info"><div class="stat-value" id="statNurses">0</div><div class="stat-label">Nurses</div></div></div>
+      <div class="stat-card"><div class="stat-icon yellow"><i class="fa-solid fa-shield"></i></div><div class="stat-info"><div class="stat-value" id="statAdmins">0</div><div class="stat-label">Administrators</div></div></div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div><div class="card-title">System Users</div><div class="card-subtitle">Role-based access control (RBAC)</div></div>
+        <button class="btn btn-primary btn-sm" data-modal="addUserModal"><i class="fa-solid fa-user-plus"></i> Add User</button>
+      </div>
+      <div class="card-body no-pad">
+        <div class="table-wrap"><table><thead><tr><th>User</th><th>Email</th><th>Role</th><th>Department</th><th>Last Login</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody id="usersBody"></tbody></table></div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:24px;">
+      <div class="card-header"><div class="card-title">Role Permissions</div></div>
+      <div class="card-body">
+        <div class="table-wrap"><table>
+          <thead><tr><th>Module</th><th>Administrator</th><th>Doctor</th><th>Nurse</th><th>Staff</th></tr></thead>
+          <tbody>
+            <tr><td>Dashboard & Patients</td><td><i class="fa-solid fa-check" style="color:var(--success)"></i></td><td><i class="fa-solid fa-check" style="color:var(--success)"></i></td><td><i class="fa-solid fa-check" style="color:var(--success)"></i></td><td><i class="fa-solid fa-check" style="color:var(--success)"></i></td></tr>
+            <tr><td>Admissions & Discharge</td><td><i class="fa-solid fa-check" style="color:var(--success)"></i></td><td><i class="fa-solid fa-check" style="color:var(--success)"></i></td><td><i class="fa-solid fa-check" style="color:var(--success)"></i></td><td><i class="fa-solid fa-xmark" style="color:var(--gray-300)"></i></td></tr>
+            <tr><td>Nursing Module</td><td><i class="fa-solid fa-check" style="color:var(--success)"></i></td><td><i class="fa-solid fa-check" style="color:var(--success)"></i></td><td><i class="fa-solid fa-check" style="color:var(--success)"></i></td><td><i class="fa-solid fa-xmark" style="color:var(--gray-300)"></i></td></tr>
+            <tr><td>Billing & Reports</td><td><i class="fa-solid fa-check" style="color:var(--success)"></i></td><td><i class="fa-solid fa-check" style="color:var(--success)"></i></td><td><i class="fa-solid fa-xmark" style="color:var(--gray-300)"></i></td><td><i class="fa-solid fa-check" style="color:var(--success)"></i></td></tr>
+            <tr><td>User Management</td><td><i class="fa-solid fa-check" style="color:var(--success)"></i></td><td><i class="fa-solid fa-xmark" style="color:var(--gray-300)"></i></td><td><i class="fa-solid fa-xmark" style="color:var(--gray-300)"></i></td><td><i class="fa-solid fa-xmark" style="color:var(--gray-300)"></i></td></tr>
+            <tr><td>Inventory</td><td><i class="fa-solid fa-check" style="color:var(--success)"></i></td><td><i class="fa-solid fa-xmark" style="color:var(--gray-300)"></i></td><td><i class="fa-solid fa-xmark" style="color:var(--gray-300)"></i></td><td><i class="fa-solid fa-check" style="color:var(--success)"></i></td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="modal-overlay" id="addUserModal">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Add System User</div><button class="modal-close"><i class="fa-solid fa-xmark"></i></button></div>
+    <form id="userForm">
+      <div class="modal-body">
+        <div class="form-group"><label class="form-label">Full Name</label><input type="text" class="form-control" name="name" required/></div>
+        <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-control" name="email" required/></div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Role</label><select class="form-control" name="role"><option>Administrator</option><option>Doctor</option><option>Nurse</option><option>Staff</option></select></div>
+          <div class="form-group"><label class="form-label">Department</label><input type="text" class="form-control" name="department" placeholder="e.g. Cardiology"/></div>
+        </div>
+      </div>
+      <div class="modal-footer"><button type="button" class="btn btn-ghost modal-close">Cancel</button><button type="submit" class="btn btn-primary">Create User</button></div>
+    </form>
+  </div>
+</div>
+
+<script src="../js/data.js"></script>
+<script src="../js/nav.js"></script>
+<script src="../js/app.js"></script>
+<script src="../js/main.js"></script>
+<script>
+function renderUsers() {
+  const users = HMSData.get('users');
+  document.getElementById('statUsers').textContent = users.length;
+  document.getElementById('statDoctors').textContent = users.filter(u => u.role === 'Doctor').length;
+  document.getElementById('statNurses').textContent = users.filter(u => u.role === 'Nurse').length;
+  document.getElementById('statAdmins').textContent = users.filter(u => u.role === 'Administrator').length;
+  document.getElementById('usersBody').innerHTML = users.map(u => `<tr>
+    <td><div class="table-avatar"><img src="${HMSData.avatarUrl(u.name)}" alt=""/><div><div class="name">${u.name}</div><div class="sub">${u.id}</div></div></div></td>
+    <td>${u.email}</td>
+    <td><span class="badge badge-info">${u.role}</span></td><td>${u.department}</td>
+    <td>${HMSData.formatDate(u.lastLogin)}</td>
+    <td><span class="badge badge-success">${u.status}</span></td>
+    <td><button class="btn btn-danger btn-sm" data-delete-id="${u.id}" onclick="deleteUser('${u.id}')"><i class="fa-solid fa-trash"></i></button></td></tr>`).join('');
+}
+function deleteUser(id) {
+  if (!confirm('Deactivate this user?')) return;
+  HMSData.remove('users', id);
+  showToast('User removed');
+  renderUsers();
+}
+document.getElementById('userForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  HMSData.add('users', { id: HMSData.nextId('U-', 'users'), name: fd.get('name'), email: fd.get('email'), role: fd.get('role'), department: fd.get('department'), status: 'Active', lastLogin: '—' });
+  document.getElementById('addUserModal').classList.remove('active');
+  showToast('User created');
+  renderUsers();
+});
+document.addEventListener('DOMContentLoaded', renderUsers);
+</script>
+</body>
+</html>

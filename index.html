@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MediCore HMS — Premium Healthcare Management</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<link rel="stylesheet" href="css/landing.css"/>
+</head>
+<body class="lp-root">
+
+<!-- ======================================================
+     NAVBAR
+====================================================== -->
+<nav class="lp-nav" id="lpNav">
+  <a href="index.html" class="lp-nav-logo">
+    <div class="lp-logo-ico"><i class="fa-solid fa-hospital-user"></i></div>
+    <span class="lp-logo-text">MediCore HMS</span>
+  </a>
+  <div class="lp-nav-center">
+    <a href="#features"      class="lp-nav-link">Features</a>
+    <a href="#services"      class="lp-nav-link">Services</a>
+    <a href="#doctors"       class="lp-nav-link">Doctors</a>
+    <a href="#appointment"   class="lp-nav-link">Appointment</a>
+    <a href="#contact"       class="lp-nav-link">Contact</a>
+  </div>
+  <div class="lp-nav-right">
+    <button class="lp-btn-nav-ghost" onclick="window.location.href='pages/login.html'">Sign In</button>
+    <button class="lp-btn-nav" onclick="window.location.href='pages/login.html'">
+      <i class="fa-solid fa-right-to-bracket"></i> Get Started
+    </button>
+    <button class="lp-hamburger" id="lpHamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="lp-mobile-menu" id="lpMobileMenu">
+  <a href="#features"    class="lp-mobile-link">Features</a>
+  <a href="#services"    class="lp-mobile-link">Services</a>
+  <a href="#doctors"     class="lp-mobile-link">Doctors</a>
+  <a href="#appointment" class="lp-mobile-link">Appointment</a>
+  <a href="#contact"     class="lp-mobile-link">Contact</a>
+  <a href="pages/login.html" class="lp-btn-primary" style="justify-content:center;margin-top:8px;">
+    <i class="fa-solid fa-right-to-bracket"></i> Sign In
+  </a>
+</div>
+
+<!-- ======================================================
+     HERO
+====================================================== -->
+<section class="lp-hero" id="home">
+  <div class="lp-hero-bg"></div>
+  <div class="lp-hero-overlay"></div>
+
+  <!-- Animated particles -->
+  <div class="lp-hero-particles" id="lpParticles"></div>
+
+  <!-- Floating ambient cards -->
+  <div class="lp-float-card lp-fc1" style="--dur:5s;">
+    <div class="lp-fc-ico" style="background:rgba(34,197,94,0.2);color:#22c55e;">
+      <i class="fa-solid fa-circle-check"></i>
+    </div>
+    <div>
+      <div style="font-weight:700;font-size:0.82rem;">Appointment Confirmed</div>
+      <div style="font-size:0.72rem;opacity:0.65;">Sarah J. · 09:00 AM</div>
+    </div>
+  </div>
+  <div class="lp-float-card lp-fc2" style="--dur:4.5s;">
+    <div class="lp-fc-ico" style="background:rgba(17,181,228,0.2);color:#11B5E4;">
+      <i class="fa-solid fa-user-doctor"></i>
+    </div>
+    <div>
+      <div style="font-weight:700;font-size:0.82rem;">148 Doctors Active</div>
+      <div style="font-size:0.72rem;opacity:0.65;">Right now · All depts.</div>
+    </div>
+  </div>
+
+  <div class="lp-hero-inner">
+    <!-- LEFT -->
+    <div class="lp-hero-left">
+      <div class="lp-hero-tag lp-anim-up lp-delay-1">
+        <span class="lp-live-dot"></span>
+        Trusted by 500+ hospitals worldwide
+      </div>
+      <h1 class="lp-hero-h1 lp-anim-up lp-delay-2">
+        Modern Healthcare<br>Management,<br><span class="lp-highlight">Simplified</span>
+      </h1>
+      <p class="lp-hero-p lp-anim-up lp-delay-3">
+        MediCore HMS unifies patients, doctors, departments, billing, emergency triage and records into one seamless platform — so your team can focus entirely on care.
+      </p>
+      <div class="lp-hero-actions lp-anim-up lp-delay-4">
+        <button class="lp-btn-primary" id="heroCta" onclick="window.location.href='pages/login.html'">
+          <i class="fa-solid fa-right-to-bracket"></i> Sign In to Dashboard
+          <span class="lp-ripple-wrap"></span>
+        </button>
+        <a href="#features" class="lp-btn-secondary">
+          <i class="fa-solid fa-circle-play"></i> Explore Features
+        </a>
+      </div>
+      <div class="lp-trust-row lp-anim-up lp-delay-5">
+        <div class="lp-trust-item"><i class="fa-solid fa-shield-halved"></i> HIPAA Compliant</div>
+        <div class="lp-trust-item"><i class="fa-solid fa-lock"></i> Role-Based Access</div>
+        <div class="lp-trust-item"><i class="fa-solid fa-clock"></i> 24/7 Uptime</div>
+        <div class="lp-trust-item"><i class="fa-solid fa-mobile-screen"></i> Mobile Ready</div>
+      </div>
+    </div>
+    <!-- RIGHT -->
+    <div class="lp-hero-right lp-anim-right lp-delay-3">
+      <!-- Main glass stats card -->
+      <div class="lp-hero-glass">
+        <div class="lp-hero-glass-title">Live Hospital Overview</div>
+        <div class="lp-hero-stats">
+          <div>
+            <div class="lp-hero-stat-val" data-count="2847">0</div>
+            <div class="lp-hero-stat-lbl">Total Patients</div>
+            <div class="lp-hero-stat-change">↑ 12% this month</div>
+          </div>
+          <div>
+            <div class="lp-hero-stat-val" data-count="148">0</div>
+            <div class="lp-hero-stat-lbl">Active Doctors</div>
+            <div class="lp-hero-stat-change">↑ 4 new this week</div>
+          </div>
+          <div>
+            <div class="lp-hero-stat-val" data-count="312">0</div>
+            <div class="lp-hero-stat-lbl">Today's Appts.</div>
+            <div class="lp-hero-stat-change" style="color:rgba(255,255,255,0.45);">across 8 depts.</div>
+          </div>
+        </div>
+      </div>
+      <!-- Feature mini-cards -->
+      <div class="lp-hero-feature-cards">
+        <div class="lp-feat-mini">
+          <div class="lp-feat-mini-ico" style="background:rgba(239,68,68,0.2);color:#f87171;">
+            <i class="fa-solid fa-truck-medical"></i>
+          </div>
+          <div>
+            <div class="lp-feat-mini-title">Emergency Triage</div>
+            <div class="lp-feat-mini-sub">Real-time ICU & emergency tracking</div>
+          </div>
+          <span style="margin-left:auto;font-size:0.7rem;padding:3px 10px;background:rgba(239,68,68,0.15);color:#f87171;border-radius:20px;font-weight:700;">LIVE</span>
+        </div>
+        <div class="lp-feat-mini">
+          <div class="lp-feat-mini-ico" style="background:rgba(17,181,228,0.2);color:#11B5E4;">
+            <i class="fa-solid fa-file-medical"></i>
+          </div>
+          <div>
+            <div class="lp-feat-mini-title">Digital Records</div>
+            <div class="lp-feat-mini-sub">Complete patient history & lab results</div>
+          </div>
+          <i class="fa-solid fa-chevron-right" style="margin-left:auto;opacity:0.4;font-size:0.75rem;"></i>
+        </div>
+        <div class="lp-feat-mini">
+          <div class="lp-feat-mini-ico" style="background:rgba(34,197,94,0.2);color:#22c55e;">
+            <i class="fa-solid fa-sack-dollar"></i>
+          </div>
+          <div>
+            <div class="lp-feat-mini-title">Billing & Finance</div>
+            <div class="lp-feat-mini-sub">$48.2K revenue today · ↑ 22%</div>
+          </div>
+          <i class="fa-solid fa-chevron-right" style="margin-left:auto;opacity:0.4;font-size:0.75rem;"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll hint -->
+  <div class="lp-scroll-hint">
+    <div class="lp-scroll-mouse"></div>
+    <span>Scroll to explore</span>
+  </div>
+</section>
+
+<!-- ======================================================
+     STATS STRIP
+====================================================== -->
+<div class="lp-stats-strip">
+  <div class="lp-stats-inner">
+    <div class="lp-strip-stat lp-reveal">
+      <div class="lp-strip-icon"><i class="fa-solid fa-users"></i></div>
+      <div class="lp-strip-val" data-count="2847">0</div>
+      <div class="lp-strip-lbl">Active Patients</div>
+    </div>
+    <div class="lp-strip-stat lp-reveal lp-delay-1">
+      <div class="lp-strip-icon"><i class="fa-solid fa-user-doctor"></i></div>
+      <div class="lp-strip-val" data-count="148">0</div>
+      <div class="lp-strip-lbl">Registered Doctors</div>
+    </div>
+    <div class="lp-strip-stat lp-reveal lp-delay-2">
+      <div class="lp-strip-icon"><i class="fa-solid fa-calendar-check"></i></div>
+      <div class="lp-strip-val" data-count="312">0</div>
+      <div class="lp-strip-lbl">Appointments Today</div>
+    </div>
+    <div class="lp-strip-stat lp-reveal lp-delay-3">
+      <div class="lp-strip-icon"><i class="fa-solid fa-building-columns"></i></div>
+      <div class="lp-strip-val" data-count="8">0</div>
+      <div class="lp-strip-lbl">Departments</div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================================================
+     FEATURES
+====================================================== -->
+<section class="lp-section lp-features" id="features">
+  <div class="lp-container">
+    <div class="lp-section-center" style="margin-bottom:56px;">
+      <div class="lp-section-tag lp-reveal">Capabilities</div>
+      <h2 class="lp-section-h2 lp-reveal lp-delay-1">Everything Your Hospital Needs</h2>
+      <p class="lp-section-p lp-reveal lp-delay-2">From patient intake to emergency triage, MediCore covers every clinical and administrative workflow in one place.</p>
+    </div>
+    <div class="lp-features-grid">
+      <div class="lp-feat-card lp-reveal">
+        <div class="lp-feat-card-ico"><i class="fa-solid fa-calendar-check"></i></div>
+        <h3 class="lp-feat-card-h">Smart Appointments</h3>
+        <p class="lp-feat-card-p">Book, reschedule and manage appointments with real-time availability, automated reminders, and multi-doctor scheduling.</p>
+      </div>
+      <div class="lp-feat-card lp-reveal lp-delay-1">
+        <div class="lp-feat-card-ico"><i class="fa-solid fa-file-medical"></i></div>
+        <h3 class="lp-feat-card-h">Digital Medical Records</h3>
+        <p class="lp-feat-card-p">Complete patient histories, lab results, prescriptions, imaging, and diagnoses — all in one secure digital file.</p>
+      </div>
+      <div class="lp-feat-card lp-reveal lp-delay-2">
+        <div class="lp-feat-card-ico"><i class="fa-solid fa-truck-medical"></i></div>
+        <h3 class="lp-feat-card-h">Emergency Triage</h3>
+        <p class="lp-feat-card-p">Real-time emergency case tracking with priority levels, instant staff notifications, and ICU bed management.</p>
+      </div>
+      <div class="lp-feat-card lp-reveal lp-delay-3">
+        <div class="lp-feat-card-ico"><i class="fa-solid fa-pills"></i></div>
+        <h3 class="lp-feat-card-h">Pharmacy & Inventory</h3>
+        <p class="lp-feat-card-p">Manage prescriptions, monitor stock levels, and receive automatic low-stock and expiry alerts.</p>
+      </div>
+      <div class="lp-feat-card lp-reveal lp-delay-4">
+        <div class="lp-feat-card-ico"><i class="fa-solid fa-file-invoice-dollar"></i></div>
+        <h3 class="lp-feat-card-h">Billing & Invoicing</h3>
+        <p class="lp-feat-card-p">Generate invoices, process insurance claims, and monitor revenue with detailed financial reports and analytics.</p>
+      </div>
+      <div class="lp-feat-card lp-reveal lp-delay-5">
+        <div class="lp-feat-card-ico"><i class="fa-solid fa-chart-bar"></i></div>
+        <h3 class="lp-feat-card-h">Analytics & Reports</h3>
+        <p class="lp-feat-card-p">Department-level performance reports, patient statistics, staff analytics, and exportable PDF summaries.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================
+     ABOUT
+====================================================== -->
+<section class="lp-section lp-about" id="about">
+  <div class="lp-container">
+    <div class="lp-about-grid">
+      <div class="lp-about-img-wrap lp-reveal-left">
+        <img class="lp-about-img" src="https://images.unsplash.com/photo-1551076805-e1869033e561?w=800&q=80" alt="Medical Team"/>
+        <div class="lp-about-badge">
+          <div class="lp-about-badge-ico"><i class="fa-solid fa-award"></i></div>
+          <div>
+            <div class="lp-about-badge-val">12+ Years</div>
+            <div class="lp-about-badge-lbl">Healthcare Excellence</div>
+          </div>
+        </div>
+      </div>
+      <div class="lp-reveal-right">
+        <div class="lp-section-tag">About MediCore</div>
+        <h2 class="lp-section-h2">Built for Modern Healthcare Teams</h2>
+        <p class="lp-section-p" style="margin-bottom:24px;">
+          MediCore HMS was engineered in collaboration with clinical professionals to solve the real-world complexity of hospital operations — from a single GP clinic to a multi-department general hospital.
+        </p>
+        <div class="lp-about-list">
+          <div class="lp-about-item"><i class="fa-solid fa-check"></i> HIPAA-compliant data security & encrypted records</div>
+          <div class="lp-about-item"><i class="fa-solid fa-check"></i> Role-based access for doctors, nurses, and admins</div>
+          <div class="lp-about-item"><i class="fa-solid fa-check"></i> Real-time notifications and emergency alerts</div>
+          <div class="lp-about-item"><i class="fa-solid fa-check"></i> Fully responsive — desktop, tablet & mobile</div>
+          <div class="lp-about-item"><i class="fa-solid fa-check"></i> Seamless integration with lab and pharmacy systems</div>
+        </div>
+        <div style="margin-top:32px;">
+          <button class="lp-btn-primary" onclick="window.location.href='pages/login.html'">
+            <i class="fa-solid fa-right-to-bracket"></i> Access Dashboard
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================
+     SERVICES
+====================================================== -->
+<section class="lp-section lp-services" id="services">
+  <div class="lp-container">
+    <div class="lp-section-center" style="margin-bottom:52px;">
+      <div class="lp-section-tag lp-reveal">Our Modules</div>
+      <h2 class="lp-section-h2 lp-reveal lp-delay-1">Comprehensive Hospital Modules</h2>
+      <p class="lp-section-p lp-reveal lp-delay-2" style="color:rgba(255,255,255,0.65);">Every department. Every workflow. One unified platform.</p>
+    </div>
+    <div class="lp-services-grid">
+      <div class="lp-svc-card lp-reveal">
+        <div class="lp-svc-ico"><i class="fa-solid fa-users"></i></div>
+        <h3 class="lp-svc-h">Patient Management</h3>
+        <p class="lp-svc-p">Complete patient lifecycle — registration, profiles, admissions, discharges, and medical history.</p>
+      </div>
+      <div class="lp-svc-card lp-reveal lp-delay-1">
+        <div class="lp-svc-ico"><i class="fa-solid fa-flask-vial"></i></div>
+        <h3 class="lp-svc-h">Laboratory</h3>
+        <p class="lp-svc-p">Order lab tests, track results, manage equipment, and integrate with diagnostic reports.</p>
+      </div>
+      <div class="lp-svc-card lp-reveal lp-delay-2">
+        <div class="lp-svc-ico"><i class="fa-solid fa-bed"></i></div>
+        <h3 class="lp-svc-h">Rooms & Wards</h3>
+        <p class="lp-svc-p">Real-time bed availability, ward assignments, ICU monitoring, and maintenance scheduling.</p>
+      </div>
+      <div class="lp-svc-card lp-reveal lp-delay-3">
+        <div class="lp-svc-ico"><i class="fa-solid fa-id-badge"></i></div>
+        <h3 class="lp-svc-h">Staff Management</h3>
+        <p class="lp-svc-p">Schedule shifts, manage roles, track attendance, and oversee all 600+ hospital staff.</p>
+      </div>
+      <div class="lp-svc-card lp-reveal lp-delay-4">
+        <div class="lp-svc-ico"><i class="fa-solid fa-message"></i></div>
+        <h3 class="lp-svc-h">Internal Messaging</h3>
+        <p class="lp-svc-p">Secure real-time chat between doctors, nurses, and admin staff with file attachments.</p>
+      </div>
+      <div class="lp-svc-card lp-reveal lp-delay-5">
+        <div class="lp-svc-ico"><i class="fa-solid fa-shield-halved"></i></div>
+        <h3 class="lp-svc-h">Security & Compliance</h3>
+        <p class="lp-svc-p">Role-based permissions, audit trails, encrypted storage, and HIPAA-ready infrastructure.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================
+     DOCTORS
+====================================================== -->
+<section class="lp-section lp-doctors" id="doctors">
+  <div class="lp-container">
+    <div class="lp-section-center" style="margin-bottom:52px;">
+      <div class="lp-section-tag lp-reveal">Our Team</div>
+      <h2 class="lp-section-h2 lp-reveal lp-delay-1">Meet Our Expert Doctors</h2>
+      <p class="lp-section-p lp-reveal lp-delay-2">World-class physicians across every specialty, available through the MediCore platform.</p>
+    </div>
+    <div class="lp-doctors-grid">
+      <div class="lp-doc-card lp-reveal">
+        <div class="lp-doc-card-top">
+          <div class="lp-doc-img-wrap">
+            <img class="lp-doc-img" src="https://ui-avatars.com/api/?name=Mike+Chen&background=dbeafe&color=0A4D68&size=200" alt="Dr. Mike Chen"/>
+            <div class="lp-doc-status"></div>
+          </div>
+          <div class="lp-doc-name">Dr. Mike Chen</div>
+          <div class="lp-doc-spec">Senior Cardiologist</div>
+          <div class="lp-doc-rating">★★★★★ <span style="color:#aab4c4;">5.0</span></div>
+        </div>
+        <div class="lp-doc-card-bot">
+          <div class="lp-doc-stat"><div class="lp-doc-stat-v">245</div><div class="lp-doc-stat-l">Patients</div></div>
+          <div class="lp-doc-stat"><div class="lp-doc-stat-v">12y</div><div class="lp-doc-stat-l">Exp.</div></div>
+          <div class="lp-doc-stat"><div class="lp-doc-stat-v">98%</div><div class="lp-doc-stat-l">Rating</div></div>
+        </div>
+      </div>
+      <div class="lp-doc-card lp-reveal lp-delay-1">
+        <div class="lp-doc-card-top">
+          <div class="lp-doc-img-wrap">
+            <img class="lp-doc-img" src="https://ui-avatars.com/api/?name=Lisa+Park&background=f3e8ff&color=0A4D68&size=200" alt="Dr. Lisa Park"/>
+            <div class="lp-doc-status"></div>
+          </div>
+          <div class="lp-doc-name">Dr. Lisa Park</div>
+          <div class="lp-doc-spec">Neurologist</div>
+          <div class="lp-doc-rating">★★★★★ <span style="color:#aab4c4;">4.8</span></div>
+        </div>
+        <div class="lp-doc-card-bot">
+          <div class="lp-doc-stat"><div class="lp-doc-stat-v">198</div><div class="lp-doc-stat-l">Patients</div></div>
+          <div class="lp-doc-stat"><div class="lp-doc-stat-v">9y</div><div class="lp-doc-stat-l">Exp.</div></div>
+          <div class="lp-doc-stat"><div class="lp-doc-stat-v">96%</div><div class="lp-doc-stat-l">Rating</div></div>
+        </div>
+      </div>
+      <div class="lp-doc-card lp-reveal lp-delay-2">
+        <div class="lp-doc-card-top">
+          <div class="lp-doc-img-wrap">
+            <img class="lp-doc-img" src="https://ui-avatars.com/api/?name=Anna+White&background=dcfce7&color=0A4D68&size=200" alt="Dr. Anna White"/>
+            <div class="lp-doc-status"></div>
+          </div>
+          <div class="lp-doc-name">Dr. Anna White</div>
+          <div class="lp-doc-spec">Pediatrician</div>
+          <div class="lp-doc-rating">★★★★★ <span style="color:#aab4c4;">5.0</span></div>
+        </div>
+        <div class="lp-doc-card-bot">
+          <div class="lp-doc-stat"><div class="lp-doc-stat-v">421</div><div class="lp-doc-stat-l">Patients</div></div>
+          <div class="lp-doc-stat"><div class="lp-doc-stat-v">8y</div><div class="lp-doc-stat-l">Exp.</div></div>
+          <div class="lp-doc-stat"><div class="lp-doc-stat-v">100%</div><div class="lp-doc-stat-l">Rating</div></div>
+        </div>
+      </div>
+      <div class="lp-doc-card lp-reveal lp-delay-3">
+        <div class="lp-doc-card-top">
+          <div class="lp-doc-img-wrap">
+            <img class="lp-doc-img" src="https://ui-avatars.com/api/?name=Rachel+Green&background=e0f2fe&color=0A4D68&size=200" alt="Dr. Rachel Green"/>
+            <div class="lp-doc-status"></div>
+          </div>
+          <div class="lp-doc-name">Dr. Rachel Green</div>
+          <div class="lp-doc-spec">Emergency Medicine</div>
+          <div class="lp-doc-rating">★★★★★ <span style="color:#aab4c4;">4.9</span></div>
+        </div>
+        <div class="lp-doc-card-bot">
+          <div class="lp-doc-stat"><div class="lp-doc-stat-v">567</div><div class="lp-doc-stat-l">Patients</div></div>
+          <div class="lp-doc-stat"><div class="lp-doc-stat-v">11y</div><div class="lp-doc-stat-l">Exp.</div></div>
+          <div class="lp-doc-stat"><div class="lp-doc-stat-v">97%</div><div class="lp-doc-stat-l">Rating</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================
+     TESTIMONIALS
+====================================================== -->
+<section class="lp-section lp-testimonials">
+  <div class="lp-container">
+    <div class="lp-section-center" style="margin-bottom:52px;">
+      <div class="lp-section-tag lp-reveal">Testimonials</div>
+      <h2 class="lp-section-h2 lp-reveal lp-delay-1">What Our Users Say</h2>
+      <p class="lp-section-p lp-reveal lp-delay-2">Real feedback from doctors, nurses, and administrators using MediCore daily.</p>
+    </div>
+    <div class="lp-testi-grid">
+      <div class="lp-testi-card lp-reveal">
+        <div class="lp-testi-stars">★★★★★</div>
+        <p class="lp-testi-text">"MediCore transformed how our cardiology department operates. Patient records, scheduling, and billing are now completely seamless. I save at least 2 hours every day."</p>
+        <div class="lp-testi-author">
+          <img src="https://ui-avatars.com/api/?name=Dr+Sarah+M&background=dbeafe&color=0A4D68&size=100" alt=""/>
+          <div><div class="lp-testi-name">Dr. Sarah Mitchell</div><div class="lp-testi-role">Head of Cardiology, St. Luke's</div></div>
+        </div>
+      </div>
+      <div class="lp-testi-card lp-reveal lp-delay-1">
+        <div class="lp-testi-stars">★★★★★</div>
+        <p class="lp-testi-text">"The emergency triage module is a game-changer. We can see real-time ICU availability, assign doctors instantly, and track case status without any delays."</p>
+        <div class="lp-testi-author">
+          <img src="https://ui-avatars.com/api/?name=Rachel+G&background=dcfce7&color=0A4D68&size=100" alt=""/>
+          <div><div class="lp-testi-name">Dr. Rachel Green</div><div class="lp-testi-role">Emergency Medicine, MediCore</div></div>
+        </div>
+      </div>
+      <div class="lp-testi-card lp-reveal lp-delay-2">
+        <div class="lp-testi-stars">★★★★★</div>
+        <p class="lp-testi-text">"As a hospital administrator, the billing and reports section gives me exactly what I need. Clean dashboards, export-ready reports, and zero manual entry errors."</p>
+        <div class="lp-testi-author">
+          <img src="https://ui-avatars.com/api/?name=James+B&background=fef3c7&color=0A4D68&size=100" alt=""/>
+          <div><div class="lp-testi-name">James Baxter</div><div class="lp-testi-role">Hospital Administrator, City General</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================
+     APPOINTMENT
+====================================================== -->
+<section class="lp-section lp-appointment" id="appointment">
+  <div class="lp-container">
+    <div class="lp-appt-grid">
+      <div class="lp-reveal-left">
+        <div class="lp-section-tag">Quick Access</div>
+        <h2 class="lp-section-h2">Schedule an Appointment</h2>
+        <p class="lp-section-p" style="margin-bottom:32px;">
+          Fill in your details and our team will confirm your slot within minutes. Full appointment management is available through the dashboard after login.
+        </p>
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <div style="display:flex;align-items:center;gap:14px;padding:16px;background:white;border-radius:12px;border:1.5px solid rgba(17,181,228,0.1);box-shadow:0 2px 12px rgba(0,0,0,0.04);">
+            <div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#11B5E4,#0A4D68);display:flex;align-items:center;justify-content:center;color:white;font-size:1rem;flex-shrink:0;"><i class="fa-solid fa-clock"></i></div>
+            <div><div style="font-weight:700;color:#0A4D68;font-size:0.9rem;">Working Hours</div><div style="font-size:0.8rem;color:#6B7A99;">Mon – Sat: 8:00 AM – 8:00 PM</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;padding:16px;background:white;border-radius:12px;border:1.5px solid rgba(17,181,228,0.1);box-shadow:0 2px 12px rgba(0,0,0,0.04);">
+            <div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#11B5E4,#0A4D68);display:flex;align-items:center;justify-content:center;color:white;font-size:1rem;flex-shrink:0;"><i class="fa-solid fa-phone"></i></div>
+            <div><div style="font-weight:700;color:#0A4D68;font-size:0.9rem;">Emergency Hotline</div><div style="font-size:0.8rem;color:#6B7A99;">+1 (555) 800-9000 · 24/7</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;padding:16px;background:white;border-radius:12px;border:1.5px solid rgba(17,181,228,0.1);box-shadow:0 2px 12px rgba(0,0,0,0.04);">
+            <div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#11B5E4,#0A4D68);display:flex;align-items:center;justify-content:center;color:white;font-size:1rem;flex-shrink:0;"><i class="fa-solid fa-location-dot"></i></div>
+            <div><div style="font-weight:700;color:#0A4D68;font-size:0.9rem;">Our Location</div><div style="font-size:0.8rem;color:#6B7A99;">1200 Medical Center Dr, Chicago, IL</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="lp-reveal-right">
+        <div class="lp-appt-form-wrap">
+          <div class="lp-form-h">Book Appointment</div>
+          <p class="lp-form-p">Fill in your details — our team will confirm shortly.</p>
+          <div class="lp-form-row">
+            <div class="lp-input-group">
+              <label class="lp-input-label">First Name</label>
+              <input type="text" class="lp-input" placeholder="John"/>
+            </div>
+            <div class="lp-input-group">
+              <label class="lp-input-label">Last Name</label>
+              <input type="text" class="lp-input" placeholder="Doe"/>
+            </div>
+          </div>
+          <div class="lp-form-row">
+            <div class="lp-input-group">
+              <label class="lp-input-label">Phone</label>
+              <input type="tel" class="lp-input" placeholder="+1 (555) 000-0000"/>
+            </div>
+            <div class="lp-input-group">
+              <label class="lp-input-label">Email</label>
+              <input type="email" class="lp-input" placeholder="you@email.com"/>
+            </div>
+          </div>
+          <div class="lp-form-row">
+            <div class="lp-input-group">
+              <label class="lp-input-label">Department</label>
+              <select class="lp-input">
+                <option>Cardiology</option><option>Neurology</option>
+                <option>Orthopedics</option><option>Pediatrics</option>
+                <option>Dermatology</option><option>Emergency</option>
+              </select>
+            </div>
+            <div class="lp-input-group">
+              <label class="lp-input-label">Preferred Date</label>
+              <input type="date" class="lp-input"/>
+            </div>
+          </div>
+          <div class="lp-input-group">
+            <label class="lp-input-label">Additional Notes</label>
+            <textarea class="lp-input" rows="3" placeholder="Describe your symptoms or reason for visit..."></textarea>
+          </div>
+          <button class="lp-btn-primary" style="width:100%;justify-content:center;margin-top:4px;" id="apptBtn">
+            <i class="fa-solid fa-calendar-check"></i> Request Appointment
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================
+     FAQ
+====================================================== -->
+<section class="lp-section lp-faq">
+  <div class="lp-container">
+    <div class="lp-section-center" style="margin-bottom:48px;">
+      <div class="lp-section-tag lp-reveal">FAQ</div>
+      <h2 class="lp-section-h2 lp-reveal lp-delay-1">Frequently Asked Questions</h2>
+    </div>
+    <div class="lp-faq-list" id="lpFaqList">
+      <div class="lp-faq-item lp-reveal open">
+        <button class="lp-faq-q">
+          What is MediCore HMS?
+          <span class="lp-faq-icon"><i class="fa-solid fa-plus"></i></span>
+        </button>
+        <div class="lp-faq-a">
+          <div class="lp-faq-a-inner">MediCore HMS is a comprehensive hospital management system that streamlines patient records, appointments, billing, pharmacy, laboratory, emergency triage, and staff management in a single unified platform.</div>
+        </div>
+      </div>
+      <div class="lp-faq-item lp-reveal lp-delay-1">
+        <button class="lp-faq-q">How secure is patient data?<span class="lp-faq-icon"><i class="fa-solid fa-plus"></i></span></button>
+        <div class="lp-faq-a"><div class="lp-faq-a-inner">All patient data is encrypted at rest and in transit. MediCore is designed with HIPAA compliance in mind, featuring role-based access control, audit trails, and secure session management.</div></div>
+      </div>
+      <div class="lp-faq-item lp-reveal lp-delay-2">
+        <button class="lp-faq-q">Who can access the system?<span class="lp-faq-icon"><i class="fa-solid fa-plus"></i></span></button>
+        <div class="lp-faq-a"><div class="lp-faq-a-inner">Access is role-based. Administrators have full access; doctors see their patients and schedules; nurses have clinical access; and staff have limited administrative access. All roles are configurable.</div></div>
+      </div>
+      <div class="lp-faq-item lp-reveal lp-delay-3">
+        <button class="lp-faq-q">Is it mobile-friendly?<span class="lp-faq-icon"><i class="fa-solid fa-plus"></i></span></button>
+        <div class="lp-faq-a"><div class="lp-faq-a-inner">Yes. MediCore is fully responsive and optimized for desktop, laptop, tablet, and mobile devices. The sidebar collapses gracefully on small screens without any loss of functionality.</div></div>
+      </div>
+      <div class="lp-faq-item lp-reveal lp-delay-4">
+        <button class="lp-faq-q">Can I try a demo account?<span class="lp-faq-icon"><i class="fa-solid fa-plus"></i></span></button>
+        <div class="lp-faq-a"><div class="lp-faq-a-inner">Yes! On the login page, use the quick-fill role chips to log in as Admin, Doctor, Nurse, or Staff using pre-filled demo credentials. No registration required.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================
+     CONTACT
+====================================================== -->
+<section class="lp-section lp-contact" id="contact">
+  <div class="lp-container">
+    <div class="lp-section-center" style="margin-bottom:52px;">
+      <div class="lp-section-tag lp-reveal">Contact Us</div>
+      <h2 class="lp-section-h2 lp-reveal lp-delay-1">Get in Touch</h2>
+      <p class="lp-section-p lp-reveal lp-delay-2">Have questions or need a demo? Our team is available around the clock.</p>
+    </div>
+    <div class="lp-contact-grid">
+      <div class="lp-contact-info lp-reveal-left">
+        <div class="lp-contact-item">
+          <div class="lp-contact-ico"><i class="fa-solid fa-location-dot"></i></div>
+          <div><div class="lp-contact-label">Our Address</div><div class="lp-contact-val">1200 Medical Center Dr, Chicago, IL 60601</div></div>
+        </div>
+        <div class="lp-contact-item">
+          <div class="lp-contact-ico"><i class="fa-solid fa-phone"></i></div>
+          <div><div class="lp-contact-label">Phone</div><div class="lp-contact-val">+1 (555) 800-9000</div></div>
+        </div>
+        <div class="lp-contact-item">
+          <div class="lp-contact-ico"><i class="fa-solid fa-envelope"></i></div>
+          <div><div class="lp-contact-label">Email</div><div class="lp-contact-val">admin@medicore.com</div></div>
+        </div>
+        <div class="lp-contact-item">
+          <div class="lp-contact-ico"><i class="fa-solid fa-clock"></i></div>
+          <div><div class="lp-contact-label">Working Hours</div><div class="lp-contact-val">Mon – Sun · 24 / 7 Support</div></div>
+        </div>
+        <div class="lp-map-wrap">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2970.5019349787697!2d-87.62979808412753!3d41.88400987922244!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x880e2d3f50b4db2b%3A0x9b92b8b2b8e2c16e!2sChicago%2C%20IL!5e0!3m2!1sen!2sus!4v1690000000000!5m2!1sen!2sus" width="100%" height="220" style="border:0;display:block;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+      </div>
+      <div class="lp-reveal-right">
+        <div class="lp-appt-form-wrap">
+          <div class="lp-form-h">Send a Message</div>
+          <p class="lp-form-p">We'll get back to you within 24 hours.</p>
+          <div class="lp-form-row">
+            <div class="lp-input-group"><label class="lp-input-label">Name</label><input type="text" class="lp-input" placeholder="Your name"/></div>
+            <div class="lp-input-group"><label class="lp-input-label">Email</label><input type="email" class="lp-input" placeholder="you@email.com"/></div>
+          </div>
+          <div class="lp-input-group"><label class="lp-input-label">Subject</label><input type="text" class="lp-input" placeholder="How can we help?"/></div>
+          <div class="lp-input-group"><label class="lp-input-label">Message</label><textarea class="lp-input" rows="4" placeholder="Write your message..."></textarea></div>
+          <button class="lp-btn-primary" style="width:100%;justify-content:center;" id="contactBtn">
+            <i class="fa-solid fa-paper-plane"></i> Send Message
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================
+     CTA
+====================================================== -->
+<section class="lp-section lp-cta">
+  <div class="lp-container">
+    <div class="lp-cta-inner lp-reveal">
+      <h2 class="lp-cta-h">Ready to Transform Your Hospital?</h2>
+      <p class="lp-cta-p">Sign in now and take full control of every department from one powerful dashboard.</p>
+      <button class="lp-cta-btn" id="ctaFinalBtn" onclick="window.location.href='pages/login.html'">
+        <i class="fa-solid fa-right-to-bracket" style="color:var(--lp-primary);"></i>
+        Sign In to MediCore
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================
+     FOOTER
+====================================================== -->
+<footer class="lp-footer">
+  <div class="lp-container">
+    <div class="lp-footer-top">
+      <div class="lp-footer-brand">
+        <div class="lp-footer-logo">
+          <div class="lp-logo-ico"><i class="fa-solid fa-hospital-user"></i></div>
+          <span>MediCore HMS</span>
+        </div>
+        <p class="lp-footer-brand-p">The all-in-one hospital management system trusted by 500+ healthcare facilities worldwide.</p>
+        <div class="lp-footer-socials">
+          <a href="#" class="lp-social-btn"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#" class="lp-social-btn"><i class="fa-brands fa-twitter"></i></a>
+          <a href="#" class="lp-social-btn"><i class="fa-brands fa-linkedin-in"></i></a>
+          <a href="#" class="lp-social-btn"><i class="fa-brands fa-instagram"></i></a>
+        </div>
+      </div>
+      <div>
+        <div class="lp-footer-col-h">Quick Links</div>
+        <div class="lp-footer-links">
+          <a href="#home"        class="lp-footer-link">Home</a>
+          <a href="#features"    class="lp-footer-link">Features</a>
+          <a href="#services"    class="lp-footer-link">Services</a>
+          <a href="#doctors"     class="lp-footer-link">Doctors</a>
+          <a href="#appointment" class="lp-footer-link">Appointment</a>
+        </div>
+      </div>
+      <div>
+        <div class="lp-footer-col-h">System</div>
+        <div class="lp-footer-links">
+          <a href="pages/login.html"      class="lp-footer-link">Sign In</a>
+          <a href="pages/dashboard.html"  class="lp-footer-link">Dashboard</a>
+          <a href="pages/patients.html"   class="lp-footer-link">Patients</a>
+          <a href="pages/doctors.html"    class="lp-footer-link">Doctors</a>
+          <a href="pages/billing.html"    class="lp-footer-link">Billing</a>
+        </div>
+      </div>
+      <div>
+        <div class="lp-footer-col-h">Newsletter</div>
+        <p style="font-size:0.82rem;color:rgba(255,255,255,0.45);margin-bottom:0;">Get updates on new features and healthcare insights.</p>
+        <div class="lp-newsletter-form">
+          <input type="email" class="lp-newsletter-input" placeholder="Your email"/>
+          <button class="lp-newsletter-btn" id="newsletterBtn">Subscribe</button>
+        </div>
+      </div>
+    </div>
+    <div class="lp-footer-bottom">
+      <span>© 2026 MediCore HMS. All rights reserved.</span>
+      <div style="display:flex;gap:20px;">
+        <a href="#" style="color:rgba(255,255,255,0.35);font-size:0.8rem;">Privacy Policy</a>
+        <a href="#" style="color:rgba(255,255,255,0.35);font-size:0.8rem;">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ================================================================
+   LANDING PAGE JAVASCRIPT
+   All existing JS logic preserved — this file has no main.js
+================================================================ */
+
+// ===== NAVBAR scroll effect =====
+const lpNav = document.getElementById('lpNav');
+window.addEventListener('scroll', () => {
+  lpNav.classList.toggle('scrolled', window.scrollY > 60);
+}, { passive: true });
+
+// ===== HAMBURGER MENU =====
+const lpHam  = document.getElementById('lpHamburger');
+const lpMenu = document.getElementById('lpMobileMenu');
+lpHam.addEventListener('click', () => {
+  lpHam.classList.toggle('open');
+  lpMenu.classList.toggle('open');
+});
+// Close mobile menu on link click
+lpMenu.querySelectorAll('a').forEach(a => {
+  a.addEventListener('click', () => {
+    lpHam.classList.remove('open');
+    lpMenu.classList.remove('open');
+  });
+});
+
+// ===== SMOOTH SCROLL =====
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (!target) return;
+    e.preventDefault();
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+
+// ===== ANIMATED COUNTER =====
+function animateCount(el) {
+  const target = parseInt(el.dataset.count);
+  const suffix = target >= 1000 ? '+' : '';
+  let current = 0;
+  const step = Math.ceil(target / 70);
+  const timer = setInterval(() => {
+    current = Math.min(current + step, target);
+    el.textContent = current.toLocaleString() + suffix;
+    if (current >= target) clearInterval(timer);
+  }, 18);
+}
+const countObs = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    animateCount(entry.target);
+    countObs.unobserve(entry.target);
+  });
+}, { threshold: 0.5 });
+document.querySelectorAll('[data-count]').forEach(el => countObs.observe(el));
+
+// ===== SCROLL REVEAL =====
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('is-visible');
+      revealObs.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.lp-reveal, .lp-reveal-left, .lp-reveal-right').forEach(el => revealObs.observe(el));
+
+// ===== BUTTON RIPPLE =====
+document.querySelectorAll('.lp-btn-primary').forEach(btn => {
+  btn.addEventListener('click', function(e) {
+    const wrap = this.querySelector('.lp-ripple-wrap');
+    if (!wrap) return;
+    const r = document.createElement('span');
+    r.className = 'lp-ripple-circle';
+    const rect = this.getBoundingClientRect();
+    r.style.left = (e.clientX - rect.left) + 'px';
+    r.style.top  = (e.clientY - rect.top)  + 'px';
+    wrap.appendChild(r);
+    setTimeout(() => r.remove(), 800);
+  });
+});
+
+// ===== FAQ ACCORDION =====
+document.querySelectorAll('.lp-faq-q').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.closest('.lp-faq-item');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.lp-faq-item.open').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  });
+});
+
+// ===== HERO PARTICLES =====
+(function() {
+  const container = document.getElementById('lpParticles');
+  if (!container) return;
+  for (let i = 0; i < 14; i++) {
+    const p = document.createElement('div');
+    p.className = 'lp-particle';
+    const size = Math.random() * 80 + 30;
+    p.style.cssText = `
+      width:${size}px; height:${size}px;
+      top:${Math.random()*100}%; left:${Math.random()*100}%;
+      opacity:${Math.random()*0.25 + 0.05};
+      --dur:${Math.random()*5+4}s;
+      --del:${Math.random()*4}s;
+      animation-delay:var(--del);
+    `;
+    container.appendChild(p);
+  }
+})();
+
+// ===== APPOINTMENT FORM =====
+document.getElementById('apptBtn').addEventListener('click', function() {
+  const inputs = this.closest('.lp-appt-form-wrap').querySelectorAll('.lp-input');
+  let ok = true;
+  inputs.forEach(inp => {
+    if (inp.required !== false && !inp.value.trim() && inp.type !== 'date' && inp.tagName !== 'SELECT') ok = false;
+  });
+  showLpToast('Appointment request sent! We\'ll confirm shortly.', 'success');
+});
+
+// ===== CONTACT FORM =====
+document.getElementById('contactBtn').addEventListener('click', function() {
+  showLpToast('Message sent! We\'ll reply within 24 hours.', 'success');
+});
+
+// ===== NEWSLETTER =====
+document.getElementById('newsletterBtn').addEventListener('click', function() {
+  const inp = document.querySelector('.lp-newsletter-input');
+  if (!inp.value || !/\S+@\S+\.\S+/.test(inp.value)) {
+    showLpToast('Please enter a valid email address.', 'error');
+    return;
+  }
+  showLpToast('You\'ve been subscribed! Thank you.', 'success');
+  inp.value = '';
+});
+
+// ===== TOAST NOTIFICATION =====
+function showLpToast(msg, type) {
+  const t = document.createElement('div');
+  t.style.cssText = `
+    position:fixed;bottom:28px;right:28px;z-index:9999;
+    background:${type === 'success' ? 'linear-gradient(135deg,#11B5E4,#0A4D68)' : 'linear-gradient(135deg,#ef4444,#b91c1c)'};
+    color:white;padding:14px 22px;border-radius:14px;
+    font-family:'Outfit',sans-serif;font-size:0.875rem;font-weight:600;
+    box-shadow:0 10px 40px rgba(0,0,0,0.25);
+    display:flex;align-items:center;gap:10px;max-width:340px;
+    transform:translateY(20px);opacity:0;transition:all 0.35s ease;
+  `;
+  t.innerHTML = `<i class="fa-solid ${type === 'success' ? 'fa-circle-check' : 'fa-circle-xmark'}"></i> ${msg}`;
+  document.body.appendChild(t);
+  setTimeout(() => { t.style.transform = 'translateY(0)'; t.style.opacity = '1'; }, 20);
+  setTimeout(() => {
+    t.style.transform = 'translateY(20px)'; t.style.opacity = '0';
+    setTimeout(() => t.remove(), 400);
+  }, 3500);
+}
+</script>
+</body>
+</html>

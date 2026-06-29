@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MediCore HMS — Discharge</title>
+<link rel="stylesheet" href="../css/style.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar">
+  <div class="sidebar-logo"><div class="logo-icon"><i class="fa-solid fa-hospital-user" style="color:white"></i></div><div><h1>MediCore</h1><span>Hospital Management</span></div></div>
+  <nav class="sidebar-nav"></nav>
+  <div class="sidebar-footer"><a href="my-profile.html" class="sidebar-user"><img id="sidebarAvatar" src="" alt=""/><div class="user-info"><div class="user-name" id="sidebarName">User</div><div class="user-role" id="sidebarRole">Role</div></div></a></div>
+</aside>
+<div class="main-content">
+  <header class="header">
+    <button class="sidebar-toggle"><i class="fa-solid fa-bars"></i></button>
+    <div class="header-left">
+      <div style="display:flex;align-items:center;gap:8px;"><a href="admissions.html" style="color:var(--gray-500);font-size:0.825rem;"><i class="fa-solid fa-arrow-left"></i> Admissions</a></div>
+      <div class="header-title">Patient Discharge</div>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-ghost btn-sm" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i></button>
+      <a href="my-profile.html"><img id="headerAvatar" class="header-avatar" alt=""/></a>
+    </div>
+  </header>
+  <div class="page-content">
+    <div class="grid-2" style="align-items:start;">
+      <div class="card" id="dischargeCard">
+        <div class="card-header"><div class="card-title">Discharge Summary</div></div>
+        <div class="card-body" id="dischargeContent">
+          <div class="empty-state"><i class="fa-solid fa-file-medical"></i><p>Select an admission to process discharge</p></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Pending Discharges</div></div>
+        <div class="card-body no-pad">
+          <div class="table-wrap"><table><thead><tr><th>Patient</th><th>Ward</th><th>Status</th><th></th></tr></thead>
+          <tbody id="pendingBody"></tbody></table></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script src="../js/data.js"></script>
+<script src="../js/nav.js"></script>
+<script src="../js/app.js"></script>
+<script src="../js/main.js"></script>
+<script>
+let selectedId = new URLSearchParams(location.search).get('id');
+
+function renderPending() {
+  const adm = HMSData.get('admissions').filter(a => a.status !== 'Discharged');
+  document.getElementById('pendingBody').innerHTML = adm.length ? adm.map(a => `<tr>
+    <td><div class="name">${a.patient}</div><div class="sub">${a.patientId}</div></td>
+    <td>${a.ward}</td><td><span class="badge ${HMSData.badgeForStatus(a.status)}">${a.status}</span></td>
+    <td><button class="btn btn-primary btn-sm" onclick="selectAdmission('${a.id}')">Process</button></td></tr>`).join('') : '<tr><td colspan="4" class="empty-state">No pending discharges</td></tr>';
+  if (selectedId) selectAdmission(selectedId);
+}
+
+function selectAdmission(id) {
+  selectedId = id;
+  const a = HMSData.find('admissions', id);
+  if (!a) return;
+  document.getElementById('dischargeContent').innerHTML = `
+    <div style="margin-bottom:20px;">
+      <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:4px;">${a.patient}</h3>
+      <p style="color:var(--gray-500);font-size:0.85rem;">${a.patientId} · ${a.ward} · Room ${a.room} · Bed ${a.bed}</p>
+    </div>
+    <div class="info-list" style="margin-bottom:20px;">
+      <div class="info-item"><div class="info-item-icon"><i class="fa-solid fa-stethoscope"></i></div><div><div class="info-item-label">Diagnosis</div><div class="info-item-value">${a.diagnosis}</div></div></div>
+      <div class="info-item"><div class="info-item-icon"><i class="fa-solid fa-user-doctor"></i></div><div><div class="info-item-label">Attending</div><div class="info-item-value">${a.doctor}</div></div></div>
+      <div class="info-item"><div class="info-item-icon"><i class="fa-solid fa-calendar"></i></div><div><div class="info-item-label">Admitted</div><div class="info-item-value">${HMSData.formatDate(a.admittedOn)}</div></div></div>
+    </div>
+    <form id="dischargeForm">
+      <div class="form-group"><label class="form-label">Discharge Summary</label><textarea class="form-control" name="summary" rows="3" placeholder="Treatment summary, follow-up instructions..." required></textarea></div>
+      <div class="form-group"><label class="form-label">Follow-up Date</label><input type="date" class="form-control" name="followup"/></div>
+      <div class="form-group"><label class="form-label">Final Bill Amount ($)</label><input type="number" class="form-control" name="bill" placeholder="0.00" min="0" step="0.01"/></div>
+      <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;"><i class="fa-solid fa-door-closed"></i> Complete Discharge</button>
+    </form>`;
+  document.getElementById('dischargeForm').addEventListener('submit', e => {
+    e.preventDefault();
+    HMSData.update('admissions', id, { status: 'Discharged', dischargedOn: new Date().toISOString().slice(0, 10) });
+    HMSData.update('patients', a.patientId, { status: 'Discharged' });
+    showToast('Patient discharged successfully');
+    selectedId = null;
+    renderPending();
+    document.getElementById('dischargeContent').innerHTML = '<div class="empty-state"><i class="fa-solid fa-circle-check" style="color:var(--success)"></i><p>Discharge completed</p></div>';
+  });
+}
+
+document.addEventListener('DOMContentLoaded', renderPending);
+</script>
+</body>
+</html>

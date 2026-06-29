@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MediCore HMS — Settings</title>
+<link rel="stylesheet" href="../css/style.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<style>
+.toggle { display:inline-flex; align-items:center; cursor:pointer; }
+.toggle input { display:none; }
+.toggle-slider { width:42px; height:24px; background:var(--gray-300); border-radius:100px; position:relative; transition:var(--transition); }
+.toggle-slider::after { content:''; position:absolute; width:18px; height:18px; background:white; border-radius:50%; top:3px; left:3px; transition:var(--transition); box-shadow:0 1px 3px rgba(0,0,0,0.2); }
+.toggle input:checked + .toggle-slider { background:var(--primary); }
+.toggle input:checked + .toggle-slider::after { left:21px; }
+.setting-row { display:flex; align-items:center; justify-content:space-between; padding:16px 0; border-bottom:1px solid var(--gray-100); }
+.setting-row:last-child { border-bottom:none; }
+</style>
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar">
+  <div class="sidebar-logo"><div class="logo-icon"><i class="fa-solid fa-hospital-user" style="color:white"></i></div><div><h1>MediCore</h1><span>Hospital Management</span></div></div>
+  <nav class="sidebar-nav">
+    <div class="nav-section"><div class="nav-section-title">Main</div>
+      <a href="dashboard.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-grip"></i></span> Dashboard</a>
+      <a href="appointments.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-calendar-check"></i></span> Appointments <span class="nav-badge">5</span></a>
+      <a href="patients.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-users"></i></span> Patients</a>
+      <a href="doctors.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-user-doctor"></i></span> Doctors</a>
+      <a href="departments.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-building-columns"></i></span> Departments</a>
+    </div>
+    <div class="nav-section"><div class="nav-section-title">Clinical</div>
+      <a href="medical-records.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-file-medical"></i></span> Medical Records</a>
+      <a href="laboratory.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-flask-vial"></i></span> Laboratory</a>
+      <a href="pharmacy.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-pills"></i></span> Pharmacy</a>
+      <a href="rooms.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-bed"></i></span> Rooms &amp; Wards</a>
+      <a href="emergency.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-truck-medical"></i></span> Emergency</a>
+    </div>
+    <div class="nav-section"><div class="nav-section-title">Administration</div>
+      <a href="staff.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-id-badge"></i></span> Staff</a>
+      <a href="billing.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-file-invoice-dollar"></i></span> Billing</a>
+      <a href="reports.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-chart-bar"></i></span> Reports</a>
+      <a href="messages.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-message"></i></span> Messages <span class="nav-badge">3</span></a>
+      <a href="notifications.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-bell"></i></span> Notifications</a>
+      <a href="settings.html" class="nav-item active"><span class="nav-icon"><i class="fa-solid fa-gear"></i></span> Settings</a>
+    </div>
+  </nav>
+  <div class="sidebar-footer"><a href="my-profile.html" class="sidebar-user"><img id="sidebarAvatar" src="https://ui-avatars.com/api/?name=Dr+Admin&background=2563eb&color=fff" alt=""/><div class="user-info"><div class="user-name" id="sidebarName">Dr. Admin</div><div class="user-role" id="sidebarRole">Administrator</div></div></a></div>
+</aside>
+<div class="main-content">
+  <header class="header">
+    <button class="sidebar-toggle"><i class="fa-solid fa-bars"></i></button>
+    <div class="header-left"><div class="header-title">Settings</div><div class="header-subtitle">System preferences &amp; configuration</div></div>
+    <div class="header-actions">
+      <a href="notifications.html" class="header-btn"><i class="fa-solid fa-bell"></i></a>
+      <a href="my-profile.html"><img src="https://ui-avatars.com/api/?name=Dr+Admin&background=2563eb&color=fff" class="header-avatar" alt=""/></a>
+    </div>
+  </header>
+  <div class="page-content">
+    <div class="grid-2" style="align-items:start;gap:24px;">
+      <!-- LEFT -->
+      <div style="display:flex;flex-direction:column;gap:24px;">
+        <!-- General -->
+        <div class="card">
+          <div class="card-header"><div class="card-title"><i class="fa-solid fa-building-user" style="color:var(--primary);margin-right:8px;"></i>Hospital Information</div></div>
+          <div class="card-body">
+            <div class="form-group"><label class="form-label">Hospital Name</label><input type="text" class="form-control" value="MediCore General Hospital"/></div>
+            <div class="form-group"><label class="form-label">Address</label><input type="text" class="form-control" value="1200 Medical Center Dr, Chicago, IL 60601"/></div>
+            <div class="form-row">
+              <div class="form-group"><label class="form-label">Phone</label><input type="tel" class="form-control" value="+1 (555) 800-9000"/></div>
+              <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-control" value="admin@medicore.com"/></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label class="form-label">Timezone</label><select class="form-control"><option selected>America/Chicago (CST)</option><option>America/New_York (EST)</option><option>America/Los_Angeles (PST)</option></select></div>
+              <div class="form-group"><label class="form-label">Currency</label><select class="form-control"><option selected>USD ($)</option><option>EUR (€)</option><option>GBP (£)</option></select></div>
+            </div>
+            <button class="btn btn-primary" onclick="window.showToast('Hospital info saved!')"><i class="fa-solid fa-check"></i> Save Changes</button>
+          </div>
+        </div>
+
+        <!-- Account -->
+        <div class="card">
+          <div class="card-header"><div class="card-title"><i class="fa-solid fa-shield-halved" style="color:var(--primary);margin-right:8px;"></i>Security</div></div>
+          <div class="card-body">
+            <div class="form-group"><label class="form-label">Current Password</label><input type="password" class="form-control" placeholder="Current password"/></div>
+            <div class="form-row">
+              <div class="form-group"><label class="form-label">New Password</label><input type="password" class="form-control" placeholder="New password"/></div>
+              <div class="form-group"><label class="form-label">Confirm Password</label><input type="password" class="form-control" placeholder="Confirm password"/></div>
+            </div>
+            <div class="setting-row" style="border-top:1px solid var(--gray-100);padding-top:16px;">
+              <div><div style="font-weight:600;font-size:0.875rem;">Two-Factor Authentication</div><div style="font-size:0.78rem;color:var(--gray-500);">Add extra security to your account</div></div>
+              <label class="toggle"><input type="checkbox" checked/><div class="toggle-slider"></div></label>
+            </div>
+            <button class="btn btn-primary" style="margin-top:16px;" onclick="window.showToast('Password updated!')"><i class="fa-solid fa-lock"></i> Update Password</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT -->
+      <div style="display:flex;flex-direction:column;gap:24px;">
+        <!-- Notifications -->
+        <div class="card">
+          <div class="card-header"><div class="card-title"><i class="fa-solid fa-bell" style="color:var(--primary);margin-right:8px;"></i>Notification Preferences</div></div>
+          <div class="card-body">
+            <div class="setting-row"><div><div style="font-weight:600;font-size:0.875rem;">Emergency Alerts</div><div style="font-size:0.78rem;color:var(--gray-500);">Critical patient &amp; emergency notifications</div></div><label class="toggle"><input type="checkbox" checked/><div class="toggle-slider"></div></label></div>
+            <div class="setting-row"><div><div style="font-weight:600;font-size:0.875rem;">Appointment Reminders</div><div style="font-size:0.78rem;color:var(--gray-500);">30 min before each appointment</div></div><label class="toggle"><input type="checkbox" checked/><div class="toggle-slider"></div></label></div>
+            <div class="setting-row"><div><div style="font-weight:600;font-size:0.875rem;">Lab Results Ready</div><div style="font-size:0.78rem;color:var(--gray-500);">Notify when test results are available</div></div><label class="toggle"><input type="checkbox" checked/><div class="toggle-slider"></div></label></div>
+            <div class="setting-row"><div><div style="font-weight:600;font-size:0.875rem;">Low Pharmacy Stock</div><div style="font-size:0.78rem;color:var(--gray-500);">Alert when medicine stock drops below threshold</div></div><label class="toggle"><input type="checkbox" checked/><div class="toggle-slider"></div></label></div>
+            <div class="setting-row"><div><div style="font-weight:600;font-size:0.875rem;">Billing Alerts</div><div style="font-size:0.78rem;color:var(--gray-500);">Overdue invoice notifications</div></div><label class="toggle"><input type="checkbox"/><div class="toggle-slider"></div></label></div>
+            <div class="setting-row"><div><div style="font-weight:600;font-size:0.875rem;">Email Notifications</div><div style="font-size:0.78rem;color:var(--gray-500);">Send notifications to registered email</div></div><label class="toggle"><input type="checkbox" checked/><div class="toggle-slider"></div></label></div>
+          </div>
+        </div>
+
+        <!-- System -->
+        <div class="card">
+          <div class="card-header"><div class="card-title"><i class="fa-solid fa-sliders" style="color:var(--primary);margin-right:8px;"></i>System Preferences</div></div>
+          <div class="card-body">
+            <div class="setting-row"><div><div style="font-weight:600;font-size:0.875rem;">Dark Mode</div><div style="font-size:0.78rem;color:var(--gray-500);">Switch to dark interface</div></div><label class="toggle"><input type="checkbox" id="darkToggle" onchange="toggleDark(this)"/><div class="toggle-slider"></div></label></div>
+            <div class="setting-row"><div><div style="font-weight:600;font-size:0.875rem;">Auto-Save Forms</div><div style="font-size:0.78rem;color:var(--gray-500);">Save form drafts automatically</div></div><label class="toggle"><input type="checkbox" checked/><div class="toggle-slider"></div></label></div>
+            <div class="setting-row"><div><div style="font-weight:600;font-size:0.875rem;">Compact Table View</div><div style="font-size:0.78rem;color:var(--gray-500);">Show more rows in tables</div></div><label class="toggle"><input type="checkbox"/><div class="toggle-slider"></div></label></div>
+            <div class="form-group" style="margin-top:12px;"><label class="form-label">Date Format</label><select class="form-control"><option>MM/DD/YYYY</option><option selected>MMM DD, YYYY</option><option>DD/MM/YYYY</option></select></div>
+            <div class="form-group"><label class="form-label">Language</label><select class="form-control"><option selected>English (US)</option><option>Spanish</option><option>French</option><option>Arabic</option></select></div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:10px;">
+          <button class="btn btn-danger btn-sm" id="clearCacheBtn"><i class="fa-solid fa-trash-can"></i> Reset Data</button>
+          <button class="btn btn-ghost btn-sm" onclick="window.showToast('Backup started!','success')"><i class="fa-solid fa-database"></i> Backup Data</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<script src="../js/data.js"></script>
+<script src="../js/nav.js"></script>
+<script src="../js/app.js"></script>
+<script src="../js/main.js"></script>
+<script>
+function toggleDark(cb) {
+  HMSApp.applyDarkMode(cb.checked);
+  showToast(cb.checked ? 'Dark mode enabled' : 'Light mode restored');
+}
+document.addEventListener('DOMContentLoaded', () => {
+  HMSApp.initDarkMode();
+  document.getElementById('clearCacheBtn')?.addEventListener('click', () => {
+    HMSData.reset();
+    showToast('Data reset to defaults');
+  });
+});
+</script>
+</body>
+</html>

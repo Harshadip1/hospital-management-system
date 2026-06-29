@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MediCore HMS — Emergency</title>
+<link rel="stylesheet" href="../css/style.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar">
+  <div class="sidebar-logo"><div class="logo-icon"><i class="fa-solid fa-hospital-user" style="color:white"></i></div><div><h1>MediCore</h1><span>Hospital Management</span></div></div>
+  <nav class="sidebar-nav">
+    <div class="nav-section"><div class="nav-section-title">Main</div>
+      <a href="dashboard.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-grip"></i></span> Dashboard</a>
+      <a href="appointments.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-calendar-check"></i></span> Appointments <span class="nav-badge">5</span></a>
+      <a href="patients.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-users"></i></span> Patients</a>
+      <a href="doctors.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-user-doctor"></i></span> Doctors</a>
+      <a href="departments.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-building-columns"></i></span> Departments</a>
+    </div>
+    <div class="nav-section"><div class="nav-section-title">Clinical</div>
+      <a href="medical-records.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-file-medical"></i></span> Medical Records</a>
+      <a href="laboratory.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-flask-vial"></i></span> Laboratory</a>
+      <a href="pharmacy.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-pills"></i></span> Pharmacy</a>
+      <a href="rooms.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-bed"></i></span> Rooms &amp; Wards</a>
+      <a href="emergency.html" class="nav-item active"><span class="nav-icon"><i class="fa-solid fa-truck-medical"></i></span> Emergency <span class="nav-badge">2</span></a>
+    </div>
+    <div class="nav-section"><div class="nav-section-title">Administration</div>
+      <a href="staff.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-id-badge"></i></span> Staff</a>
+      <a href="billing.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-file-invoice-dollar"></i></span> Billing</a>
+      <a href="reports.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-chart-bar"></i></span> Reports</a>
+      <a href="messages.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-message"></i></span> Messages <span class="nav-badge">3</span></a>
+      <a href="notifications.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-bell"></i></span> Notifications</a>
+      <a href="settings.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-gear"></i></span> Settings</a>
+    </div>
+  </nav>
+  <div class="sidebar-footer"><a href="my-profile.html" class="sidebar-user"><img id="sidebarAvatar" src="https://ui-avatars.com/api/?name=Dr+Admin&background=2563eb&color=fff" alt=""/><div class="user-info"><div class="user-name" id="sidebarName">Dr. Admin</div><div class="user-role" id="sidebarRole">Administrator</div></div></a></div>
+</aside>
+<div class="main-content">
+  <header class="header">
+    <button class="sidebar-toggle"><i class="fa-solid fa-bars"></i></button>
+    <div class="header-left">
+      <div class="header-title">Emergency</div>
+      <div class="header-subtitle" style="display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;background:var(--danger);border-radius:50%;display:inline-block;animation:pulse 1.5s infinite;"></span> 2 active emergency cases</div>
+    </div>
+    <div class="header-actions">
+      <a href="notifications.html" class="header-btn"><i class="fa-solid fa-bell"></i><span class="badge"></span></a>
+      <a href="my-profile.html"><img src="https://ui-avatars.com/api/?name=Dr+Admin&background=2563eb&color=fff" class="header-avatar" alt=""/></a>
+    </div>
+  </header>
+  <div class="page-content">
+    <!-- ACTIVE EMERGENCIES BANNER -->
+    <div style="background:linear-gradient(135deg,#7f1d1d,#dc2626,#ef4444);border-radius:var(--radius);padding:20px 24px;margin-bottom:24px;display:flex;align-items:center;gap:16px;">
+      <div style="width:48px;height:48px;background:rgba(255,255,255,0.15);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;color:white;flex-shrink:0;"><i class="fa-solid fa-triangle-exclamation"></i></div>
+      <div style="flex:1;"><p style="color:rgba(255,255,255,0.8);font-size:0.8rem;margin-bottom:2px;">ACTIVE EMERGENCIES</p><p style="color:white;font-weight:700;font-size:1rem;">2 critical patients require immediate attention</p></div>
+      <button class="btn" style="background:rgba(255,255,255,0.15);color:white;border:1.5px solid rgba(255,255,255,0.3);" data-modal="addEmergencyModal"><i class="fa-solid fa-plus"></i> Register Emergency</button>
+    </div>
+
+    <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:24px;">
+      <div class="stat-card"><div class="stat-icon red"><i class="fa-solid fa-triangle-exclamation"></i></div><div class="stat-info"><div class="stat-value">2</div><div class="stat-label">Active Cases</div></div></div>
+      <div class="stat-card"><div class="stat-icon yellow"><i class="fa-solid fa-clock-rotate-left"></i></div><div class="stat-info"><div class="stat-value">18</div><div class="stat-label">Cases Today</div></div></div>
+      <div class="stat-card"><div class="stat-icon green"><i class="fa-solid fa-circle-check"></i></div><div class="stat-info"><div class="stat-value">16</div><div class="stat-label">Resolved</div></div></div>
+      <div class="stat-card"><div class="stat-icon blue"><i class="fa-solid fa-clock"></i></div><div class="stat-info"><div class="stat-value">8 min</div><div class="stat-label">Avg Response</div></div></div>
+    </div>
+
+    <!-- ACTIVE EMERGENCY CASES -->
+    <div class="card" style="margin-bottom:24px;">
+      <div class="card-header"><div class="card-title" style="color:var(--danger);">🚨 Active Emergency Cases</div></div>
+      <div class="card-body">
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;align-items:center;gap:16px;padding:16px;background:#fff5f5;border-radius:10px;border:1.5px solid #fecaca;">
+            <div style="width:48px;height:48px;background:var(--danger);border-radius:12px;display:flex;align-items:center;justify-content:center;color:white;font-size:1.2rem;flex-shrink:0;"><i class="fa-solid fa-heart-pulse"></i></div>
+            <img src="https://ui-avatars.com/api/?name=David+Kim&background=fce7f3&color=9d174d" style="width:44px;height:44px;border-radius:50%;" alt=""/>
+            <div style="flex:1;">
+              <div style="font-weight:700;color:var(--gray-900);">David Kim — P-00418</div>
+              <div style="font-size:0.825rem;color:var(--gray-600);">Acute Abdominal Pain · Appendicitis Suspected</div>
+              <div style="font-size:0.75rem;color:var(--gray-400);margin-top:2px;">Admitted 08:42 AM · Assigned to Dr. Rachel Green · Room ICU-1</div>
+            </div>
+            <div style="text-align:center;"><span class="badge badge-danger" style="font-size:0.8rem;">Critical</span><div style="font-size:0.72rem;color:var(--gray-400);margin-top:4px;">3h 21m</div></div>
+            <button class="btn btn-primary btn-sm">Update</button>
+          </div>
+          <div style="display:flex;align-items:center;gap:16px;padding:16px;background:#fff5f5;border-radius:10px;border:1.5px solid #fecaca;">
+            <div style="width:48px;height:48px;background:#ef4444;border-radius:12px;display:flex;align-items:center;justify-content:center;color:white;font-size:1.2rem;flex-shrink:0;"><i class="fa-solid fa-brain"></i></div>
+            <img src="https://ui-avatars.com/api/?name=Leo+Park&background=e0f2fe&color=0369a1" style="width:44px;height:44px;border-radius:50%;" alt=""/>
+            <div style="flex:1;">
+              <div style="font-weight:700;color:var(--gray-900);">Leo Park — P-00398</div>
+              <div style="font-size:0.825rem;color:var(--gray-600);">Severe Headache · Possible Stroke</div>
+              <div style="font-size:0.75rem;color:var(--gray-400);margin-top:2px;">Admitted 10:05 AM · Assigned to Dr. Lisa Park · Room ICU-2</div>
+            </div>
+            <div style="text-align:center;"><span class="badge badge-danger" style="font-size:0.8rem;">Critical</span><div style="font-size:0.72rem;color:var(--gray-400);margin-top:4px;">1h 58m</div></div>
+            <button class="btn btn-primary btn-sm">Update</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TODAY'S CASES TABLE -->
+    <div class="card">
+      <div class="card-header"><div class="card-title">All Cases Today</div></div>
+      <div class="card-body no-pad">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Case ID</th><th>Patient</th><th>Chief Complaint</th><th>Triage Level</th><th>Doctor</th><th>Admitted</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td><span class="badge badge-danger">EM-0801</span></td><td><div class="table-avatar"><img src="https://ui-avatars.com/api/?name=David+Kim&background=fce7f3&color=9d174d" alt=""/><div><div class="name">David Kim</div></div></div></td><td>Acute Abdominal Pain</td><td><span class="badge badge-danger">Level 1</span></td><td>Dr. Rachel Green</td><td>08:42 AM</td><td><span class="badge badge-danger">Active</span></td></tr>
+              <tr><td><span class="badge badge-danger">EM-0802</span></td><td><div class="table-avatar"><img src="https://ui-avatars.com/api/?name=Leo+Park&background=e0f2fe&color=0369a1" alt=""/><div><div class="name">Leo Park</div></div></div></td><td>Severe Headache</td><td><span class="badge badge-danger">Level 1</span></td><td>Dr. Lisa Park</td><td>10:05 AM</td><td><span class="badge badge-danger">Active</span></td></tr>
+              <tr><td><span class="badge badge-warning">EM-0799</span></td><td><div class="table-avatar"><img src="https://ui-avatars.com/api/?name=Tina+Ross&background=fef3c7&color=92400e" alt=""/><div><div class="name">Tina Ross</div></div></div></td><td>Allergic Reaction</td><td><span class="badge badge-warning">Level 2</span></td><td>Dr. Mike Chen</td><td>07:10 AM</td><td><span class="badge badge-success">Resolved</span></td></tr>
+              <tr><td><span class="badge badge-warning">EM-0800</span></td><td><div class="table-avatar"><img src="https://ui-avatars.com/api/?name=Jake+White&background=dcfce7&color=166534" alt=""/><div><div class="name">Jake White</div></div></div></td><td>Broken Arm</td><td><span class="badge badge-primary">Level 3</span></td><td>Dr. Tom Wilson</td><td>07:55 AM</td><td><span class="badge badge-success">Resolved</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- REGISTER EMERGENCY MODAL -->
+<div class="modal-overlay" id="addEmergencyModal">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title" style="color:var(--danger);"><i class="fa-solid fa-triangle-exclamation" style="margin-right:8px;"></i>Register Emergency Case</div><button class="modal-close"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Patient Name</label><input type="text" class="form-control" placeholder="Full name or Unknown"/></div>
+        <div class="form-group"><label class="form-label">Age (approx.)</label><input type="number" class="form-control" placeholder="Age"/></div>
+      </div>
+      <div class="form-group"><label class="form-label">Chief Complaint</label><input type="text" class="form-control" placeholder="Primary complaint..."/></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Triage Level</label><select class="form-control"><option>Level 1 — Critical</option><option>Level 2 — Urgent</option><option>Level 3 — Semi-urgent</option><option>Level 4 — Non-urgent</option></select></div>
+        <div class="form-group"><label class="form-label">Assigned Doctor</label><select class="form-control"><option>Dr. Rachel Green</option><option>Dr. Mike Chen</option><option>Dr. Lisa Park</option></select></div>
+      </div>
+      <div class="form-group"><label class="form-label">Notes</label><textarea class="form-control" placeholder="Initial assessment notes..."></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost modal-close">Cancel</button>
+      <button class="btn btn-danger" onclick="window.showToast('Emergency case registered!','danger');document.getElementById('addEmergencyModal').classList.remove('active')"><i class="fa-solid fa-triangle-exclamation"></i> Register Case</button>
+    </div>
+  </div>
+</div>
+<style>@keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.4} }</style>
+<script src="../js/data.js"></script>
+<script src="../js/nav.js"></script>
+<script src="../js/app.js"></script>
+<script src="../js/main.js"></script>
+</body>
+</html>

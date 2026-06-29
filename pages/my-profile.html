@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MediCore HMS — My Profile</title>
+<link rel="stylesheet" href="../css/style.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<style>
+/* Avatar change button overlay */
+.prof-avatar-wrap { position:relative; display:inline-block; margin-bottom:16px; }
+.prof-avatar-wrap img { width:110px;height:110px;border-radius:50%;object-fit:cover;border:4px solid rgba(255,255,255,0.9);box-shadow:0 8px 24px rgba(0,0,0,0.2); }
+.prof-avatar-status { position:absolute;bottom:6px;right:6px;width:20px;height:20px;background:var(--success);border-radius:50%;border:3px solid white; }
+.prof-avatar-edit {
+  position:absolute;inset:0;border-radius:50%;
+  background:rgba(0,0,0,0.45);color:white;
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;transition:opacity 0.2s;cursor:pointer;font-size:1.2rem;
+}
+.prof-avatar-wrap:hover .prof-avatar-edit { opacity:1; }
+/* Color picker */
+.color-swatches { display:flex;gap:8px;flex-wrap:wrap;margin-top:8px; }
+.color-swatch {
+  width:28px;height:28px;border-radius:50%;cursor:pointer;
+  border:3px solid transparent;transition:all 0.2s;
+}
+.color-swatch:hover { transform:scale(1.15); }
+.color-swatch.active { border-color:var(--gray-900);box-shadow:0 0 0 2px white,0 0 0 4px var(--gray-900); }
+/* Save toast strip */
+.unsaved-bar {
+  display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+  background:var(--gray-900);color:white;padding:12px 24px;border-radius:12px;
+  font-size:0.875rem;font-weight:600;z-index:999;
+  display:none;align-items:center;gap:14px;
+  box-shadow:0 8px 32px rgba(0,0,0,0.25);
+}
+.unsaved-bar.show { display:flex; }
+</style>
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar">
+  <div class="sidebar-logo"><div class="logo-icon"><i class="fa-solid fa-hospital-user" style="color:white"></i></div><div><h1>MediCore</h1><span>Hospital Management</span></div></div>
+  <nav class="sidebar-nav">
+    <div class="nav-section"><div class="nav-section-title">Main</div>
+      <a href="dashboard.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-grip"></i></span> Dashboard</a>
+      <a href="appointments.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-calendar-check"></i></span> Appointments <span class="nav-badge">5</span></a>
+      <a href="patients.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-users"></i></span> Patients</a>
+      <a href="doctors.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-user-doctor"></i></span> Doctors</a>
+      <a href="departments.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-building-columns"></i></span> Departments</a>
+    </div>
+    <div class="nav-section"><div class="nav-section-title">Clinical</div>
+      <a href="medical-records.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-file-medical"></i></span> Medical Records</a>
+      <a href="laboratory.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-flask-vial"></i></span> Laboratory</a>
+      <a href="pharmacy.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-pills"></i></span> Pharmacy</a>
+      <a href="rooms.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-bed"></i></span> Rooms &amp; Wards</a>
+      <a href="emergency.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-truck-medical"></i></span> Emergency</a>
+    </div>
+    <div class="nav-section"><div class="nav-section-title">Administration</div>
+      <a href="staff.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-id-badge"></i></span> Staff</a>
+      <a href="billing.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-file-invoice-dollar"></i></span> Billing</a>
+      <a href="reports.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-chart-bar"></i></span> Reports</a>
+      <a href="messages.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-message"></i></span> Messages <span class="nav-badge">3</span></a>
+      <a href="notifications.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-bell"></i></span> Notifications</a>
+      <a href="settings.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-gear"></i></span> Settings</a>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <a href="my-profile.html" class="sidebar-user" style="background:rgba(255,255,255,0.06);">
+      <img id="sidebarAvatar" src="https://ui-avatars.com/api/?name=User&background=2563eb&color=fff" alt=""/>
+      <div class="user-info">
+        <div class="user-name" id="sidebarName">Loading…</div>
+        <div class="user-role" id="sidebarRole">—</div>
+      </div>
+    </a>
+  </div>
+</aside>
+
+<div class="main-content">
+  <header class="header">
+    <button class="sidebar-toggle"><i class="fa-solid fa-bars"></i></button>
+    <div class="header-left"><div class="header-title">My Profile</div><div class="header-subtitle" id="headerSubtitle"></div></div>
+    <div class="header-actions">
+      <a href="notifications.html" class="header-btn"><i class="fa-solid fa-bell"></i><span class="badge"></span></a>
+      <button class="btn btn-ghost btn-sm" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+    </div>
+  </header>
+
+  <div class="page-content">
+    <div class="grid-2" style="align-items:start;">
+
+      <!-- LEFT: PROFILE DISPLAY CARD -->
+      <div>
+        <div class="card" style="margin-bottom:20px;">
+          <div class="profile-hero" id="profileHero">
+            <div class="prof-avatar-wrap" id="avatarWrap" onclick="document.getElementById('colorPickerPanel').style.display = document.getElementById('colorPickerPanel').style.display==='block'?'none':'block';">
+              <img id="profileAvatar" src="" alt=""/>
+              <div class="prof-avatar-status"></div>
+              <div class="prof-avatar-edit"><i class="fa-solid fa-camera"></i></div>
+            </div>
+            <!-- Avatar color picker -->
+            <div id="colorPickerPanel" style="display:none;background:rgba(255,255,255,0.15);backdrop-filter:blur(8px);border-radius:12px;padding:12px 16px;margin-bottom:12px;border:1px solid rgba(255,255,255,0.2);">
+              <div style="font-size:0.72rem;color:rgba(255,255,255,0.7);margin-bottom:8px;font-weight:600;">PICK AVATAR COLOR</div>
+              <div class="color-swatches" id="colorSwatches">
+                <div class="color-swatch active" style="background:#2563eb;" data-bg="dbeafe" data-fg="2563eb" onclick="changeAvatarColor(this)"></div>
+                <div class="color-swatch" style="background:#7c3aed;" data-bg="f3e8ff" data-fg="7c3aed" onclick="changeAvatarColor(this)"></div>
+                <div class="color-swatch" style="background:#0d9488;" data-bg="f0fdfa" data-fg="0d9488" onclick="changeAvatarColor(this)"></div>
+                <div class="color-swatch" style="background:#9d174d;" data-bg="fce7f3" data-fg="9d174d" onclick="changeAvatarColor(this)"></div>
+                <div class="color-swatch" style="background:#166534;" data-bg="dcfce7" data-fg="166534" onclick="changeAvatarColor(this)"></div>
+                <div class="color-swatch" style="background:#b45309;" data-bg="fef3c7" data-fg="b45309" onclick="changeAvatarColor(this)"></div>
+              </div>
+            </div>
+            <div class="profile-name" id="profileDisplayName">—</div>
+            <div class="profile-title" id="profileDisplayTitle">—</div>
+            <div class="profile-tags" id="profileTags"></div>
+          </div>
+          <div class="profile-body">
+            <div class="profile-stats-row">
+              <div class="profile-stat"><div class="profile-stat-value" id="statPatients">—</div><div class="profile-stat-label">Patients</div></div>
+              <div class="profile-stat"><div class="profile-stat-value" id="statStaff">—</div><div class="profile-stat-label">Staff</div></div>
+              <div class="profile-stat"><div class="profile-stat-value" id="statDepts">8</div><div class="profile-stat-label">Depts.</div></div>
+            </div>
+            <div class="info-list" id="infoList">
+              <div class="info-item"><div class="info-item-icon"><i class="fa-solid fa-envelope"></i></div><div><div class="info-item-label">Email</div><div class="info-item-value" id="infoEmail">—</div></div></div>
+              <div class="info-item"><div class="info-item-icon"><i class="fa-solid fa-phone"></i></div><div><div class="info-item-label">Phone</div><div class="info-item-value" id="infoPhone">Not set</div></div></div>
+              <div class="info-item"><div class="info-item-icon"><i class="fa-solid fa-building"></i></div><div><div class="info-item-label">Department</div><div class="info-item-value" id="infoDept">—</div></div></div>
+              <div class="info-item"><div class="info-item-icon"><i class="fa-solid fa-id-badge"></i></div><div><div class="info-item-label">Role</div><div class="info-item-value" id="infoRole">—</div></div></div>
+              <div class="info-item"><div class="info-item-icon"><i class="fa-solid fa-calendar-days"></i></div><div><div class="info-item-label">Member Since</div><div class="info-item-value" id="infoJoined">—</div></div></div>
+              <div class="info-item"><div class="info-item-icon"><i class="fa-solid fa-circle-check" style="color:var(--success);"></i></div><div><div class="info-item-label">Last Login</div><div class="info-item-value" id="infoLastLogin">—</div></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ACTIVITY -->
+        <div class="card">
+          <div class="card-header"><div class="card-title">Recent Activity</div></div>
+          <div class="card-body">
+            <div class="timeline" id="activityTimeline">
+              <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-date" id="actDate1"></div><div class="timeline-title" id="actTitle1">Logged in to MediCore HMS</div></div>
+              <div class="timeline-item"><div class="timeline-dot" style="background:var(--success)"></div><div class="timeline-date">Jun 28</div><div class="timeline-title">Updated profile information</div></div>
+              <div class="timeline-item"><div class="timeline-dot" style="background:var(--warning)"></div><div class="timeline-date">Jun 27</div><div class="timeline-title">Reviewed department reports</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: EDIT FORM -->
+      <div>
+        <div class="card" style="margin-bottom:20px;">
+          <div class="card-header"><div class="card-title">Edit Profile</div><span style="font-size:0.78rem;color:var(--gray-400);">Changes save immediately</span></div>
+          <div class="card-body">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">First Name</label>
+                <input type="text" id="editFirstName" class="form-control" placeholder="First name" oninput="markDirty()"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Last Name</label>
+                <input type="text" id="editLastName" class="form-control" placeholder="Last name" oninput="markDirty()"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email Address</label>
+              <input type="email" id="editEmail" class="form-control" placeholder="your@email.com" oninput="markDirty()"/>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Phone</label>
+                <input type="tel" id="editPhone" class="form-control" placeholder="(555) 000-0000" oninput="markDirty()"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Role</label>
+                <input type="text" id="editRole" class="form-control" readonly style="background:var(--gray-50);cursor:not-allowed;" title="Role cannot be changed here"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Department</label>
+              <select id="editDept" class="form-control" onchange="markDirty()">
+                <option value="">Select department…</option>
+                <option>Cardiology</option><option>Neurology</option>
+                <option>Orthopedics</option><option>Pediatrics</option>
+                <option>Emergency</option><option>Dermatology</option>
+                <option>Radiology</option><option>Oncology</option>
+                <option>Laboratory</option><option>Pharmacy</option>
+                <option>Administration</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Office / Location</label>
+              <input type="text" id="editOffice" class="form-control" placeholder="e.g. Cardiology Wing, Room 301" oninput="markDirty()"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Bio</label>
+              <textarea id="editBio" class="form-control" rows="3" placeholder="Short description about your role…" oninput="markDirty()"></textarea>
+            </div>
+            <div style="display:flex;gap:10px;align-items:center;">
+              <button class="btn btn-primary" onclick="saveProfile()" id="saveBtn">
+                <i class="fa-solid fa-check"></i> Save Changes
+              </button>
+              <button class="btn btn-ghost" onclick="discardChanges()">Discard</button>
+              <span id="saveStatus" style="font-size:0.78rem;color:var(--gray-400);margin-left:auto;"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CHANGE PASSWORD -->
+        <div class="card" style="margin-bottom:20px;">
+          <div class="card-header"><div class="card-title">Change Password</div></div>
+          <div class="card-body">
+            <div class="form-group">
+              <label class="form-label">Current Password</label>
+              <input type="password" id="currPwd" class="form-control" placeholder="Current password"/>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">New Password</label>
+                <input type="password" id="newPwd" class="form-control" placeholder="Min. 8 characters"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Confirm New</label>
+                <input type="password" id="confirmPwd" class="form-control" placeholder="Repeat password"/>
+              </div>
+            </div>
+            <button class="btn btn-primary" onclick="changePassword()"><i class="fa-solid fa-lock"></i> Update Password</button>
+          </div>
+        </div>
+
+        <!-- QUICK ACTIONS -->
+        <div class="card">
+          <div class="card-header"><div class="card-title">Quick Actions</div></div>
+          <div class="card-body">
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <a href="settings.html" class="btn btn-ghost" style="justify-content:flex-start;gap:12px;"><i class="fa-solid fa-gear" style="color:var(--primary);width:16px;"></i> System Settings</a>
+              <a href="reports.html"  class="btn btn-ghost" style="justify-content:flex-start;gap:12px;"><i class="fa-solid fa-chart-bar" style="color:var(--success);width:16px;"></i> View Reports</a>
+              <a href="staff.html"    class="btn btn-ghost" style="justify-content:flex-start;gap:12px;"><i class="fa-solid fa-users" style="color:var(--warning);width:16px;"></i> Manage Staff</a>
+              <button onclick="logout()" class="btn btn-ghost" style="justify-content:flex-start;gap:12px;color:var(--danger);text-align:left;width:100%;">
+                <i class="fa-solid fa-right-from-bracket" style="width:16px;"></i> Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- Unsaved changes bar -->
+<div class="unsaved-bar" id="unsavedBar">
+  <i class="fa-solid fa-circle-exclamation" style="color:#f59e0b;"></i>
+  You have unsaved changes.
+  <button class="btn btn-primary btn-sm" onclick="saveProfile()">Save Now</button>
+  <button class="btn btn-ghost btn-sm" onclick="discardChanges()">Discard</button>
+</div>
+
+<script src="../js/main.js"></script>
+<script>
+/* ================================================================
+   MY PROFILE — fully dynamic from session + localStorage
+================================================================ */
+
+// ===== HELPERS =====
+function getSession() {
+  try { return JSON.parse(sessionStorage.getItem('hms_user') || 'null'); } catch { return null; }
+}
+function getStoredUsers() {
+  try { return JSON.parse(localStorage.getItem('hms_registered_users') || '{}'); } catch { return {}; }
+}
+function saveStoredUsers(obj) {
+  localStorage.setItem('hms_registered_users', JSON.stringify(obj));
+}
+function getProfileData(email) {
+  // Extended profile stored separately so demo users can also edit their profile
+  try { return JSON.parse(localStorage.getItem('hms_profile_' + email) || 'null'); } catch { return null; }
+}
+function saveProfileData(email, data) {
+  localStorage.setItem('hms_profile_' + email, JSON.stringify(data));
+}
+
+// Demo user defaults
+const DEMO_DEFAULTS = {
+  'admin@medicore.com':  { dept:'Administration', phone:'', office:'Administration Wing, Room 101', bio:'System Administrator for MediCore HMS. Oversees all clinical operations.', joined:'January 1, 2014', avatarBg:'dbeafe', avatarFg:'2563eb' },
+  'doctor@medicore.com': { dept:'Cardiology', phone:'', office:'Cardiology Wing, Room 301', bio:'Senior Cardiologist at MediCore General Hospital.', joined:'March 8, 2017', avatarBg:'dbeafe', avatarFg:'2563eb' },
+  'nurse@medicore.com':  { dept:'Cardiology', phone:'', office:'Cardiology Ward', bio:'Head Nurse — Cardiology Department.', joined:'February 20, 2019', avatarBg:'dcfce7', avatarFg:'166534' },
+  'staff@medicore.com':  { dept:'Administration', phone:'', office:'Reception', bio:'Receptionist & Administrative Support.', joined:'November 15, 2022', avatarBg:'fef3c7', avatarFg:'b45309' },
+};
+
+// Avatar bg/fg from hex color
+const AVATAR_COLORS = {
+  '2563eb': { bg:'dbeafe', fg:'2563eb' },
+  '7c3aed': { bg:'f3e8ff', fg:'7c3aed' },
+  '0d9488': { bg:'f0fdfa', fg:'0d9488' },
+  '9d174d': { bg:'fce7f3', fg:'9d174d' },
+  '166534': { bg:'dcfce7', fg:'166534' },
+  'b45309': { bg:'fef3c7', fg:'b45309' },
+};
+
+let currentUser = null;   // session data
+let currentProfile = null; // extended profile
+let isDirty = false;
+let currentBg = 'dbeafe', currentFg = '2563eb';
+
+// ===== BOOT =====
+(function init() {
+  currentUser = getSession();
+  if (!currentUser) { window.location.replace('login.html'); return; }
+
+  // Load extended profile (localStorage > demo default > blank)
+  const stored  = getStoredUsers();
+  const regUser = stored[currentUser.email] || null;
+  const saved   = getProfileData(currentUser.email);
+  const def     = DEMO_DEFAULTS[currentUser.email] || {};
+
+  currentProfile = Object.assign(
+    { dept:'', phone:'', office:'', bio:'', joined: new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}), avatarBg:'dbeafe', avatarFg:'2563eb' },
+    def,
+    regUser ? { dept: regUser.dept||def.dept||'', phone: regUser.phone||'', avatarBg:'dbeafe', avatarFg: regUser.avatarColor ? (AVATAR_COLORS[regUser.avatarColor]||{fg:'2563eb',bg:'dbeafe'}).bg : 'dbeafe' } : {},
+    saved || {}
+  );
+  if (regUser && regUser.avatarColor && AVATAR_COLORS[regUser.avatarColor]) {
+    currentProfile.avatarBg = AVATAR_COLORS[regUser.avatarColor].bg;
+    currentProfile.avatarFg = AVATAR_COLORS[regUser.avatarColor].fg;
+  }
+
+  currentBg = currentProfile.avatarBg || 'dbeafe';
+  currentFg = currentProfile.avatarFg || '2563eb';
+
+  renderProfile();
+  fillForm();
+  setActivity();
+
+  // Mark active swatch
+  document.querySelectorAll('.color-swatch').forEach(s => {
+    s.classList.toggle('active', s.dataset.fg === currentFg);
+  });
+})();
+
+// ===== RENDER LEFT PANEL =====
+function renderProfile() {
+  const name  = currentUser.name  || 'User';
+  const role  = currentUser.role  || '';
+  const email = currentUser.email || '';
+  const dept  = currentProfile.dept  || '';
+  const phone = currentProfile.phone || '';
+
+  // Avatar
+  const enc = encodeURIComponent(name.replace(/Dr\.\s?/,''));
+  const avatarUrl = `https://ui-avatars.com/api/?name=${enc}&background=${currentBg}&color=${currentFg}&size=200`;
+  document.getElementById('profileAvatar').src = avatarUrl;
+
+  // Sidebar
+  const sidebarAv = document.getElementById('sidebarAvatar');
+  if (sidebarAv) sidebarAv.src = `https://ui-avatars.com/api/?name=${enc}&background=2563eb&color=fff`;
+  const sidebarNm = document.getElementById('sidebarName');
+  if (sidebarNm) sidebarNm.textContent = name;
+  const sidebarRl = document.getElementById('sidebarRole');
+  if (sidebarRl) sidebarRl.textContent = role;
+
+  // Header subtitle
+  document.getElementById('headerSubtitle').textContent = `${role}${dept ? ' · ' + dept : ''}`;
+
+  // Display name + title
+  document.getElementById('profileDisplayName').textContent = name;
+  document.getElementById('profileDisplayTitle').textContent = `${role}${dept ? ' · ' + dept : ''}`;
+
+  // Tags
+  const tagsEl = document.getElementById('profileTags');
+  tagsEl.innerHTML = '';
+  const addTag = (icon, text) => {
+    const t = document.createElement('span');
+    t.className = 'profile-tag';
+    t.innerHTML = `<i class="fa-solid ${icon}"></i> ${text}`;
+    tagsEl.appendChild(t);
+  };
+  const roleIcons = { Doctor:'fa-user-doctor', Nurse:'fa-user-nurse', Administrator:'fa-shield', Staff:'fa-id-badge' };
+  addTag(roleIcons[role] || 'fa-user', role);
+  if (dept) addTag('fa-building-columns', dept);
+
+  // Info list
+  document.getElementById('infoEmail').textContent    = email;
+  document.getElementById('infoPhone').textContent    = phone || 'Not set';
+  document.getElementById('infoDept').textContent     = dept  || 'Not set';
+  document.getElementById('infoRole').textContent     = role;
+  document.getElementById('infoJoined').textContent   = currentProfile.joined || '—';
+  document.getElementById('infoLastLogin').textContent = new Date().toLocaleString('en-US',{dateStyle:'medium',timeStyle:'short'});
+
+  // Stats by role
+  const statMap = {
+    Administrator: ['2,847','642'],
+    Doctor:        ['245','—'],
+    Nurse:         ['—','—'],
+    Staff:         ['—','—'],
+  };
+  const [p,s] = statMap[role] || ['—','—'];
+  document.getElementById('statPatients').textContent = p;
+  document.getElementById('statStaff').textContent    = s;
+}
+
+// ===== FILL EDIT FORM =====
+function fillForm() {
+  const name  = currentUser.name || '';
+  const parts = name.replace(/^Dr\.\s*/,'').split(' ');
+  document.getElementById('editFirstName').value = parts[0] || '';
+  document.getElementById('editLastName').value  = parts.slice(1).join(' ') || '';
+  document.getElementById('editEmail').value     = currentUser.email || '';
+  document.getElementById('editPhone').value     = currentProfile.phone  || '';
+  document.getElementById('editRole').value      = currentUser.role   || '';
+  document.getElementById('editOffice').value    = currentProfile.office || '';
+  document.getElementById('editBio').value       = currentProfile.bio    || '';
+
+  // Department select
+  const deptSel = document.getElementById('editDept');
+  const deptVal = currentProfile.dept || '';
+  Array.from(deptSel.options).forEach(o => { o.selected = o.value === deptVal; });
+}
+
+// ===== ACTIVITY =====
+function setActivity() {
+  const now = new Date();
+  document.getElementById('actDate1').textContent  = 'Today, ' + now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+}
+
+// ===== DIRTY STATE =====
+function markDirty() {
+  isDirty = true;
+  document.getElementById('unsavedBar').classList.add('show');
+  document.getElementById('saveStatus').textContent = '';
+}
+
+// ===== AVATAR COLOR =====
+function changeAvatarColor(el) {
+  document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+  el.classList.add('active');
+  currentBg = el.dataset.bg;
+  currentFg = el.dataset.fg;
+  // Live-update avatar
+  const enc = encodeURIComponent((currentUser.name||'U').replace(/Dr\.\s?/,''));
+  document.getElementById('profileAvatar').src = `https://ui-avatars.com/api/?name=${enc}&background=${currentBg}&color=${currentFg}&size=200`;
+  markDirty();
+}
+
+// ===== SAVE =====
+function saveProfile() {
+  const fn    = document.getElementById('editFirstName').value.trim();
+  const ln    = document.getElementById('editLastName').value.trim();
+  const email = document.getElementById('editEmail').value.trim().toLowerCase();
+  const phone = document.getElementById('editPhone').value.trim();
+  const dept  = document.getElementById('editDept').value;
+  const office= document.getElementById('editOffice').value.trim();
+  const bio   = document.getElementById('editBio').value.trim();
+
+  if (!fn) { alert('First name is required.'); return; }
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { alert('Please enter a valid email.'); return; }
+
+  const prefix  = (currentUser.role === 'Doctor') ? 'Dr. ' : '';
+  const newName = prefix + fn + (ln ? ' ' + ln : '');
+
+  // Update session
+  currentUser.name  = newName;
+  currentUser.email = email;
+  sessionStorage.setItem('hms_user', JSON.stringify(currentUser));
+
+  // Update stored registered user if exists
+  const allUsers = getStoredUsers();
+  if (allUsers[currentUser.email]) {
+    allUsers[email] = Object.assign({}, allUsers[currentUser.email], { phone, dept });
+    if (email !== currentUser.email) delete allUsers[currentUser.email];
+    saveStoredUsers(allUsers);
+  }
+
+  // Save extended profile
+  currentProfile = Object.assign(currentProfile, { phone, dept, office, bio, avatarBg: currentBg, avatarFg: currentFg });
+  saveProfileData(email, currentProfile);
+
+  isDirty = false;
+  document.getElementById('unsavedBar').classList.remove('show');
+  document.getElementById('saveStatus').textContent = '✓ Saved ' + new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+
+  // Re-render left panel
+  renderProfile();
+  window.showToast('Profile updated successfully!', 'success');
+}
+
+// ===== DISCARD =====
+function discardChanges() {
+  fillForm();
+  isDirty = false;
+  document.getElementById('unsavedBar').classList.remove('show');
+  document.getElementById('saveStatus').textContent = '';
+  // Reset avatar
+  currentBg = currentProfile.avatarBg || 'dbeafe';
+  currentFg = currentProfile.avatarFg || '2563eb';
+  renderProfile();
+  document.querySelectorAll('.color-swatch').forEach(s => {
+    s.classList.toggle('active', s.dataset.fg === currentFg);
+  });
+}
+
+// ===== CHANGE PASSWORD =====
+function changePassword() {
+  const curr = document.getElementById('currPwd').value;
+  const nw   = document.getElementById('newPwd').value;
+  const conf = document.getElementById('confirmPwd').value;
+
+  if (!curr) { window.showToast('Enter your current password.', 'danger'); return; }
+  if (nw.length < 8) { window.showToast('New password must be at least 8 characters.', 'danger'); return; }
+  if (nw !== conf)   { window.showToast('Passwords do not match.', 'danger'); return; }
+
+  // Verify current password
+  const DEMO_PWDS = { 'admin@medicore.com':'admin123','doctor@medicore.com':'doctor123','nurse@medicore.com':'nurse123','staff@medicore.com':'staff123' };
+  const allUsers = getStoredUsers();
+  const regUser  = allUsers[currentUser.email];
+  const demoPwd  = DEMO_PWDS[currentUser.email];
+  const actualPwd = regUser ? regUser.password : demoPwd;
+
+  if (curr !== actualPwd) { window.showToast('Current password is incorrect.', 'danger'); return; }
+
+  // Save new password
+  if (regUser) {
+    regUser.password = nw;
+    saveStoredUsers(allUsers);
+  } else {
+    // For demo users, persist override
+    const ext = getStoredUsers();
+    ext[currentUser.email] = { password: nw, role: currentUser.role, name: currentUser.name };
+    saveStoredUsers(ext);
+  }
+
+  document.getElementById('currPwd').value = '';
+  document.getElementById('newPwd').value  = '';
+  document.getElementById('confirmPwd').value = '';
+  window.showToast('Password changed successfully!', 'success');
+}
+
+// Warn before leaving with unsaved changes
+window.addEventListener('beforeunload', e => {
+  if (isDirty) { e.preventDefault(); e.returnValue = ''; }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MediCore HMS — Sign In</title>
+<link rel="stylesheet" href="../css/style.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<style>
+  body { background:var(--gray-50); }
+
+  .login-wrap {
+    min-height:100vh;
+    display:flex;
+    align-items:stretch;
+  }
+
+  /* LEFT PANEL */
+  .login-panel {
+    flex:1;
+    background:linear-gradient(145deg, #0f172a 0%, #1e3a8a 55%, #1d4ed8 100%);
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    padding:60px 48px;
+    position:relative; overflow:hidden;
+  }
+  .login-panel::before {
+    content:''; position:absolute;
+    width:500px; height:500px; border-radius:50%;
+    background:rgba(255,255,255,0.04);
+    top:-150px; right:-150px;
+  }
+  .login-panel::after {
+    content:''; position:absolute;
+    width:300px; height:300px; border-radius:50%;
+    background:rgba(255,255,255,0.03);
+    bottom:-80px; left:-80px;
+  }
+  .panel-content { position:relative; z-index:1; text-align:center; max-width:360px; }
+  .panel-logo {
+    width:70px; height:70px;
+    background:rgba(255,255,255,0.12);
+    border:1.5px solid rgba(255,255,255,0.2);
+    border-radius:20px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:2rem; color:white; margin:0 auto 24px;
+    backdrop-filter:blur(8px);
+  }
+  .panel-content h2 { font-size:2rem; font-weight:800; color:white; margin-bottom:10px; }
+  .panel-content p { color:rgba(255,255,255,0.65); font-size:0.9rem; line-height:1.7; margin-bottom:40px; }
+  .panel-stats { display:flex; gap:32px; justify-content:center; }
+  .panel-stat .num { font-size:1.6rem; font-weight:800; color:white; }
+  .panel-stat .lbl { font-size:0.72rem; color:rgba(255,255,255,0.5); margin-top:2px; }
+
+  /* Feature pills */
+  .panel-pills { display:flex; flex-direction:column; gap:10px; margin-top:40px; text-align:left; }
+  .panel-pill {
+    display:flex; align-items:center; gap:10px;
+    background:rgba(255,255,255,0.07);
+    border:1px solid rgba(255,255,255,0.1);
+    border-radius:10px; padding:10px 14px;
+    font-size:0.82rem; color:rgba(255,255,255,0.8);
+    backdrop-filter:blur(4px);
+  }
+  .panel-pill i { color:rgba(255,255,255,0.6); width:14px; }
+
+  /* RIGHT PANEL */
+  .login-form-panel {
+    width:480px; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+    padding:40px;
+    background:white;
+  }
+  .form-box { width:100%; max-width:380px; }
+  .back-link {
+    display:inline-flex; align-items:center; gap:6px;
+    font-size:0.8rem; color:var(--gray-400);
+    margin-bottom:32px; transition:var(--transition);
+  }
+  .back-link:hover { color:var(--primary); }
+  .form-box h1 { font-size:1.7rem; font-weight:800; color:var(--gray-900); margin-bottom:6px; }
+  .form-box .sub { color:var(--gray-500); font-size:0.875rem; margin-bottom:32px; }
+
+  /* Input with icon */
+  .input-group { position:relative; }
+  .input-group .prefix-icon {
+    position:absolute; left:12px; top:50%; transform:translateY(-50%);
+    color:var(--gray-400); font-size:0.875rem; pointer-events:none;
+  }
+  .input-group input { padding-left:38px; padding-right:38px; }
+  .input-group .suffix-btn {
+    position:absolute; right:10px; top:50%; transform:translateY(-50%);
+    background:none; border:none; color:var(--gray-400);
+    cursor:pointer; padding:4px; border-radius:4px; transition:var(--transition);
+    font-size:0.875rem;
+  }
+  .input-group .suffix-btn:hover { color:var(--gray-700); }
+
+  /* Validation states */
+  .form-control.error { border-color:var(--danger); box-shadow:0 0 0 3px rgba(239,68,68,0.1); }
+  .form-control.success { border-color:var(--success); }
+  .field-error { font-size:0.75rem; color:var(--danger); margin-top:5px; display:none; }
+  .field-error.show { display:block; }
+
+  /* Error alert */
+  .login-alert {
+    padding:12px 16px;
+    border-radius:8px;
+    font-size:0.825rem;
+    font-weight:500;
+    margin-bottom:18px;
+    display:none;
+    align-items:center;
+    gap:8px;
+  }
+  .login-alert.danger { background:#fef2f2; color:#991b1b; border-left:4px solid var(--danger); display:flex; }
+  .login-alert.success { background:#ecfdf5; color:#065f46; border-left:4px solid var(--success); display:flex; }
+
+  /* Submit button loading */
+  .btn-primary .spinner { display:none; animation:spin 0.8s linear infinite; }
+  .btn-primary.loading .btn-text { display:none; }
+  .btn-primary.loading .spinner { display:inline-block; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+
+  @media(max-width:768px){
+    .login-panel { display:none; }
+    .login-form-panel { width:100%; padding:24px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="login-wrap">
+  <!-- LEFT -->
+  <div class="login-panel">
+    <div class="panel-content">
+      <div class="panel-logo"><i class="fa-solid fa-hospital-user"></i></div>
+      <h2>MediCore HMS</h2>
+      <p>The all-in-one platform powering modern hospitals — from reception to ICU.</p>
+      <div class="panel-stats">
+        <div class="panel-stat"><div class="num">2,847</div><div class="lbl">Patients</div></div>
+        <div class="panel-stat"><div class="num">148</div><div class="lbl">Doctors</div></div>
+        <div class="panel-stat"><div class="num">24/7</div><div class="lbl">Uptime</div></div>
+      </div>
+      <div class="panel-pills">
+        <div class="panel-pill"><i class="fa-solid fa-shield-halved"></i> HIPAA-compliant &amp; secure</div>
+        <div class="panel-pill"><i class="fa-solid fa-layer-group"></i> Patients, records &amp; billing in one place</div>
+        <div class="panel-pill"><i class="fa-solid fa-bolt"></i> Real-time emergency alerts</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="login-form-panel">
+    <div class="form-box">
+      <a href="../index.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> Back to home</a>
+      <h1>Welcome back</h1>
+      <p class="sub">Sign in to access your dashboard</p>
+
+      <!-- Alert box -->
+      <div class="login-alert" id="loginAlert"></div>
+
+      <form id="loginForm" novalidate>
+        <!-- Email -->
+        <div class="form-group">
+          <label class="form-label" for="emailInput">Email Address</label>
+          <div class="input-group">
+            <i class="fa-solid fa-envelope prefix-icon"></i>
+            <input type="email" id="emailInput" class="form-control" placeholder="your@email.com" autocomplete="email"/>
+          </div>
+          <div class="field-error" id="emailError">Please enter a valid email address.</div>
+        </div>
+
+        <!-- Password -->
+        <div class="form-group">
+          <label class="form-label" style="display:flex;justify-content:space-between;" for="pwdInput">
+            Password
+            <a href="#" style="color:var(--primary);font-weight:500;font-size:0.825rem;" onclick="forgotPwd(event)">Forgot password?</a>
+          </label>
+          <div class="input-group">
+            <i class="fa-solid fa-lock prefix-icon"></i>
+            <input type="password" id="pwdInput" class="form-control" placeholder="Enter your password" autocomplete="current-password"/>
+            <button type="button" class="suffix-btn" id="pwdToggle" onclick="togglePwd()" aria-label="Toggle password visibility">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+          <div class="field-error" id="pwdError">Password must be at least 4 characters.</div>
+        </div>
+
+        <!-- Remember me -->
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:22px;">
+          <input type="checkbox" id="remember" style="width:16px;height:16px;accent-color:var(--primary);" checked/>
+          <label for="remember" style="font-size:0.875rem;color:var(--gray-600);cursor:pointer;">Remember me for 30 days</label>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" class="btn btn-primary w-full" id="submitBtn" style="justify-content:center;padding:13px;font-size:0.95rem;">
+          <span class="btn-text"><i class="fa-solid fa-right-to-bracket"></i> Sign In</span>
+          <i class="fa-solid fa-circle-notch spinner"></i>
+        </button>
+      </form>
+
+      <div style="margin-top:24px;text-align:center;font-size:0.875rem;color:var(--gray-500);">
+        Don't have an account?
+        <a href="register.html" style="color:var(--primary);font-weight:700;">Create Account</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== DEMO CREDENTIALS =====
+const USERS = {
+  'admin@medicore.com':  { password:'admin123',  role:'Administrator', name:'Dr. Admin' },
+  'doctor@medicore.com': { password:'doctor123', role:'Doctor',         name:'Dr. Mike Chen' },
+  'nurse@medicore.com':  { password:'nurse123',  role:'Nurse',          name:'Jane Doe' },
+  'staff@medicore.com':  { password:'staff123',  role:'Staff',          name:'Tom Blake' },
+};
+
+// Redirect if already logged in
+if (sessionStorage.getItem('hms_user')) {
+  window.location.replace('dashboard.html');
+}
+
+// ===== FORM SUBMIT =====
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  if (!validate()) return;
+
+  const btn = document.getElementById('submitBtn');
+  btn.classList.add('loading');
+  btn.disabled = true;
+
+  const email = document.getElementById('emailInput').value.trim().toLowerCase();
+  const pwd   = document.getElementById('pwdInput').value;
+
+  // Simulate network delay
+  setTimeout(() => {
+    // Check hardcoded demo users first, then localStorage-registered users
+    const registeredUsers = (() => {
+      try { return JSON.parse(localStorage.getItem('hms_registered_users') || '{}'); }
+      catch { return {}; }
+    })();
+    const allUsers = Object.assign({}, USERS, registeredUsers);
+
+    const user = allUsers[email];
+    if (user && user.password === pwd) {
+      // Save session
+      sessionStorage.setItem('hms_user', JSON.stringify({ email, role: user.role, name: user.name }));
+      if (document.getElementById('remember').checked) {
+        localStorage.setItem('hms_remember', email);
+      }
+      showAlert('success', '<i class="fa-solid fa-circle-check"></i> Login successful! Redirecting...');
+      setTimeout(() => window.location.replace('dashboard.html'), 900);
+    } else {
+      btn.classList.remove('loading');
+      btn.disabled = false;
+      showAlert('danger', '<i class="fa-solid fa-circle-xmark"></i> Invalid email or password. Try a demo account below.');
+      document.getElementById('emailInput').classList.add('error');
+      document.getElementById('pwdInput').classList.add('error');
+    }
+  }, 1200);
+});
+
+// ===== VALIDATE =====
+function validate() {
+  let ok = true;
+  const email = document.getElementById('emailInput');
+  const pwd   = document.getElementById('pwdInput');
+  clearErrors();
+
+  if (!email.value || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
+    setError(email, 'emailError'); ok = false;
+  }
+  if (!pwd.value || pwd.value.length < 4) {
+    setError(pwd, 'pwdError'); ok = false;
+  }
+  return ok;
+}
+function setError(input, errId) {
+  input.classList.add('error');
+  document.getElementById(errId).classList.add('show');
+}
+function clearErrors() {
+  ['emailInput','pwdInput'].forEach(id => {
+    document.getElementById(id).classList.remove('error','success');
+  });
+  document.querySelectorAll('.field-error').forEach(e => e.classList.remove('show'));
+  hideAlert();
+}
+
+// ===== ALERT =====
+function showAlert(type, html) {
+  const el = document.getElementById('loginAlert');
+  el.className = 'login-alert ' + type;
+  el.innerHTML = html;
+}
+function hideAlert() {
+  const el = document.getElementById('loginAlert');
+  el.className = 'login-alert';
+}
+
+// ===== PASSWORD TOGGLE =====
+function togglePwd() {
+  const inp = document.getElementById('pwdInput');
+  const icon = document.querySelector('#pwdToggle i');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+  icon.className = inp.type === 'password' ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash';
+}
+
+// ===== FORGOT PASSWORD =====
+function forgotPwd(e) {
+  e.preventDefault();
+  showAlert('success', '<i class="fa-solid fa-envelope"></i> Password reset instructions sent to your email (demo only).');
+}
+
+// ===== AUTO-FILL REMEMBERED EMAIL =====
+const remembered = localStorage.getItem('hms_remember');
+if (remembered) {
+  document.getElementById('emailInput').value = remembered;
+}
+
+// ===== CLEAR ERROR ON INPUT =====
+['emailInput','pwdInput'].forEach(id => {
+  document.getElementById(id).addEventListener('input', function() {
+    this.classList.remove('error');
+    document.getElementById(id === 'emailInput' ? 'emailError' : 'pwdError').classList.remove('show');
+    hideAlert();
+  });
+});
+</script>
+</body>
+</html>

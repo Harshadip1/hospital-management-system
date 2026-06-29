@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MediCore HMS — Medical Records</title>
+<link rel="stylesheet" href="../css/style.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar">
+  <div class="sidebar-logo"><div class="logo-icon"><i class="fa-solid fa-hospital-user" style="color:white"></i></div><div><h1>MediCore</h1><span>Hospital Management</span></div></div>
+  <nav class="sidebar-nav">
+    <div class="nav-section"><div class="nav-section-title">Main</div>
+      <a href="dashboard.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-grip"></i></span> Dashboard</a>
+      <a href="appointments.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-calendar-check"></i></span> Appointments <span class="nav-badge">5</span></a>
+      <a href="patients.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-users"></i></span> Patients</a>
+      <a href="doctors.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-user-doctor"></i></span> Doctors</a>
+      <a href="departments.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-building-columns"></i></span> Departments</a>
+    </div>
+    <div class="nav-section"><div class="nav-section-title">Clinical</div>
+      <a href="medical-records.html" class="nav-item active"><span class="nav-icon"><i class="fa-solid fa-file-medical"></i></span> Medical Records</a>
+      <a href="laboratory.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-flask-vial"></i></span> Laboratory</a>
+      <a href="pharmacy.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-pills"></i></span> Pharmacy</a>
+      <a href="rooms.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-bed"></i></span> Rooms &amp; Wards</a>
+      <a href="emergency.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-truck-medical"></i></span> Emergency <span class="nav-badge">2</span></a>
+    </div>
+    <div class="nav-section"><div class="nav-section-title">Administration</div>
+      <a href="staff.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-id-badge"></i></span> Staff</a>
+      <a href="billing.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-file-invoice-dollar"></i></span> Billing</a>
+      <a href="reports.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-chart-bar"></i></span> Reports</a>
+      <a href="messages.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-message"></i></span> Messages <span class="nav-badge">3</span></a>
+      <a href="notifications.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-bell"></i></span> Notifications</a>
+      <a href="settings.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-gear"></i></span> Settings</a>
+    </div>
+  </nav>
+  <div class="sidebar-footer"><a href="my-profile.html" class="sidebar-user"><img id="sidebarAvatar" src="https://ui-avatars.com/api/?name=Dr+Admin&background=2563eb&color=fff" alt=""/><div class="user-info"><div class="user-name" id="sidebarName">Dr. Admin</div><div class="user-role" id="sidebarRole">Administrator</div></div></a></div>
+</aside>
+<div class="main-content">
+  <header class="header">
+    <button class="sidebar-toggle"><i class="fa-solid fa-bars"></i></button>
+    <div class="header-left"><div class="header-title">Medical Records</div><div class="header-subtitle">All patient medical documents</div></div>
+    <div class="header-search"><i class="fa-solid fa-magnifying-glass search-icon"></i><input type="text" id="tableSearch" placeholder="Search records..."/></div>
+    <div class="header-actions">
+      <a href="notifications.html" class="header-btn"><i class="fa-solid fa-bell"></i><span class="badge"></span></a>
+      <a href="my-profile.html"><img src="https://ui-avatars.com/api/?name=Dr+Admin&background=2563eb&color=fff" class="header-avatar" alt=""/></a>
+    </div>
+  </header>
+  <div class="page-content">
+    <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:24px;">
+      <div class="stat-card"><div class="stat-icon blue"><i class="fa-solid fa-file-medical"></i></div><div class="stat-info"><div class="stat-value">12,480</div><div class="stat-label">Total Records</div></div></div>
+      <div class="stat-card"><div class="stat-icon green"><i class="fa-solid fa-file-circle-check"></i></div><div class="stat-info"><div class="stat-value">324</div><div class="stat-label">This Month</div></div></div>
+      <div class="stat-card"><div class="stat-icon yellow"><i class="fa-solid fa-file-circle-exclamation"></i></div><div class="stat-info"><div class="stat-value">18</div><div class="stat-label">Pending Review</div></div></div>
+      <div class="stat-card"><div class="stat-icon purple"><i class="fa-solid fa-file-pdf"></i></div><div class="stat-info"><div class="stat-value">4,210</div><div class="stat-label">PDF Reports</div></div></div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div><div class="card-title">Patient Records</div></div>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+          <select class="form-control" style="width:auto;font-size:0.825rem;padding:8px 12px;">
+            <option>All Types</option><option>Diagnosis</option><option>Surgery</option><option>Lab Report</option><option>Prescription</option>
+          </select>
+          <button class="btn btn-primary btn-sm" data-modal="addRecordModal"><i class="fa-solid fa-plus"></i> Add Record</button>
+        </div>
+      </div>
+      <div class="card-body no-pad">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Record ID</th><th>Patient</th><th>Doctor</th><th>Type</th><th>Diagnosis</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><span class="badge badge-info">MR-5021</span></td>
+                <td><div class="table-avatar"><img src="https://ui-avatars.com/api/?name=Sarah+Johnson&background=dbeafe&color=1d4ed8" alt=""/><div><div class="name">Sarah Johnson</div><div class="sub">P-00421</div></div></div></td>
+                <td>Dr. Mike Chen</td><td><span class="badge badge-primary">Checkup</span></td><td>Hypertension (Stage 1)</td><td>Jun 29, 2026</td>
+                <td><span class="badge badge-success">Finalized</span></td>
+                <td><div style="display:flex;gap:6px;"><button class="btn btn-ghost btn-sm btn-icon" title="View"><i class="fa-solid fa-eye"></i></button><button class="btn btn-ghost btn-sm btn-icon" title="Download"><i class="fa-solid fa-download"></i></button></div></td>
+              </tr>
+              <tr>
+                <td><span class="badge badge-info">MR-5020</span></td>
+                <td><div class="table-avatar"><img src="https://ui-avatars.com/api/?name=James+Brown&background=fef3c7&color=92400e" alt=""/><div><div class="name">James Brown</div><div class="sub">P-00420</div></div></div></td>
+                <td>Dr. Lisa Park</td><td><span class="badge badge-warning">Admission</span></td><td>Migraine w/ Aura</td><td>Jun 28, 2026</td>
+                <td><span class="badge badge-warning">Pending Review</span></td>
+                <td><div style="display:flex;gap:6px;"><button class="btn btn-ghost btn-sm btn-icon"><i class="fa-solid fa-eye"></i></button><button class="btn btn-ghost btn-sm btn-icon"><i class="fa-solid fa-download"></i></button></div></td>
+              </tr>
+              <tr>
+                <td><span class="badge badge-info">MR-5019</span></td>
+                <td><div class="table-avatar"><img src="https://ui-avatars.com/api/?name=Emily+Davis&background=f3e8ff&color=7c3aed" alt=""/><div><div class="name">Emily Davis</div><div class="sub">P-00419</div></div></div></td>
+                <td>Dr. Tom Wilson</td><td><span class="badge badge-danger">Surgery</span></td><td>ACL Repair — Right Knee</td><td>Jun 27, 2026</td>
+                <td><span class="badge badge-success">Finalized</span></td>
+                <td><div style="display:flex;gap:6px;"><button class="btn btn-ghost btn-sm btn-icon"><i class="fa-solid fa-eye"></i></button><button class="btn btn-ghost btn-sm btn-icon"><i class="fa-solid fa-download"></i></button></div></td>
+              </tr>
+              <tr>
+                <td><span class="badge badge-info">MR-5018</span></td>
+                <td><div class="table-avatar"><img src="https://ui-avatars.com/api/?name=David+Kim&background=fce7f3&color=9d174d" alt=""/><div><div class="name">David Kim</div><div class="sub">P-00418</div></div></div></td>
+                <td>Dr. Anna White</td><td><span class="badge badge-info">Lab Report</span></td><td>Acute Appendicitis</td><td>Jun 29, 2026</td>
+                <td><span class="badge badge-danger">Critical</span></td>
+                <td><div style="display:flex;gap:6px;"><button class="btn btn-ghost btn-sm btn-icon"><i class="fa-solid fa-eye"></i></button><button class="btn btn-ghost btn-sm btn-icon"><i class="fa-solid fa-download"></i></button></div></td>
+              </tr>
+              <tr>
+                <td><span class="badge badge-info">MR-5017</span></td>
+                <td><div class="table-avatar"><img src="https://ui-avatars.com/api/?name=Maria+Garcia&background=dcfce7&color=166534" alt=""/><div><div class="name">Maria Garcia</div><div class="sub">P-00417</div></div></div></td>
+                <td>Dr. John Smith</td><td><span class="badge badge-gray">Prescription</span></td><td>Eczema — Chronic</td><td>Jun 26, 2026</td>
+                <td><span class="badge badge-success">Finalized</span></td>
+                <td><div style="display:flex;gap:6px;"><button class="btn btn-ghost btn-sm btn-icon"><i class="fa-solid fa-eye"></i></button><button class="btn btn-ghost btn-sm btn-icon"><i class="fa-solid fa-download"></i></button></div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="display:flex;align-items:center;padding:16px 20px;border-top:1px solid var(--gray-100);gap:16px;">
+          <span style="font-size:0.825rem;color:var(--gray-500);">Showing 1–5 of 12,480 records</span>
+          <div style="display:flex;gap:6px;margin-left:auto;">
+            <button class="btn btn-ghost btn-sm"><i class="fa-solid fa-chevron-left"></i></button>
+            <button class="btn btn-primary btn-sm">1</button>
+            <button class="btn btn-ghost btn-sm">2</button>
+            <button class="btn btn-ghost btn-sm">3</button>
+            <button class="btn btn-ghost btn-sm"><i class="fa-solid fa-chevron-right"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ADD RECORD MODAL -->
+<div class="modal-overlay" id="addRecordModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title"><i class="fa-solid fa-file-medical" style="color:var(--primary);margin-right:8px;"></i>Add Medical Record</div>
+      <button class="modal-close"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Patient</label><select class="form-control"><option>Sarah Johnson — P-00421</option><option>James Brown — P-00420</option><option>Emily Davis — P-00419</option></select></div>
+        <div class="form-group"><label class="form-label">Doctor</label><select class="form-control"><option>Dr. Mike Chen</option><option>Dr. Lisa Park</option><option>Dr. Tom Wilson</option></select></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Record Type</label><select class="form-control"><option>Checkup</option><option>Diagnosis</option><option>Surgery</option><option>Lab Report</option><option>Prescription</option></select></div>
+        <div class="form-group"><label class="form-label">Date</label><input type="date" class="form-control"/></div>
+      </div>
+      <div class="form-group"><label class="form-label">Diagnosis</label><input type="text" class="form-control" placeholder="Primary diagnosis..."/></div>
+      <div class="form-group"><label class="form-label">Notes</label><textarea class="form-control" placeholder="Clinical notes, observations..."></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost modal-close">Cancel</button>
+      <button class="btn btn-primary" onclick="window.showToast('Record saved!');document.getElementById('addRecordModal').classList.remove('active')"><i class="fa-solid fa-check"></i> Save Record</button>
+    </div>
+  </div>
+</div>
+<script src="../js/data.js"></script>
+<script src="../js/nav.js"></script>
+<script src="../js/app.js"></script>
+<script src="../js/main.js"></script>
+</body>
+</html>
