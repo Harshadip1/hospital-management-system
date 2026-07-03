@@ -1,0 +1,1582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MediCore HMS — Technical Documentation</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; font-size: 13px; color: #1e293b; background: #fff; line-height: 1.6; }
+
+  /* ── PDF PRINT ── */
+  @media print {
+    .no-print { display: none !important; }
+    body { font-size: 11px; }
+    h1 { font-size: 22px !important; }
+    h2 { font-size: 16px !important; }
+    h3 { font-size: 13px !important; }
+    .cover { page-break-after: always; height: 100vh; }
+    .toc-page { page-break-after: always; }
+    section { page-break-inside: avoid; }
+    .page-break { page-break-before: always; }
+    table { page-break-inside: avoid; }
+  }
+
+  /* ── COVER PAGE ── */
+  .cover {
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    min-height: 100vh; background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #1d4ed8 100%);
+    color: #fff; text-align: center; padding: 60px 40px;
+  }
+  .cover-logo { width: 90px; height: 90px; border-radius: 22px; background: rgba(255,255,255,0.12);
+    display: flex; align-items: center; justify-content: center; font-size: 40px; margin-bottom: 28px;
+    border: 2px solid rgba(255,255,255,0.2); }
+  .cover h1 { font-size: 42px; font-weight: 800; margin-bottom: 8px; letter-spacing: -1px; }
+  .cover .sub { font-size: 18px; color: rgba(255,255,255,0.7); margin-bottom: 40px; font-weight: 300; }
+  .cover-meta { display: flex; gap: 48px; margin-top: 40px; }
+  .cover-meta-item { text-align: center; }
+  .cover-meta-item .val { font-size: 28px; font-weight: 800; color: #38bdf8; }
+  .cover-meta-item .lbl { font-size: 11px; color: rgba(255,255,255,0.55); margin-top: 4px; }
+  .cover-divider { width: 80px; height: 4px; background: linear-gradient(90deg, #38bdf8, #818cf8); border-radius: 2px; margin: 28px auto; }
+  .cover-tags { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 20px; }
+  .cover-tag { padding: 6px 16px; border-radius: 20px; background: rgba(255,255,255,0.1);
+    font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.85); border: 1px solid rgba(255,255,255,0.15); }
+  .cover-version { margin-top: 48px; font-size: 12px; color: rgba(255,255,255,0.4); }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     COVER PAGE
+══════════════════════════════════════ -->
+<div class="cover">
+  <div class="cover-logo">🏥</div>
+  <h1>MediCore HMS</h1>
+  <div class="sub">Hospital Management System</div>
+  <div class="cover-divider"></div>
+  <p style="font-size:15px;color:rgba(255,255,255,0.75);max-width:520px;line-height:1.8;">
+    Comprehensive Technical &amp; Functional Documentation<br>
+    covering the Mobile App and Web Platform
+  </p>
+  <div class="cover-meta">
+    <div class="cover-meta-item"><div class="val">2</div><div class="lbl">Platforms</div></div>
+    <div class="cover-meta-item"><div class="val">28</div><div class="lbl">Screens</div></div>
+    <div class="cover-meta-item"><div class="val">16</div><div class="lbl">Data Models</div></div>
+    <div class="cover-meta-item"><div class="val">4</div><div class="lbl">User Roles</div></div>
+  </div>
+  <div class="cover-tags">
+    <span class="cover-tag">React Native</span>
+    <span class="cover-tag">Expo SDK 55</span>
+    <span class="cover-tag">Vanilla JS</span>
+    <span class="cover-tag">LocalStorage</span>
+    <span class="cover-tag">AsyncStorage</span>
+    <span class="cover-tag">RBAC</span>
+    <span class="cover-tag">HIPAA-Ready</span>
+  </div>
+  <div class="cover-version">Version 1.0.0 &nbsp;·&nbsp; July 2026 &nbsp;·&nbsp; MediCore General Hospital</div>
+</div>
+
+<style>
+  /* ── SHARED LAYOUT ── */
+  .doc-body { max-width: 960px; margin: 0 auto; padding: 48px 40px; }
+  h2.section-heading {
+    font-size: 22px; font-weight: 800; color: #0f172a;
+    border-left: 5px solid #2563eb; padding-left: 14px;
+    margin: 48px 0 20px; letter-spacing: -0.5px;
+  }
+  h3.sub-heading { font-size: 15px; font-weight: 700; color: #1e40af; margin: 28px 0 10px; }
+  h4.minor-heading { font-size: 13px; font-weight: 700; color: #374151; margin: 18px 0 8px; }
+  p { margin-bottom: 10px; color: #374151; }
+  ul, ol { padding-left: 20px; margin-bottom: 12px; }
+  li { margin-bottom: 4px; color: #374151; }
+
+  /* ── TOC ── */
+  .toc-page { padding: 60px 40px; max-width: 960px; margin: 0 auto; }
+  .toc-page h2 { font-size: 28px; font-weight: 800; color: #0f172a; margin-bottom: 32px; }
+  .toc-group { margin-bottom: 28px; }
+  .toc-section { font-size: 11px; font-weight: 700; color: #6b7280; letter-spacing: 1px;
+    text-transform: uppercase; margin-bottom: 10px; padding-bottom: 6px;
+    border-bottom: 1px solid #e5e7eb; }
+  .toc-item { display: flex; justify-content: space-between; align-items: baseline;
+    padding: 5px 0; border-bottom: 1px dotted #e5e7eb; }
+  .toc-item span { font-size: 13px; color: #1e40af; font-weight: 500; }
+  .toc-item .pg { font-size: 12px; color: #6b7280; font-weight: 600; }
+
+  /* ── INFO CARDS ── */
+  .info-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 20px 0; }
+  .info-card { background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 18px; }
+  .info-card .ic-icon { font-size: 22px; margin-bottom: 10px; }
+  .info-card .ic-title { font-size: 12px; font-weight: 700; color: #64748b; text-transform: uppercase;
+    letter-spacing: 0.5px; margin-bottom: 6px; }
+  .info-card .ic-val { font-size: 14px; font-weight: 600; color: #0f172a; }
+
+  /* ── TABLES ── */
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 12px; }
+  thead th { background: #1e40af; color: #fff; padding: 10px 12px; text-align: left;
+    font-weight: 600; font-size: 11px; letter-spacing: 0.3px; }
+  tbody tr:nth-child(even) { background: #f8fafc; }
+  tbody tr:hover { background: #eff6ff; }
+  td { padding: 9px 12px; border-bottom: 1px solid #e5e7eb; vertical-align: top; }
+  td code { background: #eff6ff; color: #1d4ed8; padding: 2px 6px; border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+
+  /* ── BADGES ── */
+  .badge { display: inline-block; padding: 2px 9px; border-radius: 20px; font-size: 10px;
+    font-weight: 700; letter-spacing: 0.3px; }
+  .badge-blue { background: #dbeafe; color: #1e40af; }
+  .badge-green { background: #dcfce7; color: #166534; }
+  .badge-red { background: #fee2e2; color: #991b1b; }
+  .badge-amber { background: #fef3c7; color: #92400e; }
+  .badge-purple { background: #ede9fe; color: #5b21b6; }
+  .badge-gray { background: #f3f4f6; color: #374151; }
+
+  /* ── CODE BLOCK ── */
+  .code-block { background: #0f172a; color: #e2e8f0; padding: 18px 20px; border-radius: 10px;
+    font-family: 'JetBrains Mono', monospace; font-size: 11.5px; overflow-x: auto;
+    margin: 14px 0; line-height: 1.7; }
+  .code-block .kw { color: #93c5fd; } .code-block .str { color: #86efac; }
+  .code-block .cm { color: #64748b; } .code-block .fn { color: #fde68a; }
+
+  /* ── ALERT BOXES ── */
+  .alert { padding: 14px 18px; border-radius: 8px; margin: 14px 0; font-size: 12.5px; }
+  .alert-info { background: #eff6ff; border-left: 4px solid #2563eb; color: #1e40af; }
+  .alert-warn { background: #fffbeb; border-left: 4px solid #f59e0b; color: #92400e; }
+  .alert-success { background: #f0fdf4; border-left: 4px solid #16a34a; color: #166534; }
+
+  /* ── SCREEN CARD ── */
+  .screen-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin: 16px 0; }
+  .screen-card { border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 16px; background: #fafafa; }
+  .screen-card .sc-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .screen-card .sc-icon { width: 34px; height: 34px; border-radius: 8px; background: #1e40af;
+    display: flex; align-items: center; justify-content: center; color: #fff; font-size: 15px; }
+  .screen-card .sc-name { font-size: 13px; font-weight: 700; color: #0f172a; }
+  .screen-card .sc-role { font-size: 10px; color: #64748b; margin-top: 2px; }
+  .screen-card ul { padding-left: 16px; margin: 0; }
+  .screen-card li { font-size: 11.5px; color: #374151; margin-bottom: 3px; }
+
+  /* ── DATA MODEL ── */
+  .model-box { background: #fafafa; border: 1.5px solid #e2e8f0; border-radius: 10px;
+    margin: 14px 0; overflow: hidden; }
+  .model-header { background: #1e293b; color: #fff; padding: 10px 16px; display: flex;
+    align-items: center; gap: 10px; font-size: 13px; font-weight: 700; }
+  .model-header .model-key { font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 4px; }
+
+  /* ── ROLE MATRIX ── */
+  .role-tag { display: inline-block; margin: 2px; padding: 2px 8px; border-radius: 20px;
+    font-size: 10px; font-weight: 600; }
+  .role-admin { background: #fee2e2; color: #991b1b; }
+  .role-doctor { background: #dbeafe; color: #1e40af; }
+  .role-nurse { background: #dcfce7; color: #166534; }
+  .role-staff { background: #fef3c7; color: #92400e; }
+
+  /* ── PAGE BREAK ── */
+  .page-break { page-break-before: always; margin-top: 60px; border-top: 2px solid #e2e8f0; padding-top: 40px; }
+  .section-divider { height: 2px; background: linear-gradient(90deg, #2563eb, transparent); margin: 40px 0; border-radius: 2px; }
+</style>
+
+<!-- ══════════════════════════════════════
+     TABLE OF CONTENTS
+══════════════════════════════════════ -->
+<div class="toc-page page-break">
+  <h2>📋 Table of Contents</h2>
+
+  <div class="toc-group">
+    <div class="toc-section">Overview</div>
+    <div class="toc-item"><span>1. Project Overview</span><span class="pg">3</span></div>
+    <div class="toc-item"><span>2. Technology Stack</span><span class="pg">3</span></div>
+    <div class="toc-item"><span>3. System Architecture</span><span class="pg">4</span></div>
+  </div>
+
+  <div class="toc-group">
+    <div class="toc-section">Mobile Application (React Native)</div>
+    <div class="toc-item"><span>4. App Overview &amp; Navigation</span><span class="pg">5</span></div>
+    <div class="toc-item"><span>5. Authentication &amp; User Roles</span><span class="pg">5</span></div>
+    <div class="toc-item"><span>6. Screen Reference — All 28 Screens</span><span class="pg">6</span></div>
+    <div class="toc-item"><span>7. App State Management</span><span class="pg">9</span></div>
+    <div class="toc-item"><span>8. App Components Library</span><span class="pg">9</span></div>
+  </div>
+
+  <div class="toc-group">
+    <div class="toc-section">Web Platform</div>
+    <div class="toc-item"><span>9. Website Overview</span><span class="pg">10</span></div>
+    <div class="toc-item"><span>10. Landing Page Sections</span><span class="pg">10</span></div>
+    <div class="toc-item"><span>11. Web Dashboard Pages</span><span class="pg">11</span></div>
+    <div class="toc-item"><span>12. Web Navigation &amp; RBAC</span><span class="pg">12</span></div>
+    <div class="toc-item"><span>13. Web Data Layer</span><span class="pg">12</span></div>
+  </div>
+
+  <div class="toc-group">
+    <div class="toc-section">Data &amp; Models</div>
+    <div class="toc-item"><span>14. Data Models Reference</span><span class="pg">13</span></div>
+    <div class="toc-item"><span>15. Status &amp; Badge Reference</span><span class="pg">15</span></div>
+  </div>
+
+  <div class="toc-group">
+    <div class="toc-section">Security &amp; Operations</div>
+    <div class="toc-item"><span>16. Role-Based Access Control</span><span class="pg">16</span></div>
+    <div class="toc-item"><span>17. Demo Credentials</span><span class="pg">16</span></div>
+    <div class="toc-item"><span>18. Deployment &amp; Setup Guide</span><span class="pg">17</span></div>
+    <div class="toc-item"><span>19. Known Limitations</span><span class="pg">17</span></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SECTION 1 — PROJECT OVERVIEW
+══════════════════════════════════════ -->
+<div class="doc-body page-break">
+
+<h2 class="section-heading">1. Project Overview</h2>
+<p>
+  <strong>MediCore HMS</strong> (Hospital Management System) is a full-featured healthcare management platform
+  delivered across two parallel implementations: a <strong>React Native mobile app</strong> (powered by Expo)
+  and a <strong>Vanilla JS web application</strong>. Both platforms share identical data models, the same seed
+  dataset, and equivalent functionality — giving hospital staff a consistent experience whether they access
+  the system from a smartphone or a desktop browser.
+</p>
+<p>
+  The system covers every major hospital workflow: patient registration, OPD queuing, appointments,
+  clinical admissions, nursing notes, laboratory &amp; radiology orders, pharmacy dispensing, billing,
+  inventory management, staff management, reporting, emergency triage, real-time messaging, and
+  role-based access control.
+</p>
+
+<div class="info-grid">
+  <div class="info-card">
+    <div class="ic-icon">📱</div>
+    <div class="ic-title">Mobile App</div>
+    <div class="ic-val">React Native · Expo SDK 55</div>
+  </div>
+  <div class="info-card">
+    <div class="ic-icon">🌐</div>
+    <div class="ic-title">Web Platform</div>
+    <div class="ic-val">HTML5 · CSS3 · Vanilla JS</div>
+  </div>
+  <div class="info-card">
+    <div class="ic-icon">🏥</div>
+    <div class="ic-title">Hospital Name</div>
+    <div class="ic-val">MediCore General Hospital</div>
+  </div>
+  <div class="info-card">
+    <div class="ic-icon">🔐</div>
+    <div class="ic-title">Auth Model</div>
+    <div class="ic-val">Role-Based (4 roles)</div>
+  </div>
+  <div class="info-card">
+    <div class="ic-icon">💾</div>
+    <div class="ic-title">Storage (App)</div>
+    <div class="ic-val">AsyncStorage (device-local)</div>
+  </div>
+  <div class="info-card">
+    <div class="ic-icon">💾</div>
+    <div class="ic-title">Storage (Web)</div>
+    <div class="ic-val">localStorage (browser-local)</div>
+  </div>
+</div>
+
+<div class="alert alert-info">
+  ℹ️ Both platforms are <strong>offline-first</strong>. All data is persisted locally using AsyncStorage (app)
+  or localStorage (web). There is no backend server or database required — making this ideal for demos,
+  prototyping, and local deployments.
+</div>
+
+<!-- ══════════════════════════════════════
+     SECTION 2 — TECHNOLOGY STACK
+══════════════════════════════════════ -->
+<h2 class="section-heading">2. Technology Stack</h2>
+
+<h3 class="sub-heading">Mobile App Stack</h3>
+<table>
+  <thead><tr><th>Package</th><th>Version</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>expo</code></td><td>~55.0.0</td><td>Build toolchain, dev server, OTA updates</td></tr>
+    <tr><td><code>react</code></td><td>19.2.0</td><td>UI library</td></tr>
+    <tr><td><code>react-native</code></td><td>0.83.6</td><td>Cross-platform mobile framework</td></tr>
+    <tr><td><code>@react-navigation/native</code></td><td>^7.0.0</td><td>Navigation container &amp; core</td></tr>
+    <tr><td><code>@react-navigation/native-stack</code></td><td>^7.0.0</td><td>Stack navigator (Auth / Detail screens)</td></tr>
+    <tr><td><code>@react-navigation/drawer</code></td><td>^7.0.0</td><td>Sidebar drawer navigator</td></tr>
+    <tr><td><code>@react-navigation/bottom-tabs</code></td><td>^7.0.0</td><td>Bottom tab bar</td></tr>
+    <tr><td><code>@expo/vector-icons</code></td><td>^15.0.2</td><td>Ionicons icon set</td></tr>
+    <tr><td><code>expo-linear-gradient</code></td><td>~55.0.15</td><td>Gradient backgrounds</td></tr>
+    <tr><td><code>@react-native-async-storage/async-storage</code></td><td>2.2.0</td><td>Persistent local storage</td></tr>
+    <tr><td><code>react-native-gesture-handler</code></td><td>~2.30.0</td><td>Gesture support for drawer</td></tr>
+    <tr><td><code>react-native-reanimated</code></td><td>4.2.1</td><td>Animation engine</td></tr>
+    <tr><td><code>react-native-screens</code></td><td>~4.23.0</td><td>Native screen containers</td></tr>
+    <tr><td><code>expo-splash-screen</code></td><td>~55.0.22</td><td>Splash screen management</td></tr>
+    <tr><td><code>expo-status-bar</code></td><td>~55.0.6</td><td>Status bar control (dark/light mode)</td></tr>
+  </tbody>
+</table>
+
+<h3 class="sub-heading">Web Platform Stack</h3>
+<table>
+  <thead><tr><th>Technology</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td>HTML5</td><td>Semantic page structure, multi-page app (MPA)</td></tr>
+    <tr><td>CSS3 (custom)</td><td><code>landing.css</code> for landing page, <code>style.css</code> for dashboard pages</td></tr>
+    <tr><td>Vanilla JavaScript</td><td>DOM manipulation, data layer, navigation RBAC, page logic</td></tr>
+    <tr><td>Google Fonts — Outfit</td><td>Typography (weights 300–900)</td></tr>
+    <tr><td>Font Awesome 6.5</td><td>Icon set via CDN</td></tr>
+    <tr><td>localStorage API</td><td>Client-side data persistence</td></tr>
+    <tr><td>sessionStorage API</td><td>Logged-in user session</td></tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ══════════════════════════════════════
+     SECTION 3 — ARCHITECTURE
+══════════════════════════════════════ -->
+<div class="doc-body page-break">
+
+<h2 class="section-heading">3. System Architecture</h2>
+
+<h3 class="sub-heading">App Architecture</h3>
+<div class="code-block">
+<span class="cm">// App Entry Point</span>
+App.js
+  └─ GestureHandlerRootView
+      └─ AppProvider  <span class="cm">(Context + AsyncStorage)</span>
+          └─ AppNavigator
+              └─ NavigationContainer
+                  └─ RootStack  <span class="cm">(Stack Navigator)</span>
+                      ├─ [Unauthenticated]
+                      │   ├─ LoginScreen
+                      │   └─ RegisterScreen
+                      └─ [Authenticated]
+                          ├─ MainDrawer  <span class="cm">(Drawer Navigator — 22 screens)</span>
+                          │   └─ HomeTabs  <span class="cm">(Bottom Tab Navigator — 5 tabs)</span>
+                          │       ├─ DashboardScreen
+                          │       ├─ ReportsScreen
+                          │       ├─ AppointmentsScreen (×2 tabs)
+                          │       └─ SettingsScreen
+                          ├─ PatientProfileScreen
+                          ├─ DoctorProfileScreen
+                          ├─ AddAppointmentScreen
+                          └─ AddPatientScreen
+</div>
+
+<h3 class="sub-heading">Web Architecture</h3>
+<div class="code-block">
+website/
+├── index.html              <span class="cm">← Landing page (public)</span>
+├── css/
+│   ├── landing.css         <span class="cm">← Landing page styles</span>
+│   └── style.css           <span class="cm">← Dashboard page styles (shared)</span>
+├── js/
+│   ├── data.js             <span class="cm">← HMSData singleton (localStorage CRUD)</span>
+│   ├── nav.js              <span class="cm">← Sidebar nav renderer + RBAC guard</span>
+│   ├── app.js              <span class="cm">← Shared utilities, auth helpers, toast</span>
+│   └── main.js             <span class="cm">← Landing page interactions</span>
+└── pages/                  <span class="cm">← 28 protected dashboard pages</span>
+    ├── login.html / register.html
+    ├── dashboard.html
+    └── [26 module pages]
+</div>
+
+<h3 class="sub-heading">State &amp; Data Flow</h3>
+<table>
+  <thead><tr><th>Platform</th><th>State Mechanism</th><th>Persistence Key</th><th>Session Key</th></tr></thead>
+  <tbody>
+    <tr><td>Mobile App</td><td>React Context + useReducer</td><td><code>hms_data_v1</code> (AsyncStorage)</td><td><code>hms_user</code> (AsyncStorage)</td></tr>
+    <tr><td>Web</td><td>HMSData singleton object</td><td><code>hms_data_v1</code> (localStorage)</td><td><code>hms_user</code> (sessionStorage)</td></tr>
+  </tbody>
+</table>
+
+<div class="alert alert-success">
+  ✅ The same storage key <code>hms_data_v1</code> and identical SEED data are used on both platforms,
+  making it easy to reason about the data shape regardless of which platform you're working on.
+</div>
+
+<!-- ══════════════════════════════════════
+     SECTION 4 — APP NAVIGATION
+══════════════════════════════════════ -->
+<h2 class="section-heading">4. App Navigation Structure</h2>
+<p>The app uses a three-layer navigation hierarchy:</p>
+<ul>
+  <li><strong>RootStack</strong> — Switches between the auth flow and the main app based on <code>state.user</code></li>
+  <li><strong>MainDrawer</strong> — Dark sidebar (background <code>#0f172a</code>) with 3 sections: Main, Clinical, Administration. Width: 270px.</li>
+  <li><strong>HomeTabs</strong> — Custom bottom tab bar with 5 tabs including a center "Book Test" FAB button that navigates to Laboratory</li>
+</ul>
+
+<h3 class="sub-heading">Sidebar Navigation Sections</h3>
+<table>
+  <thead><tr><th>Section</th><th>Items</th><th>Notes</th></tr></thead>
+  <tbody>
+    <tr><td>Main</td><td>Dashboard, OPD Queue, Patients, Doctors, Departments</td><td>All roles</td></tr>
+    <tr><td>Clinical</td><td>Admissions, Discharge, Medical Records, Nursing, Laboratory, Radiology, Pharmacy, Rooms &amp; Wards, Emergency</td><td>Emergency shows critical patient badge</td></tr>
+    <tr><td>Administration</td><td>Staff, Inventory, Billing, Reports, User Management, Messages, Notifications, Settings</td><td>User Management: Administrator only. Messages shows unread badge.</td></tr>
+  </tbody>
+</table>
+
+<h3 class="sub-heading">Bottom Tab Bar</h3>
+<table>
+  <thead><tr><th>Tab</th><th>Icon</th><th>Screen</th><th>Note</th></tr></thead>
+  <tbody>
+    <tr><td>Home</td><td>home</td><td>DashboardScreen</td><td>—</td></tr>
+    <tr><td>Reports</td><td>document-text</td><td>ReportsScreen</td><td>—</td></tr>
+    <tr><td>Book Test</td><td>add (FAB)</td><td>LaboratoryScreen</td><td>Center elevated button, blue (#11B5E4)</td></tr>
+    <tr><td>Appointments</td><td>calendar</td><td>AppointmentsScreen</td><td>—</td></tr>
+    <tr><td>Profile</td><td>person</td><td>SettingsScreen</td><td>—</td></tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ══════════════════════════════════════
+     SECTION 5 — AUTH & ROLES
+══════════════════════════════════════ -->
+<div class="doc-body page-break">
+
+<h2 class="section-heading">5. Authentication &amp; User Roles</h2>
+
+<h3 class="sub-heading">Login Flow</h3>
+<p>
+  Both platforms use a credential-based login. The app reads registered users from
+  <code>hms_registered_users</code> (AsyncStorage). The web uses <code>hms_registered_users</code>
+  (localStorage). On first launch, no users exist — users must register or use demo credentials.
+</p>
+
+<h3 class="sub-heading">Demo Credentials</h3>
+<table>
+  <thead><tr><th>Email</th><th>Password</th><th>Role</th><th>Name</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>admin@medicore.com</code></td><td><code>admin123</code></td>
+      <td><span class="badge badge-red">Administrator</span></td><td>Dr. Admin</td>
+    </tr>
+    <tr>
+      <td><code>doctor@medicore.com</code></td><td><code>doctor123</code></td>
+      <td><span class="badge badge-blue">Doctor</span></td><td>Dr. Mike Chen</td>
+    </tr>
+    <tr>
+      <td><code>nurse@medicore.com</code></td><td><code>nurse123</code></td>
+      <td><span class="badge badge-green">Nurse</span></td><td>Nurse Emily</td>
+    </tr>
+    <tr>
+      <td><code>staff@medicore.com</code></td><td><code>staff123</code></td>
+      <td><span class="badge badge-amber">Staff</span></td><td>John Staff</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 class="sub-heading">Role-Based Access Control (RBAC)</h3>
+<table>
+  <thead><tr><th>Module</th><th>Administrator</th><th>Doctor</th><th>Nurse</th><th>Staff</th></tr></thead>
+  <tbody>
+    <tr><td>Dashboard</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+    <tr><td>Patients</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+    <tr><td>Doctors</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+    <tr><td>Departments</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+    <tr><td>OPD Queue</td><td>✅</td><td>—</td><td>✅</td><td>✅</td></tr>
+    <tr><td>Admissions</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+    <tr><td>Discharge</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+    <tr><td>Medical Records</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+    <tr><td>Nursing</td><td>✅</td><td>✅</td><td>✅</td><td>—</td></tr>
+    <tr><td>Laboratory</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+    <tr><td>Radiology</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+    <tr><td>Pharmacy</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+    <tr><td>Rooms &amp; Wards</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+    <tr><td>Emergency</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+    <tr><td>Staff</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+    <tr><td>Inventory</td><td>✅</td><td>—</td><td>—</td><td>✅</td></tr>
+    <tr><td>Billing</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+    <tr><td>Reports</td><td>✅</td><td>✅</td><td>—</td><td>✅</td></tr>
+    <tr><td>User Management</td><td>✅</td><td>—</td><td>—</td><td>—</td></tr>
+    <tr><td>Messages</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+    <tr><td>Notifications</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+    <tr><td>Settings</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+  </tbody>
+</table>
+<p style="font-size:11px;color:#6b7280;">
+  ✅ = Full access &nbsp;·&nbsp; — = Hidden or redirected &nbsp;·&nbsp;
+  Web enforces via <code>nav.js guardPage()</code>; App enforces via sidebar filter.
+</p>
+</div>
+
+<!-- ══════════════════════════════════════
+     SECTION 6 — SCREEN REFERENCE
+══════════════════════════════════════ -->
+<div class="doc-body page-break">
+
+<h2 class="section-heading">6. Screen Reference — Mobile App</h2>
+
+<h3 class="sub-heading">Authentication Screens</h3>
+<div class="screen-grid">
+  <div class="screen-card">
+    <div class="sc-header">
+      <div class="sc-icon">🔐</div>
+      <div><div class="sc-name">LoginScreen</div><div class="sc-role">All users</div></div>
+    </div>
+    <ul>
+      <li>Email + password inputs with show/hide toggle</li>
+      <li>Gradient hero banner with stats (1,240+ patients, 48 doctors)</li>
+      <li>Reads from <code>hms_registered_users</code> AsyncStorage key</li>
+      <li>Navigate to RegisterScreen</li>
+    </ul>
+  </div>
+  <div class="screen-card">
+    <div class="sc-header">
+      <div class="sc-icon">📝</div>
+      <div><div class="sc-name">RegisterScreen</div><div class="sc-role">New users</div></div>
+    </div>
+    <ul>
+      <li>Name, email, password, role selection</li>
+      <li>Saves new user to <code>hms_registered_users</code> array</li>
+      <li>Auto-redirects to Login after success</li>
+    </ul>
+  </div>
+</div>
+
+<h3 class="sub-heading">Main Module Screens</h3>
+<div class="screen-grid">
+  <div class="screen-card">
+    <div class="sc-header"><div class="sc-icon">🏠</div><div><div class="sc-name">DashboardScreen</div><div class="sc-role">All roles</div></div></div>
+    <ul>
+      <li>Hero image banner with "Your Health, Our Priority"</li>
+      <li>4 feature pills: Reports, Safe &amp; Secure, Fast Delivery, 24/7 Support</li>
+      <li>Quick Actions grid (Book Test, My Reports, Appointments, Find Center)</li>
+      <li>Popular Services horizontal scroll (Blood, Genetic, Cardiac, Covid-19 tests)</li>
+      <li>Promo banner with "Flat 20% OFF on First Test"</li>
+      <li>Unread notification badge on bell icon</li>
+    </ul>
+  </div>
+  <div class="screen-card">
+    <div class="sc-header"><div class="sc-icon">👥</div><div><div class="sc-name">PatientsScreen</div><div class="sc-role">All roles</div></div></div>
+    <ul>
+      <li>Searchable &amp; filterable patient list</li>
+      <li>Patient cards with status badges (Stable, Critical, Admitted, etc.)</li>
+      <li>Quick stats bar: total, admitted, critical</li>
+      <li>FAB button → AddPatientScreen</li>
+      <li>Tap patient → PatientProfileScreen</li>
+    </ul>
+  </div>
+  <div class="screen-card">
+    <div class="sc-header"><div class="sc-icon">👤</div><div><div class="sc-name">PatientProfileScreen</div><div class="sc-role">All roles</div></div></div>
+    <ul>
+      <li>Demographics, contact, blood group, assigned doctor</li>
+      <li>Live vitals: BP, HR, Temperature, SpO2</li>
+      <li>Medical conditions &amp; allergy list</li>
+      <li>Visit count, admission count, total billed</li>
+      <li>Action buttons: Book Appointment, View Records</li>
+    </ul>
+  </div>
+  <div class="screen-card">
+    <div class="sc-header"><div class="sc-icon">🩺</div><div><div class="sc-name">DoctorsScreen</div><div class="sc-role">All roles</div></div></div>
+    <ul>
+      <li>Doctor cards with specialty, rating, patient count</li>
+      <li>Real-time status badge (Available, In Surgery, On Leave)</li>
+      <li>Search by name or specialty</li>
+      <li>Tap → DoctorProfileScreen</li>
+    </ul>
+  </div>
+  <div class="screen-card">
+    <div class="sc-header"><div class="sc-icon">📅</div><div><div class="sc-name">AppointmentsScreen</div><div class="sc-role">All roles</div></div></div>
+    <ul>
+      <li>Date-filterable appointment list</li>
+      <li>Type badges: Checkup, Consultation, Follow-up</li>
+      <li>Status filters: Confirmed, Pending, Checked In, Cancelled</li>
+      <li>FAB → AddAppointmentScreen</li>
+    </ul>
+  </div>
+  <div class="screen-card">
+    <div class="sc-header"><div class="sc-icon">🏢</div><div><div class="sc-name">DepartmentsScreen</div><div class="sc-role">All roles</div></div></div>
+    <ul>
+      <li>Department cards: head doctor, doctor count, bed occupancy</li>
+      <li>6 departments: Cardiology, Neurology, Orthopedics, Pediatrics, Dermatology, Oncology</li>
+      <li>Occupancy progress bars</li>
+    </ul>
+  </div>
+</div>
+
+<h3 class="sub-heading">Clinical Screens</h3>
+<div class="screen-grid">
+  <div class="screen-card">
+    <div class="sc-header"><div class="sc-icon">🚪</div><div><div class="sc-name">AdmissionsScreen</div><div class="sc-role">All roles</div></div></div>
+    <ul>
+      <li>Active inpatient list with ward, room, bed assignment</li>
+      <li>Admission date, attending doctor, diagnosis</li>
+      <li>Status: Admitted, Critical</li>
+    </ul>
+  </div>
+  <div class="screen-card">
+    <div class="sc-header"><div class="sc-icon">🚶</div><div><div class="sc-name">DischargeScreen</div><div class="sc-role">All roles</div></div></div>
+    <ul>
+      <li>Process patient discharge from inpatient ward</li>
+      <li>Discharge summary, final billing link</li>
+    </ul>
+  </div>
+  <div class="screen-card">
+    <div class="sc-header"><div class="sc-icon">📋</div><div><div class="sc-name">OPDQueueScreen</div><div class="sc-role">Admin, Nurse, Staff</div></div></div>
+    <ul>
+      <li>Token-numbered queue for outpatient department</li>
+      <li>Per-patient: department, assigned doctor, wait time</li>
+      <li>Status: Waiting, In Consultation, Completed</li>
+    </ul>
+  </div>
+  <div class="screen-card">
+    <div class="sc-header"><div class="sc-icon">🚨</div><div><div class="sc-name">EmergencyScreen</div><div class="sc-role">All roles</div></div></div>
+    <ul>
+      <li>Active emergency cases with severity: Critical, Urgent</li>
+      <li>Arrival time, assigned doctor, treatment status</li>
+      <li>Red badge on sidebar nav showing critical count</li>
+    </ul>
+  </div>
+  <div class="screen-card">
+    <div class="sc-header"><div class="sc-icon">📄</div><div><div class="sc-name">MedicalRecordsScreen</div><div class="sc-role">All roles</div></div></div>
+    <ul>
+      <li>Patient-linked record list by date</li>
+      <li>Record types: Checkup, Emergency, Follow-up</li>
+      <li>Doctor notes, diagnosis text</li>
+    </ul>
+  </div>
+  <div class="screen-card">
+    <div class="sc-header"><div class="sc-icon">💉</div><div><div class="sc-name">NursingScreen</div><div class="sc-role">Admin, Doctor, Nurse</div></div></div>
+    <ul>
+      <li>Nursing notes with vitals snapshot</li>
+      <li>Note types: Vitals, Medication</li>
+      <li>Nurse name, timestamp, patient link</li>
+    </ul>
+  </div>
+  <div class="screen-card">
+    <div class="sc-header"><div class="sc-icon">🔬</div><div><div class="sc-name">LaboratoryScreen</div><div class="sc-role">All roles</div></div></div>
+    <ul>
+      <li>Lab orders list with test name, ordering doctor</li>
+      <li>Priority badges: Routine, Urgent</li>
+      <li>Status: Pending, In Progress, Completed</li>
+    </ul>
+  </div>
+  <div class="screen-card">
+    <div class="sc-header"><div class="sc-icon">🩻</div><div><div class="sc-name">RadiologyScreen</div><div class="sc-role">All roles</div></div></div>
+    <ul>
+      <li>Radiology orders: X-Ray, CT, MRI</li>
+      <li>Priority and status tracking same as Lab</li>
+    </ul>
+  </div>
+  <div class="screen-card">
+    <div class="sc-header"><div class="sc-icon">💊</div><div><div class="sc-name">PharmacyScreen</div><div class="sc-role">All roles</div></div></div>
+    <ul>
+      <li>Prescription list with medicine name, quantity</li>
+      <li>Prescribing doctor, patient link</li>
+      <li>Status: Dispensed, Pending</li>
+    </ul>
+  </div>
+  <div class="screen-card">
+    <div class="sc-header"><div class="sc-icon">🛏️</div><div><div class="sc-name">RoomsScreen</div><div class="sc-role">All roles</div></div></div>
+    <ul>
+      <li>Room/bed inventory per ward</li>
+      <li>Types: General, ICU, Emergency</li>
+      <li>Occupancy status: Available, Occupied</li>
+    </ul>
+  </div>
+</div>
+
+<h3 class="sub-heading">Administration Screens</h3>
+<div class="screen-grid">
+  <div class="screen-card">
+    <div class="sc-header"><div class="sc-icon">🧑‍⚕️</div><div><div class="sc-name">StaffScreen</div><div class="sc-role">All roles</div></div></div>
+    <ul><li>Staff list with role, department, shift</li><li>Status: Active, Inactive</li></ul>
+  </div>
+  <div class="screen-card">
+    <div class="sc-header"><div class="sc-icon">📦</div><div><div class="sc-name">InventoryScreen</div><div class="sc-role">Admin, Staff</div></div></div>
+    <ul><li>Medical supplies with quantity &amp; reorder level</li><li>Status: In Stock, Low Stock, Out of Stock</li></ul>
+  </div>
+  <div class="screen-card">
+    <div class="sc-header"><div class="sc-icon">🧾</div><div><div class="sc-name">BillingScreen</div><div class="sc-role">All roles</div></div></div>
+    <ul><li>Invoice list with amount, paid amount, balance</li><li>Status: Paid, Partial, Pending</li></ul>
+  </div>
+  <div class="screen-card">
+    <div class="sc-header"><div class="sc-icon">📊</div><div><div class="sc-name">ReportsScreen</div><div class="sc-role">Admin, Doctor, Staff</div></div></div>
+    <ul><li>Department performance summaries</li><li>Patient statistics, financial overview</li></ul>
+  </div>
+  <div class="screen-card">
+    <div class="sc-header"><div class="sc-icon">💬</div><div><div class="sc-name">MessagesScreen</div><div class="sc-role">All roles</div></div></div>
+    <ul><li>Internal messages with read/unread state</li><li>Unread count shown in sidebar badge</li></ul>
+  </div>
+  <div class="screen-card">
+    <div class="sc-header"><div class="sc-icon">🔔</div><div><div class="sc-name">NotificationsScreen</div><div class="sc-role">All roles</div></div></div>
+    <ul><li>Types: danger (critical alert), info, warning</li><li>Unread dot on header bell icon</li></ul>
+  </div>
+  <div class="screen-card">
+    <div class="sc-header"><div class="sc-icon">👤</div><div><div class="sc-name">UsersScreen</div><div class="sc-role">Administrator only</div></div></div>
+    <ul><li>User account management</li><li>Role assignment, last login tracking</li></ul>
+  </div>
+  <div class="screen-card">
+    <div class="sc-header"><div class="sc-icon">⚙️</div><div><div class="sc-name">SettingsScreen</div><div class="sc-role">All roles</div></div></div>
+    <ul><li>Dark mode toggle</li><li>Hospital name, profile info</li><li>Logout action</li></ul>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SECTION 7 — APP STATE MANAGEMENT
+══════════════════════════════════════ -->
+<div class="doc-body page-break">
+
+<h2 class="section-heading">7. App State Management</h2>
+<p>
+  The app uses React Context + <code>useReducer</code> for global state, persisted via AsyncStorage.
+  The <code>AppProvider</code> component wraps the entire app and exposes all CRUD helpers via context.
+</p>
+
+<h3 class="sub-heading">Context API Surface</h3>
+<table>
+  <thead><tr><th>Method / Property</th><th>Type</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td><code>state.data</code></td><td>Object</td><td>Full dataset (all 16 collections loaded from AsyncStorage)</td></tr>
+    <tr><td><code>state.user</code></td><td>Object | null</td><td>Currently logged-in user: <code>{ name, email, role }</code></td></tr>
+    <tr><td><code>state.darkMode</code></td><td>Boolean</td><td>Dark mode preference</td></tr>
+    <tr><td><code>state.loading</code></td><td>Boolean</td><td>True while AsyncStorage is being read on startup</td></tr>
+    <tr><td><code>login(user)</code></td><td>async fn</td><td>Persists user to AsyncStorage, sets <code>state.user</code></td></tr>
+    <tr><td><code>logout()</code></td><td>async fn</td><td>Removes user key, clears <code>state.user</code></td></tr>
+    <tr><td><code>setData(key, value)</code></td><td>async fn</td><td>Replaces an entire collection and saves to AsyncStorage</td></tr>
+    <tr><td><code>addItem(key, item)</code></td><td>async fn</td><td>Appends an item to a collection array</td></tr>
+    <tr><td><code>updateItem(key, id, updates)</code></td><td>async fn</td><td>Merges updates into the matching item (by <code>id</code>)</td></tr>
+    <tr><td><code>removeItem(key, id)</code></td><td>async fn</td><td>Filters out item with matching <code>id</code></td></tr>
+    <tr><td><code>toggleDark()</code></td><td>async fn</td><td>Toggles dark mode, persists to <code>hms_dark</code> key</td></tr>
+  </tbody>
+</table>
+
+<h3 class="sub-heading">Reducer Actions</h3>
+<table>
+  <thead><tr><th>Action Type</th><th>Payload</th><th>Effect</th></tr></thead>
+  <tbody>
+    <tr><td><code>INIT</code></td><td>data, user, darkMode</td><td>Sets all initial state, sets loading = false</td></tr>
+    <tr><td><code>LOGIN</code></td><td>user</td><td>Sets state.user</td></tr>
+    <tr><td><code>LOGOUT</code></td><td>—</td><td>Clears state.user to null</td></tr>
+    <tr><td><code>SET_DATA</code></td><td>key, value</td><td>Updates one key in state.data</td></tr>
+    <tr><td><code>TOGGLE_DARK</code></td><td>—</td><td>Flips state.darkMode boolean</td></tr>
+  </tbody>
+</table>
+
+<h3 class="sub-heading">AsyncStorage Keys</h3>
+<table>
+  <thead><tr><th>Key</th><th>Content</th><th>Notes</th></tr></thead>
+  <tbody>
+    <tr><td><code>hms_data_v1</code></td><td>Full JSON dataset</td><td>Seeded from SEED on first launch</td></tr>
+    <tr><td><code>hms_user</code></td><td>Logged-in user object</td><td>Cleared on logout</td></tr>
+    <tr><td><code>hms_registered_users</code></td><td>Array of registered accounts</td><td>Used by LoginScreen for auth</td></tr>
+    <tr><td><code>hms_dark</code></td><td>"true" or "false" string</td><td>Dark mode preference</td></tr>
+  </tbody>
+</table>
+
+<!-- ══════════════════════════════════════
+     SECTION 8 — COMPONENTS LIBRARY
+══════════════════════════════════════ -->
+<h2 class="section-heading">8. Shared Components Library</h2>
+<p>All shared UI primitives live in <code>src/components/</code> and are used across screens.</p>
+
+<table>
+  <thead><tr><th>Component</th><th>File</th><th>Props</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><strong>Avatar</strong></td><td><code>Avatar.js</code></td>
+      <td>name, size, color</td>
+      <td>Renders initials-based circular avatar with background color</td>
+    </tr>
+    <tr>
+      <td><strong>Card</strong></td><td><code>Card.js</code></td>
+      <td>style, children</td>
+      <td>White rounded card with shadow — base container for most list items</td>
+    </tr>
+    <tr>
+      <td><strong>EmptyState</strong></td><td><code>EmptyState.js</code></td>
+      <td>icon, title, subtitle</td>
+      <td>Centered empty-list illustration with icon, title and message</td>
+    </tr>
+    <tr>
+      <td><strong>PageHeader</strong></td><td><code>PageHeader.js</code></td>
+      <td>title, subtitle, action</td>
+      <td>Top section heading with optional right-side action button</td>
+    </tr>
+    <tr>
+      <td><strong>ScreenHeader</strong></td><td><code>ScreenHeader.js</code></td>
+      <td>title, onBack, rightAction</td>
+      <td>Navigation header with back button for stack screens</td>
+    </tr>
+    <tr>
+      <td><strong>SearchBar</strong></td><td><code>SearchBar.js</code></td>
+      <td>value, onChangeText, placeholder</td>
+      <td>Styled search input with magnifier icon</td>
+    </tr>
+    <tr>
+      <td><strong>StatCard</strong></td><td><code>StatCard.js</code></td>
+      <td>icon, label, value, color</td>
+      <td>Compact stat tile used in list page headers (e.g., total patients, critical count)</td>
+    </tr>
+    <tr>
+      <td><strong>StatusBadge</strong></td><td><code>StatusBadge.js</code></td>
+      <td>status</td>
+      <td>Pill badge with color from <code>StatusColors</code> map (e.g., Stable=green, Critical=red)</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="alert alert-info">
+  ℹ️ <strong>StatusBadge</strong> uses the <code>StatusColors</code> map from <code>constants/colors.js</code>
+  to automatically resolve background and text color for any status string — no per-screen styling needed.
+</div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SECTION 9-10 — WEBSITE
+══════════════════════════════════════ -->
+<div class="doc-body page-break">
+
+<h2 class="section-heading">9. Website Overview</h2>
+<p>
+  The web platform is a Multi-Page Application (MPA) built with plain HTML5, CSS3, and Vanilla JavaScript.
+  It shares the same data model as the mobile app. The site has two tiers:
+</p>
+<ul>
+  <li><strong>Landing Page</strong> (<code>index.html</code>) — Public marketing page with features, doctors showcase, appointment form, and sign-in CTA</li>
+  <li><strong>Dashboard Pages</strong> (<code>pages/*.html</code>) — 28 protected application pages requiring login, sharing a common sidebar layout via <code>nav.js</code></li>
+</ul>
+
+<div class="info-grid">
+  <div class="info-card">
+    <div class="ic-icon">🌐</div>
+    <div class="ic-title">Entry Point</div>
+    <div class="ic-val">index.html (Landing)</div>
+  </div>
+  <div class="info-card">
+    <div class="ic-icon">🔐</div>
+    <div class="ic-title">Auth Entry</div>
+    <div class="ic-val">pages/login.html</div>
+  </div>
+  <div class="info-card">
+    <div class="ic-icon">🏠</div>
+    <div class="ic-title">Post-Login</div>
+    <div class="ic-val">pages/dashboard.html</div>
+  </div>
+  <div class="info-card">
+    <div class="ic-icon">📄</div>
+    <div class="ic-title">Total Pages</div>
+    <div class="ic-val">29 HTML files</div>
+  </div>
+  <div class="info-card">
+    <div class="ic-icon">🎨</div>
+    <div class="ic-title">Stylesheets</div>
+    <div class="ic-val">landing.css + style.css</div>
+  </div>
+  <div class="info-card">
+    <div class="ic-icon">⚙️</div>
+    <div class="ic-title">JS Modules</div>
+    <div class="ic-val">data.js · nav.js · app.js · main.js</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SECTION 10 — LANDING PAGE
+══════════════════════════════════════ -->
+<h2 class="section-heading">10. Landing Page Sections</h2>
+<p>The landing page (<code>index.html</code>) is a single-scroll marketing page with 9 distinct sections and animated scroll-reveal effects.</p>
+
+<table>
+  <thead><tr><th>#</th><th>Section ID</th><th>Content</th><th>Key Features</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>1</td><td><code>#home</code> — Navbar</td>
+      <td>Fixed top navigation bar</td>
+      <td>Logo, nav links (Features, Services, Doctors, Appointment, Contact), Sign In + Get Started buttons, hamburger for mobile</td>
+    </tr>
+    <tr>
+      <td>2</td><td><code>#home</code> — Hero</td>
+      <td>Full-viewport hero section</td>
+      <td>Animated particles background, floating ambient cards (Appointment Confirmed, 148 Doctors Active), live stats glass card (2,847 patients, 148 doctors, 312 appointments), trust badges (HIPAA, Role-Based Access, 24/7 Uptime, Mobile Ready)</td>
+    </tr>
+    <tr>
+      <td>3</td><td>Stats Strip</td>
+      <td>Animated counter row</td>
+      <td>4 counters: 2,847 Active Patients, 148 Doctors, 312 Appointments Today, 8 Departments — animate on scroll via IntersectionObserver</td>
+    </tr>
+    <tr>
+      <td>4</td><td><code>#features</code></td>
+      <td>6-card feature grid</td>
+      <td>Smart Appointments, Digital Medical Records, Emergency Triage, Pharmacy &amp; Inventory, Billing &amp; Invoicing, Analytics &amp; Reports</td>
+    </tr>
+    <tr>
+      <td>5</td><td><code>#about</code></td>
+      <td>About section, 2-col layout</td>
+      <td>Medical team image, 12+ Years badge, 5 bullet points on compliance and capabilities, Access Dashboard CTA</td>
+    </tr>
+    <tr>
+      <td>6</td><td><code>#services</code></td>
+      <td>6-card services/modules grid</td>
+      <td>Patient Management, Laboratory, Rooms &amp; Wards, Staff Management, Internal Messaging, Security &amp; Compliance</td>
+    </tr>
+    <tr>
+      <td>7</td><td><code>#doctors</code></td>
+      <td>4-card doctor showcase</td>
+      <td>Dr. Mike Chen (Cardiology), Dr. Lisa Park (Neurology), Dr. Anna White (Pediatrics), Dr. Rachel Green (Emergency) — each with rating, patients, experience</td>
+    </tr>
+    <tr>
+      <td>8</td><td>Testimonials</td>
+      <td>3 user testimonials</td>
+      <td>Quotes from a cardiologist, emergency doctor, and hospital administrator</td>
+    </tr>
+    <tr>
+      <td>9</td><td><code>#appointment</code></td>
+      <td>Appointment booking form</td>
+      <td>Left: working hours, emergency hotline, location. Right: form with name, phone, email, department select, date, notes. Redirects to login for full management.</td>
+    </tr>
+    <tr>
+      <td>10</td><td>FAQ</td>
+      <td>Accordion FAQ list</td>
+      <td>What is MediCore, data security, user access, supported devices, billing export — accordion expand/collapse</td>
+    </tr>
+    <tr>
+      <td>11</td><td><code>#contact</code> — Footer</td>
+      <td>Footer with contact info</td>
+      <td>Address (1200 Medical Center Dr, Chicago IL), phone, email, social links, copyright</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 class="sub-heading">Landing Page JavaScript</h3>
+<table>
+  <thead><tr><th>File</th><th>Responsibilities</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>main.js</code></td>
+      <td>Navbar scroll shrink, hamburger menu toggle, animated stat counters (IntersectionObserver), scroll-reveal animations, FAQ accordion, particle generator, ripple effect on CTA button, appointment form toast notification</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ══════════════════════════════════════
+     SECTION 11 — WEB DASHBOARD PAGES
+══════════════════════════════════════ -->
+<div class="doc-body page-break">
+
+<h2 class="section-heading">11. Web Dashboard Pages</h2>
+<p>All 28 dashboard pages live in <code>pages/</code> and share the same two-column layout: a fixed sidebar (rendered by <code>nav.js</code>) and a main content area. Each page loads <code>data.js</code>, <code>nav.js</code>, and <code>app.js</code>.</p>
+
+<table>
+  <thead><tr><th>File</th><th>Module</th><th>Key Features</th></tr></thead>
+  <tbody>
+    <tr><td><code>login.html</code></td><td>Authentication</td><td>Email + password form, role display, link to register. Saves user to sessionStorage on success.</td></tr>
+    <tr><td><code>register.html</code></td><td>Authentication</td><td>Name, email, password, role select. Saves to <code>hms_registered_users</code> in localStorage.</td></tr>
+    <tr><td><code>dashboard.html</code></td><td>Main</td><td>Summary stats: total patients, admissions, appointments, revenue. Recent activity feed. Quick-access shortcut cards.</td></tr>
+    <tr><td><code>patients.html</code></td><td>Main</td><td>Searchable patient table with status badges. Add patient button. Pagination. Click → patient-profile.html</td></tr>
+    <tr><td><code>patient-profile.html</code></td><td>Main</td><td>Full patient detail: demographics, vitals, conditions, allergies, visit history, billing summary, linked appointments.</td></tr>
+    <tr><td><code>doctors.html</code></td><td>Main</td><td>Doctor cards grid with specialty, rating, status. Search. Click → doctor-profile.html</td></tr>
+    <tr><td><code>doctor-profile.html</code></td><td>Main</td><td>Doctor bio, experience, schedule, patient count, department, contact info.</td></tr>
+    <tr><td><code>departments.html</code></td><td>Main</td><td>Department list with head, doctor count, bed total, occupancy bar chart.</td></tr>
+    <tr><td><code>appointments.html</code></td><td>Main</td><td>Date-filterable appointment table. Status filter tabs. Link to add-appointment.html</td></tr>
+    <tr><td><code>add-appointment.html</code></td><td>Main</td><td>Form: patient select, doctor select, department, date, time, appointment type. Saves via HMSData.add().</td></tr>
+    <tr><td><code>opd-queue.html</code></td><td>Main</td><td>Token-numbered queue table. Status update buttons (Waiting → In Consultation → Completed). Roles: Admin, Nurse, Staff.</td></tr>
+    <tr><td><code>admissions.html</code></td><td>Clinical</td><td>Active inpatient list: ward, room, bed, diagnosis, doctor, admission date. Status badges.</td></tr>
+    <tr><td><code>discharge.html</code></td><td>Clinical</td><td>Process patient discharge with summary notes and final billing trigger.</td></tr>
+    <tr><td><code>medical-records.html</code></td><td>Clinical</td><td>Filterable records by patient or date. Record types: Checkup, Emergency, Follow-up. Notes display.</td></tr>
+    <tr><td><code>nursing.html</code></td><td>Clinical</td><td>Nursing notes with vitals snapshot. Type: Vitals, Medication. Add new note form. Roles: Admin, Doctor, Nurse.</td></tr>
+    <tr><td><code>laboratory.html</code></td><td>Clinical</td><td>Lab order list. Priority badges (Routine/Urgent). Status workflow. Add new order form.</td></tr>
+    <tr><td><code>radiology.html</code></td><td>Clinical</td><td>Radiology orders: X-Ray, CT, MRI. Same structure as laboratory. Priority + status tracking.</td></tr>
+    <tr><td><code>pharmacy.html</code></td><td>Clinical</td><td>Prescription list. Dispense action. Medicine name, quantity, prescribing doctor, patient link.</td></tr>
+    <tr><td><code>rooms.html</code></td><td>Clinical</td><td>Room/bed inventory with ward, type (General/ICU/Emergency), occupancy. Availability status.</td></tr>
+    <tr><td><code>emergency.html</code></td><td>Clinical</td><td>Active emergency cases. Severity color-coded (Critical=red, Urgent=amber). Arrival time, assigned doctor.</td></tr>
+    <tr><td><code>staff.html</code></td><td>Administration</td><td>Staff table with role, department, shift, status. Add/edit staff.</td></tr>
+    <tr><td><code>inventory.html</code></td><td>Administration</td><td>Supply list with quantity, reorder level, status. Low Stock auto-flagged. Roles: Admin, Staff.</td></tr>
+    <tr><td><code>billing.html</code></td><td>Administration</td><td>Invoice list: amount, paid, balance, status (Paid/Partial/Pending). Revenue summary header.</td></tr>
+    <tr><td><code>reports.html</code></td><td>Administration</td><td>Department performance, patient stats, financial overview, staff analytics. Export-ready layout. Roles: Admin, Doctor, Staff.</td></tr>
+    <tr><td><code>users.html</code></td><td>Administration</td><td>User account management: name, email, role, department, last login, status. Admin only.</td></tr>
+    <tr><td><code>messages.html</code></td><td>Administration</td><td>Internal message list. Read/unread state. From/to/time display. Mark as read action.</td></tr>
+    <tr><td><code>notifications.html</code></td><td>Administration</td><td>Notification list by type: danger, info, warning. Mark all read. Timestamps.</td></tr>
+    <tr><td><code>settings.html</code></td><td>Administration</td><td>Hospital name config, dark mode toggle, account info, logout.</td></tr>
+    <tr><td><code>my-profile.html</code></td><td>Administration</td><td>Current user profile view: name, role, department, email.</td></tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ══════════════════════════════════════
+     SECTION 12-13 — WEB NAV & DATA LAYER
+══════════════════════════════════════ -->
+<div class="doc-body page-break">
+
+<h2 class="section-heading">12. Web Navigation &amp; RBAC</h2>
+<p>
+  The <code>nav.js</code> module runs on every dashboard page. It renders the sidebar dynamically
+  based on the current user's role from <code>sessionStorage</code>, and guards pages against
+  unauthorized access.
+</p>
+
+<h3 class="sub-heading">nav.js Functions</h3>
+<table>
+  <thead><tr><th>Function</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td><code>getUserRole()</code></td><td>Reads <code>sessionStorage.hms_user</code>, returns role string. Defaults to "Administrator" if missing.</td></tr>
+    <tr><td><code>canAccess(item, role)</code></td><td>Returns true if item has no role restriction, or if the user's role is in the item's <code>roles</code> array.</td></tr>
+    <tr><td><code>renderNav()</code></td><td>Builds and injects the full sidebar HTML into <code>.sidebar-nav</code> element. Filters items by role. Adds active class to current page. Renders live badges (appointment count, critical count, unread messages).</td></tr>
+    <tr><td><code>guardPage()</code></td><td>Checks if the current page URL requires a specific role. If user lacks access, shows a toast and redirects to <code>dashboard.html</code>.</td></tr>
+  </tbody>
+</table>
+
+<h3 class="sub-heading">Session Management (Web)</h3>
+<table>
+  <thead><tr><th>Storage</th><th>Key</th><th>Value</th><th>Lifecycle</th></tr></thead>
+  <tbody>
+    <tr><td>sessionStorage</td><td><code>hms_user</code></td><td><code>{ name, email, role }</code></td><td>Set on login, cleared when browser tab closes</td></tr>
+    <tr><td>localStorage</td><td><code>hms_data_v1</code></td><td>Full dataset JSON</td><td>Persists across sessions. Seeded from SEED on first visit.</td></tr>
+    <tr><td>localStorage</td><td><code>hms_registered_users</code></td><td>Array of user accounts</td><td>Grows as users register</td></tr>
+  </tbody>
+</table>
+
+<div class="alert alert-warn">
+  ⚠️ The web platform uses <strong>sessionStorage</strong> for the user session — closing the browser tab
+  will log the user out. This is by design for security in shared environments.
+  The mobile app uses AsyncStorage which persists across app restarts.
+</div>
+
+<!-- ══════════════════════════════════════
+     SECTION 13 — WEB DATA LAYER
+══════════════════════════════════════ -->
+<h2 class="section-heading">13. Web Data Layer (HMSData)</h2>
+<p>
+  <code>data.js</code> exposes a global singleton <code>window.HMSData</code> that provides all
+  CRUD operations over <code>localStorage</code>. Every dashboard page uses this API exclusively —
+  no fetch/XHR calls, no backend.
+</p>
+
+<h3 class="sub-heading">HMSData API</h3>
+<table>
+  <thead><tr><th>Method</th><th>Signature</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td><code>getAll()</code></td><td><code>() → Object</code></td><td>Returns the full dataset object from localStorage</td></tr>
+    <tr><td><code>get(key)</code></td><td><code>(key) → Array|Object</code></td><td>Returns a single collection by key (e.g., <code>'patients'</code>)</td></tr>
+    <tr><td><code>set(key, value)</code></td><td><code>(key, value) → value</code></td><td>Replaces an entire collection and saves</td></tr>
+    <tr><td><code>add(key, item)</code></td><td><code>(key, item) → item</code></td><td>Appends item to collection array and saves</td></tr>
+    <tr><td><code>update(key, id, updates, idField?)</code></td><td><code>→ updatedItem | null</code></td><td>Merges updates into matching item. Default idField is <code>'id'</code>.</td></tr>
+    <tr><td><code>remove(key, id, idField?)</code></td><td><code>→ void</code></td><td>Removes item with matching id from collection</td></tr>
+    <tr><td><code>find(key, id, idField?)</code></td><td><code>→ item | null</code></td><td>Returns first item matching id, or null</td></tr>
+    <tr><td><code>nextId(prefix, key)</code></td><td><code>(str, str) → string</code></td><td>Auto-generates next sequential ID. E.g., <code>nextId('P-', 'patients')</code> → <code>'P-007'</code></td></tr>
+    <tr><td><code>getPatientName(p)</code></td><td><code>(patient) → string</code></td><td>Returns <code>"firstName lastName"</code></td></tr>
+    <tr><td><code>getAge(dob)</code></td><td><code>(dateStr) → number</code></td><td>Calculates age from ISO date string</td></tr>
+    <tr><td><code>formatDate(d)</code></td><td><code>(dateStr) → string</code></td><td>Returns locale-formatted date like "Jun 29, 2026"</td></tr>
+    <tr><td><code>badgeForStatus(status)</code></td><td><code>(str) → cssClass</code></td><td>Maps status string to a CSS badge class (e.g., <code>'badge-success'</code>, <code>'badge-danger'</code>)</td></tr>
+    <tr><td><code>avatarUrl(name)</code></td><td><code>(str) → url</code></td><td>Returns a ui-avatars.com URL for the given name</td></tr>
+    <tr><td><code>reset()</code></td><td><code>() → data</code></td><td>Clears localStorage and reloads from SEED data</td></tr>
+  </tbody>
+</table>
+
+<div class="code-block">
+<span class="cm">// Example usage on any dashboard page</span>
+<span class="kw">const</span> patients = HMSData.<span class="fn">get</span>(<span class="str">'patients'</span>);
+<span class="kw">const</span> newPatient = { id: HMSData.<span class="fn">nextId</span>(<span class="str">'P-'</span>, <span class="str">'patients'</span>), firstName: <span class="str">'Jane'</span>, ... };
+HMSData.<span class="fn">add</span>(<span class="str">'patients'</span>, newPatient);
+HMSData.<span class="fn">update</span>(<span class="str">'appointments'</span>, <span class="str">'A-1001'</span>, { status: <span class="str">'Completed'</span> });
+HMSData.<span class="fn">remove</span>(<span class="str">'staff'</span>, <span class="str">'S-003'</span>);
+</div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SECTION 14 — DATA MODELS
+══════════════════════════════════════ -->
+<div class="doc-body page-break">
+
+<h2 class="section-heading">14. Data Models Reference</h2>
+<p>All 16 data collections are stored under <code>hms_data_v1</code>. Below are the full field schemas for each model.</p>
+
+<div class="model-box">
+  <div class="model-header">👤 Patient <span class="model-key">patients[]</span></div>
+  <table>
+    <thead><tr><th>Field</th><th>Type</th><th>Example</th></tr></thead>
+    <tbody>
+      <tr><td><code>id</code></td><td>string</td><td>P-00421</td></tr>
+      <tr><td><code>firstName</code>, <code>lastName</code></td><td>string</td><td>Sarah Johnson</td></tr>
+      <tr><td><code>email</code>, <code>phone</code></td><td>string</td><td>sarah.j@email.com · +1 (555) 234-5678</td></tr>
+      <tr><td><code>dob</code></td><td>ISO date string</td><td>1992-03-15</td></tr>
+      <tr><td><code>gender</code></td><td>string</td><td>Female / Male</td></tr>
+      <tr><td><code>address</code></td><td>string</td><td>456 Oak Ave, Chicago, IL</td></tr>
+      <tr><td><code>bloodGroup</code></td><td>string</td><td>A+, O-, AB-</td></tr>
+      <tr><td><code>doctor</code>, <code>department</code></td><td>string</td><td>Dr. Mike Chen · Cardiology</td></tr>
+      <tr><td><code>status</code></td><td>string</td><td>Stable | In Treatment | Discharged | Admitted | Critical</td></tr>
+      <tr><td><code>lastVisit</code></td><td>ISO date string</td><td>2026-06-29</td></tr>
+      <tr><td><code>visits</code>, <code>admissions</code>, <code>billed</code></td><td>number</td><td>12 · 3 · 4200</td></tr>
+      <tr><td><code>conditions</code></td><td>string[]</td><td>['Hypertension', 'Hyperlipidemia']</td></tr>
+      <tr><td><code>allergies</code></td><td>string[]</td><td>['Penicillin', 'Sulfa drugs']</td></tr>
+      <tr><td><code>vitals</code></td><td>object</td><td>{ bp, hr, temp, spo2 }</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="model-box">
+  <div class="model-header">🩺 Doctor <span class="model-key">doctors[]</span></div>
+  <table>
+    <thead><tr><th>Field</th><th>Type</th><th>Example</th></tr></thead>
+    <tbody>
+      <tr><td><code>id</code></td><td>string</td><td>D-001</td></tr>
+      <tr><td><code>name</code>, <code>specialty</code>, <code>department</code></td><td>string</td><td>Dr. Mike Chen · Cardiology</td></tr>
+      <tr><td><code>email</code>, <code>phone</code></td><td>string</td><td>mike.chen@medicore.com</td></tr>
+      <tr><td><code>experience</code></td><td>number (years)</td><td>15</td></tr>
+      <tr><td><code>patients</code></td><td>number</td><td>342</td></tr>
+      <tr><td><code>rating</code></td><td>number (0–5)</td><td>4.9</td></tr>
+      <tr><td><code>status</code></td><td>string</td><td>Available | In Surgery | On Leave</td></tr>
+      <tr><td><code>schedule</code></td><td>string</td><td>Mon–Fri 9AM–5PM</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="model-box">
+  <div class="model-header">📅 Appointment <span class="model-key">appointments[]</span></div>
+  <table>
+    <thead><tr><th>Field</th><th>Type</th><th>Example</th></tr></thead>
+    <tbody>
+      <tr><td><code>id</code></td><td>string</td><td>A-1001</td></tr>
+      <tr><td><code>patientId</code>, <code>patient</code></td><td>string</td><td>P-00421 · Sarah Johnson</td></tr>
+      <tr><td><code>doctor</code>, <code>department</code></td><td>string</td><td>Dr. Mike Chen · Cardiology</td></tr>
+      <tr><td><code>date</code>, <code>time</code></td><td>string</td><td>2026-06-29 · 09:00</td></tr>
+      <tr><td><code>type</code></td><td>string</td><td>Checkup | Consultation | Follow-up</td></tr>
+      <tr><td><code>status</code></td><td>string</td><td>Confirmed | Pending | Checked In | Cancelled</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="model-box">
+  <div class="model-header">🚪 Admission <span class="model-key">admissions[]</span></div>
+  <table>
+    <thead><tr><th>Field</th><th>Type</th><th>Example</th></tr></thead>
+    <tbody>
+      <tr><td><code>id</code></td><td>string</td><td>ADM-001</td></tr>
+      <tr><td><code>patientId</code>, <code>patient</code></td><td>string</td><td>P-00416 · Robert Lee</td></tr>
+      <tr><td><code>ward</code>, <code>room</code>, <code>bed</code></td><td>string</td><td>Cardiology Ward · C-204 · B2</td></tr>
+      <tr><td><code>admittedOn</code></td><td>ISO date string</td><td>2026-06-25</td></tr>
+      <tr><td><code>doctor</code>, <code>diagnosis</code></td><td>string</td><td>Dr. Mike Chen · Coronary Artery Disease</td></tr>
+      <tr><td><code>status</code></td><td>string</td><td>Admitted | Critical</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="model-box">
+  <div class="model-header">🔬 Lab Order <span class="model-key">labOrders[]</span> &nbsp;|&nbsp; 🩻 Radiology Order <span class="model-key">radiologyOrders[]</span></div>
+  <table>
+    <thead><tr><th>Field</th><th>Type</th><th>Example</th></tr></thead>
+    <tbody>
+      <tr><td><code>id</code></td><td>string</td><td>LAB-001 / RAD-001</td></tr>
+      <tr><td><code>patient</code>, <code>patientId</code></td><td>string</td><td>Sarah Johnson · P-00421</td></tr>
+      <tr><td><code>test</code></td><td>string</td><td>CBC / Chest X-Ray / CT Angiography / MRI Brain</td></tr>
+      <tr><td><code>orderedBy</code></td><td>string</td><td>Dr. Mike Chen</td></tr>
+      <tr><td><code>date</code></td><td>ISO date string</td><td>2026-06-29</td></tr>
+      <tr><td><code>status</code></td><td>string</td><td>Pending | In Progress | Completed | Scheduled</td></tr>
+      <tr><td><code>priority</code></td><td>string</td><td>Routine | Urgent</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="model-box">
+  <div class="model-header">💊 Pharmacy <span class="model-key">pharmacy[]</span></div>
+  <table>
+    <thead><tr><th>Field</th><th>Type</th><th>Example</th></tr></thead>
+    <tbody>
+      <tr><td><code>id</code></td><td>string</td><td>PH-001</td></tr>
+      <tr><td><code>medicine</code></td><td>string</td><td>Metoprolol 25mg</td></tr>
+      <tr><td><code>patient</code>, <code>patientId</code></td><td>string</td><td>Robert Lee · P-00416</td></tr>
+      <tr><td><code>prescribedBy</code></td><td>string</td><td>Dr. Mike Chen</td></tr>
+      <tr><td><code>date</code></td><td>ISO date string</td><td>2026-06-29</td></tr>
+      <tr><td><code>quantity</code></td><td>number</td><td>30</td></tr>
+      <tr><td><code>status</code></td><td>string</td><td>Dispensed | Pending</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="model-box">
+  <div class="model-header">📦 Inventory <span class="model-key">inventory[]</span></div>
+  <table>
+    <thead><tr><th>Field</th><th>Type</th><th>Example</th></tr></thead>
+    <tbody>
+      <tr><td><code>id</code></td><td>string</td><td>INV-001</td></tr>
+      <tr><td><code>name</code></td><td>string</td><td>Surgical Gloves (Box)</td></tr>
+      <tr><td><code>category</code></td><td>string</td><td>Consumables | Fluids | PPE | Equipment</td></tr>
+      <tr><td><code>quantity</code>, <code>unit</code></td><td>number, string</td><td>450 · boxes</td></tr>
+      <tr><td><code>reorderLevel</code></td><td>number</td><td>100</td></tr>
+      <tr><td><code>status</code></td><td>string</td><td>In Stock | Low Stock | Out of Stock</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="model-box">
+  <div class="model-header">🧾 Billing <span class="model-key">billing[]</span></div>
+  <table>
+    <thead><tr><th>Field</th><th>Type</th><th>Example</th></tr></thead>
+    <tbody>
+      <tr><td><code>id</code></td><td>string</td><td>INV-B001</td></tr>
+      <tr><td><code>patient</code>, <code>patientId</code></td><td>string</td><td>Sarah Johnson · P-00421</td></tr>
+      <tr><td><code>amount</code>, <code>paid</code></td><td>number</td><td>1200 · 1200</td></tr>
+      <tr><td><code>status</code></td><td>string</td><td>Paid | Partial | Pending</td></tr>
+      <tr><td><code>date</code></td><td>ISO date string</td><td>2026-06-29</td></tr>
+      <tr><td><code>items</code></td><td>string[]</td><td>['Consultation', 'X-Ray']</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="model-box">
+  <div class="model-header">🚨 Emergency <span class="model-key">emergency[]</span></div>
+  <table>
+    <thead><tr><th>Field</th><th>Type</th><th>Example</th></tr></thead>
+    <tbody>
+      <tr><td><code>id</code></td><td>string</td><td>EM-001</td></tr>
+      <tr><td><code>patient</code>, <code>patientId</code></td><td>string</td><td>David Kim · P-00418 (unknown patients have no patientId)</td></tr>
+      <tr><td><code>age</code></td><td>number (optional)</td><td>45 (for unknown patients)</td></tr>
+      <tr><td><code>condition</code></td><td>string</td><td>Acute Heart Failure</td></tr>
+      <tr><td><code>severity</code></td><td>string</td><td>Critical | Urgent</td></tr>
+      <tr><td><code>arrivedAt</code></td><td>datetime string</td><td>2026-06-29 06:30</td></tr>
+      <tr><td><code>doctor</code>, <code>status</code></td><td>string</td><td>Dr. Anna White · Critical | In Treatment</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="model-box">
+  <div class="model-header">💬 Message <span class="model-key">messages[]</span> &nbsp;|&nbsp; 🔔 Notification <span class="model-key">notifications[]</span></div>
+  <table>
+    <thead><tr><th>Field</th><th>Model</th><th>Example</th></tr></thead>
+    <tbody>
+      <tr><td><code>id</code></td><td>Both</td><td>M-001 / NOT-001</td></tr>
+      <tr><td><code>from</code>, <code>to</code>, <code>message</code></td><td>Message</td><td>Dr. Lisa Park → Dr. Admin</td></tr>
+      <tr><td><code>time</code></td><td>Both</td><td>2026-06-29 08:30 / "10 min ago"</td></tr>
+      <tr><td><code>read</code></td><td>Both</td><td>boolean (false = unread)</td></tr>
+      <tr><td><code>title</code>, <code>message</code>, <code>type</code></td><td>Notification</td><td>Critical Patient Alert · danger | info | warning</td></tr>
+    </tbody>
+  </table>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SECTION 15 — STATUS REFERENCE
+══════════════════════════════════════ -->
+<div class="doc-body page-break">
+
+<h2 class="section-heading">15. Status &amp; Badge Color Reference</h2>
+<p>All status values and their associated colors are defined centrally in <code>constants/colors.js</code> (app) and <code>data.js badgeForStatus()</code> (web).</p>
+
+<table>
+  <thead><tr><th>Status Value</th><th>Context</th><th>App Color (bg / text)</th><th>Web CSS Class</th></tr></thead>
+  <tbody>
+    <tr><td><span class="badge badge-green">Stable</span></td><td>Patient</td><td>#d1fae5 / #065f46</td><td><code>badge-success</code></td></tr>
+    <tr><td><span class="badge badge-blue">In Treatment</span></td><td>Patient</td><td>#dbeafe / #1e40af</td><td><code>badge-warning</code></td></tr>
+    <tr><td><span class="badge badge-gray">Discharged</span></td><td>Patient</td><td>#f3f4f6 / #374151</td><td><code>badge-gray</code></td></tr>
+    <tr><td><span class="badge badge-purple">Admitted</span></td><td>Patient</td><td>#ede9fe / #5b21b6</td><td><code>badge-warning</code></td></tr>
+    <tr><td><span class="badge badge-red">Critical</span></td><td>Patient / Emergency / Admission</td><td>#fee2e2 / #991b1b</td><td><code>badge-danger</code></td></tr>
+    <tr><td><span class="badge badge-green">Available</span></td><td>Doctor / Room</td><td>#d1fae5 / #065f46</td><td><code>badge-success</code></td></tr>
+    <tr><td><span class="badge badge-red">In Surgery</span></td><td>Doctor</td><td>#fee2e2 / #991b1b</td><td><code>badge-warning</code></td></tr>
+    <tr><td><span class="badge badge-amber">On Leave</span></td><td>Doctor</td><td>#fef3c7 / #92400e</td><td><code>badge-gray</code></td></tr>
+    <tr><td><span class="badge badge-green">Confirmed</span></td><td>Appointment</td><td>#d1fae5 / #065f46</td><td><code>badge-success</code></td></tr>
+    <tr><td><span class="badge badge-amber">Pending</span></td><td>Appointment / Billing / Pharmacy</td><td>#fef3c7 / #92400e</td><td><code>badge-warning</code></td></tr>
+    <tr><td><span class="badge badge-blue">Checked In</span></td><td>Appointment</td><td>#dbeafe / #1e40af</td><td><code>badge-gray</code></td></tr>
+    <tr><td><span class="badge badge-red">Cancelled</span></td><td>Appointment</td><td>#fee2e2 / #991b1b</td><td><code>badge-danger</code></td></tr>
+    <tr><td><span class="badge badge-amber">Waiting</span></td><td>OPD Queue</td><td>#fef3c7 / #92400e</td><td><code>badge-warning</code></td></tr>
+    <tr><td><span class="badge badge-blue">In Consultation</span></td><td>OPD Queue</td><td>#dbeafe / #1e40af</td><td><code>badge-info</code></td></tr>
+    <tr><td><span class="badge badge-green">Completed</span></td><td>OPD / Lab / Radiology</td><td>#d1fae5 / #065f46</td><td><code>badge-success</code></td></tr>
+    <tr><td><span class="badge badge-blue">In Progress</span></td><td>Lab / Radiology</td><td>—</td><td><code>badge-info</code></td></tr>
+    <tr><td><span class="badge badge-purple">Routine</span></td><td>Lab / Radiology</td><td>#ede9fe / #5b21b6</td><td><code>badge-primary</code></td></tr>
+    <tr><td><span class="badge badge-red">Urgent</span></td><td>Lab / Radiology</td><td>#fee2e2 / #991b1b</td><td><code>badge-danger</code></td></tr>
+    <tr><td><span class="badge badge-green">In Stock</span></td><td>Inventory</td><td>#d1fae5 / #065f46</td><td><code>badge-success</code></td></tr>
+    <tr><td><span class="badge badge-amber">Low Stock</span></td><td>Inventory</td><td>#fef3c7 / #92400e</td><td><code>badge-warning</code></td></tr>
+    <tr><td><span class="badge badge-red">Out of Stock</span></td><td>Inventory</td><td>#fee2e2 / #991b1b</td><td><code>badge-danger</code></td></tr>
+    <tr><td><span class="badge badge-green">Paid</span></td><td>Billing</td><td>#d1fae5 / #065f46</td><td><code>badge-success</code></td></tr>
+    <tr><td><span class="badge badge-amber">Partial</span></td><td>Billing</td><td>#fef3c7 / #92400e</td><td><code>badge-warning</code></td></tr>
+    <tr><td><span class="badge badge-green">Active</span></td><td>Department / Staff / User</td><td>#d1fae5 / #065f46</td><td><code>badge-success</code></td></tr>
+    <tr><td><span class="badge badge-gray">Inactive</span></td><td>Department / Staff / User</td><td>#f3f4f6 / #374151</td><td><code>badge-gray</code></td></tr>
+    <tr><td><span class="badge badge-green">Dispensed</span></td><td>Pharmacy</td><td>#d1fae5 / #065f46</td><td><code>badge-success</code></td></tr>
+  </tbody>
+</table>
+
+<!-- ══════════════════════════════════════
+     SECTION 16 — DEPLOYMENT & SETUP
+══════════════════════════════════════ -->
+<h2 class="section-heading">16. Deployment &amp; Setup Guide</h2>
+
+<h3 class="sub-heading">Mobile App Setup</h3>
+<div class="code-block">
+<span class="cm"># Prerequisites: Node.js 18+, Expo CLI, Android Studio or Xcode (for simulators)</span>
+
+<span class="cm"># 1. Install dependencies</span>
+<span class="kw">cd</span> <span class="str">"hospital management system/app"</span>
+npm install
+
+<span class="cm"># 2. Start development server</span>
+npx expo start
+
+<span class="cm"># 3. Platform-specific launch</span>
+npx expo start --android    <span class="cm"># Android emulator / device</span>
+npx expo start --ios        <span class="cm"># iOS simulator (macOS only)</span>
+npx expo start --web        <span class="cm"># Web browser preview</span>
+</div>
+
+<h3 class="sub-heading">Web Platform Setup</h3>
+<div class="code-block">
+<span class="cm"># No build step required — pure static HTML/CSS/JS</span>
+
+<span class="cm"># Option 1: Open directly in browser</span>
+<span class="kw">open</span> <span class="str">"hospital management system/website/index.html"</span>
+
+<span class="cm"># Option 2: Serve via local server (recommended to avoid CORS)</span>
+npx serve <span class="str">"hospital management system/website"</span>
+<span class="cm"># or</span>
+python -m http.server 8080  <span class="cm"># then open http://localhost:8080</span>
+</div>
+
+<h3 class="sub-heading">First-Time Login (Both Platforms)</h3>
+<div class="alert alert-warn">
+  ⚠️ On first launch, no registered users exist in the system. You must first register an account,
+  or use the demo credentials. The demo accounts shown in Section 5 must be registered manually
+  on first use — they are not pre-seeded into the registered users list.
+</div>
+
+<table>
+  <thead><tr><th>Step</th><th>Action</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>Navigate to Register / Create Account</td></tr>
+    <tr><td>2</td><td>Enter name, email (e.g., <code>admin@medicore.com</code>), password (<code>admin123</code>), and role (Administrator)</td></tr>
+    <tr><td>3</td><td>Submit — you will be redirected to Login</td></tr>
+    <tr><td>4</td><td>Log in with the registered credentials</td></tr>
+    <tr><td>5</td><td>On first login, the seed data (SEED) is automatically loaded into storage</td></tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ══════════════════════════════════════
+     SECTION 17 — KNOWN LIMITATIONS
+══════════════════════════════════════ -->
+<div class="doc-body page-break">
+
+<h2 class="section-heading">17. Known Limitations &amp; Future Improvements</h2>
+
+<h3 class="sub-heading">Current Limitations</h3>
+<table>
+  <thead><tr><th>#</th><th>Limitation</th><th>Impact</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>No real backend / database</td>
+      <td>All data is stored locally (AsyncStorage / localStorage). Data does not sync between devices or users. Each device/browser maintains its own isolated dataset.</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>No real authentication</td>
+      <td>Passwords are stored in plain text in localStorage/AsyncStorage. This is acceptable for a demo/prototype but must be replaced with hashed passwords and server-side auth before production use.</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Web session ends on tab close</td>
+      <td>sessionStorage is cleared when the browser tab is closed, requiring re-login. Consider using localStorage with an expiry token for persistent web sessions.</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>No real-time updates</td>
+      <td>Data changes made by one user are not reflected for other users. There are no WebSocket or polling mechanisms. Each user sees only their own local state.</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>Storage size limits</td>
+      <td>AsyncStorage and localStorage have limits (~5–10 MB). Large datasets with images or attachments would exceed these limits.</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>Images loaded from Unsplash CDN</td>
+      <td>Dashboard hero, promo, and service card images are loaded from Unsplash URLs. These require an internet connection and may be unavailable offline or if the URLs change.</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>No PDF export implemented</td>
+      <td>The Reports screen mentions exportable PDFs, but no actual export function is implemented in the codebase. This would require a library like jsPDF or a server-side PDF renderer.</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td>Dark mode incomplete (App)</td>
+      <td>The dark mode toggle is functional (toggle + persist), but most screens do not have dark-mode-specific styling applied. The preference is saved but visual theming is partial.</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td>No input validation on forms</td>
+      <td>Add Patient, Add Appointment, and Register screens do minimal validation. Duplicate emails, malformed dates, or empty required fields are not consistently caught.</td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td>Web appointment form is non-functional</td>
+      <td>The landing page appointment form shows a toast confirmation but does not actually save the data or send a notification. It is a UI prototype only.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 class="sub-heading">Recommended Future Improvements</h3>
+<ul>
+  <li><strong>Backend API</strong> — Replace localStorage with a REST API (Node.js/Express + PostgreSQL or MongoDB) to enable multi-user real-time access</li>
+  <li><strong>Authentication</strong> — Implement JWT-based auth with bcrypt password hashing and secure HTTP-only cookies</li>
+  <li><strong>Real-time updates</strong> — Add WebSocket support (Socket.io) for live emergency alerts, OPD queue updates, and messaging</li>
+  <li><strong>Push notifications</strong> — Integrate Expo Notifications for critical patient alerts on mobile</li>
+  <li><strong>PDF export</strong> — Implement jsPDF or react-native-pdf for billing invoices and patient discharge summaries</li>
+  <li><strong>Image uploads</strong> — Add profile photo upload for patients and doctors using Expo ImagePicker + cloud storage</li>
+  <li><strong>Dark mode</strong> — Complete dark mode theming across all screens using the existing Colors.darkBg / Colors.darkCard tokens</li>
+  <li><strong>Input validation</strong> — Add Yup/Zod schema validation on all form inputs</li>
+  <li><strong>Audit log</strong> — Track all data changes (who changed what and when) for HIPAA compliance</li>
+  <li><strong>Multi-language support</strong> — Add i18n for regional hospital deployments</li>
+</ul>
+
+<!-- ══════════════════════════════════════
+     SECTION 18 — COLOR PALETTE
+══════════════════════════════════════ -->
+<h2 class="section-heading">18. Design System — Color Palette</h2>
+<p>All colors are defined in <code>src/constants/colors.js</code> and used consistently across both platforms.</p>
+
+<table>
+  <thead><tr><th>Token</th><th>Hex Value</th><th>Usage</th></tr></thead>
+  <tbody>
+    <tr><td><code>Colors.primary</code></td><td style="background:#2563eb;color:#fff;padding:4px 8px;">#2563eb</td><td>Primary buttons, active nav items, links</td></tr>
+    <tr><td><code>Colors.primaryDark</code></td><td style="background:#1d4ed8;color:#fff;padding:4px 8px;">#1d4ed8</td><td>Hover state for primary elements</td></tr>
+    <tr><td><code>Colors.secondary</code></td><td style="background:#0ea5e9;color:#fff;padding:4px 8px;">#0ea5e9</td><td>Secondary accents, tab bar active (#11B5E4 variant)</td></tr>
+    <tr><td><code>Colors.success</code></td><td style="background:#10b981;color:#fff;padding:4px 8px;">#10b981</td><td>Success states, Stable/Available badges</td></tr>
+    <tr><td><code>Colors.warning</code></td><td style="background:#f59e0b;color:#fff;padding:4px 8px;">#f59e0b</td><td>Pending, Low Stock, On Leave warnings</td></tr>
+    <tr><td><code>Colors.danger</code></td><td style="background:#ef4444;color:#fff;padding:4px 8px;">#ef4444</td><td>Critical, Cancelled, emergency badge, notification dot</td></tr>
+    <tr><td><code>Colors.info</code></td><td style="background:#6366f1;color:#fff;padding:4px 8px;">#6366f1</td><td>Info notifications, In Progress states</td></tr>
+    <tr><td><code>Colors.dark</code></td><td style="background:#0f172a;color:#fff;padding:4px 8px;">#0f172a</td><td>Sidebar background, dark header</td></tr>
+    <tr><td><code>Colors.gray900–50</code></td><td>—</td><td>Full Tailwind-compatible gray scale for text, borders, backgrounds</td></tr>
+    <tr><td><code>Colors.darkCard</code></td><td style="background:#1e293b;color:#fff;padding:4px 8px;">#1e293b</td><td>Card background in dark mode</td></tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ══════════════════════════════════════
+     SECTION 19 — FILE STRUCTURE
+══════════════════════════════════════ -->
+<div class="doc-body page-break">
+
+<h2 class="section-heading">19. Complete File Structure</h2>
+
+<h3 class="sub-heading">Mobile App</h3>
+<div class="code-block">
+app/
+├── App.js                          <span class="cm">← Root component: GestureHandler + AppProvider + Navigator</span>
+├── app.json                        <span class="cm">← Expo config (name, slug, icon, splash)</span>
+├── babel.config.js                 <span class="cm">← Babel preset-expo config</span>
+├── package.json                    <span class="cm">← Dependencies (Expo 55, React 19, RN 0.83.6)</span>
+└── src/
+    ├── components/
+    │   ├── Avatar.js
+    │   ├── Card.js
+    │   ├── EmptyState.js
+    │   ├── PageHeader.js
+    │   ├── ScreenHeader.js
+    │   ├── SearchBar.js
+    │   ├── StatCard.js
+    │   └── StatusBadge.js
+    ├── constants/
+    │   └── colors.js               <span class="cm">← Colors + StatusColors maps</span>
+    ├── context/
+    │   └── AppContext.js           <span class="cm">← Global state: useReducer + AsyncStorage</span>
+    ├── data/
+    │   └── seedData.js             <span class="cm">← SEED dataset + DEMO_CREDENTIALS</span>
+    ├── navigation/
+    │   └── AppNavigator.js         <span class="cm">← RootStack → MainDrawer → HomeTabs</span>
+    └── screens/
+        ├── LoginScreen.js
+        ├── RegisterScreen.js
+        ├── DashboardScreen.js
+        ├── PatientsScreen.js
+        ├── PatientProfileScreen.js
+        ├── AddPatientScreen.js
+        ├── DoctorsScreen.js
+        ├── DoctorProfileScreen.js
+        ├── AppointmentsScreen.js
+        ├── AddAppointmentScreen.js
+        ├── AdmissionsScreen.js
+        ├── OPDQueueScreen.js
+        ├── DischargeScreen.js
+        ├── MedicalRecordsScreen.js
+        ├── NursingScreen.js
+        ├── LaboratoryScreen.js
+        ├── RadiologyScreen.js
+        ├── PharmacyScreen.js
+        ├── RoomsScreen.js
+        ├── EmergencyScreen.js
+        ├── DepartmentsScreen.js
+        ├── StaffScreen.js
+        ├── InventoryScreen.js
+        ├── BillingScreen.js
+        ├── ReportsScreen.js
+        ├── MessagesScreen.js
+        ├── NotificationsScreen.js
+        ├── UsersScreen.js
+        └── SettingsScreen.js
+</div>
+
+<h3 class="sub-heading">Web Platform</h3>
+<div class="code-block">
+website/
+├── index.html                      <span class="cm">← Public landing page</span>
+├── css/
+│   ├── landing.css                 <span class="cm">← Landing page styles (animations, hero, sections)</span>
+│   └── style.css                   <span class="cm">← Shared dashboard layout: sidebar, cards, tables, badges</span>
+├── js/
+│   ├── data.js                     <span class="cm">← HMSData singleton (localStorage CRUD + utilities)</span>
+│   ├── nav.js                      <span class="cm">← Sidebar renderer + RBAC page guard</span>
+│   ├── app.js                      <span class="cm">← Auth helpers, toast notifications, shared utilities</span>
+│   └── main.js                     <span class="cm">← Landing page: counters, FAQ, particles, scroll effects</span>
+└── pages/
+    ├── login.html                  <span class="cm">← Auth</span>
+    ├── register.html               <span class="cm">← Auth</span>
+    ├── dashboard.html              <span class="cm">← Main</span>
+    ├── patients.html               <span class="cm">← Main</span>
+    ├── patient-profile.html        <span class="cm">← Main</span>
+    ├── doctors.html                <span class="cm">← Main</span>
+    ├── doctor-profile.html         <span class="cm">← Main</span>
+    ├── departments.html            <span class="cm">← Main</span>
+    ├── appointments.html           <span class="cm">← Main</span>
+    ├── add-appointment.html        <span class="cm">← Main</span>
+    ├── opd-queue.html              <span class="cm">← Main</span>
+    ├── admissions.html             <span class="cm">← Clinical</span>
+    ├── discharge.html              <span class="cm">← Clinical</span>
+    ├── medical-records.html        <span class="cm">← Clinical</span>
+    ├── nursing.html                <span class="cm">← Clinical</span>
+    ├── laboratory.html             <span class="cm">← Clinical</span>
+    ├── radiology.html              <span class="cm">← Clinical</span>
+    ├── pharmacy.html               <span class="cm">← Clinical</span>
+    ├── rooms.html                  <span class="cm">← Clinical</span>
+    ├── emergency.html              <span class="cm">← Clinical</span>
+    ├── staff.html                  <span class="cm">← Administration</span>
+    ├── inventory.html              <span class="cm">← Administration</span>
+    ├── billing.html                <span class="cm">← Administration</span>
+    ├── reports.html                <span class="cm">← Administration</span>
+    ├── users.html                  <span class="cm">← Administration (Admin only)</span>
+    ├── messages.html               <span class="cm">← Administration</span>
+    ├── notifications.html          <span class="cm">← Administration</span>
+    ├── settings.html               <span class="cm">← Administration</span>
+    └── my-profile.html             <span class="cm">← Administration</span>
+</div>
+
+<!-- ══════════════════════════════════════
+     CLOSING / FOOTER
+══════════════════════════════════════ -->
+<div style="margin-top:60px;padding:32px;background:linear-gradient(135deg,#0f172a,#1e3a8a);border-radius:16px;color:#fff;text-align:center;">
+  <div style="font-size:32px;margin-bottom:12px;">🏥</div>
+  <div style="font-size:20px;font-weight:800;margin-bottom:6px;">MediCore HMS</div>
+  <div style="font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:20px;">Hospital Management System — Technical Documentation</div>
+  <div style="display:flex;justify-content:center;gap:32px;flex-wrap:wrap;margin-bottom:20px;">
+    <div style="text-align:center;"><div style="font-size:22px;font-weight:800;color:#38bdf8;">2</div><div style="font-size:11px;color:rgba(255,255,255,0.5);">Platforms</div></div>
+    <div style="text-align:center;"><div style="font-size:22px;font-weight:800;color:#38bdf8;">28</div><div style="font-size:11px;color:rgba(255,255,255,0.5);">Screens / Pages</div></div>
+    <div style="text-align:center;"><div style="font-size:22px;font-weight:800;color:#38bdf8;">16</div><div style="font-size:11px;color:rgba(255,255,255,0.5);">Data Models</div></div>
+    <div style="text-align:center;"><div style="font-size:22px;font-weight:800;color:#38bdf8;">4</div><div style="font-size:11px;color:rgba(255,255,255,0.5);">User Roles</div></div>
+    <div style="text-align:center;"><div style="font-size:22px;font-weight:800;color:#38bdf8;">19</div><div style="font-size:11px;color:rgba(255,255,255,0.5);">Doc Sections</div></div>
+  </div>
+  <div style="font-size:11px;color:rgba(255,255,255,0.35);">Version 1.0.0 &nbsp;·&nbsp; MediCore General Hospital &nbsp;·&nbsp; July 2026</div>
+</div>
+
+<div style="height:60px;"></div>
+
+</div>
+
+<!-- ══ PDF PRINT BUTTON (screen only) ══ -->
+<div class="no-print" style="position:fixed;bottom:28px;right:28px;z-index:999;">
+  <button onclick="window.print()"
+    style="background:#2563eb;color:#fff;border:none;border-radius:50px;padding:14px 28px;
+           font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 4px 20px rgba(37,99,235,0.4);
+           display:flex;align-items:center;gap:10px;font-family:Inter,sans-serif;">
+    🖨️ &nbsp;Print / Save as PDF
+  </button>
+</div>
+
+<style>
+  @media print {
+    @page { size: A4; margin: 15mm 15mm 15mm 15mm; }
+  }
+</style>
+
+</body>
+</html>
